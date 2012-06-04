@@ -1,93 +1,85 @@
-=====================================
-Writing your first Django app, part 1
-=====================================
+=================================
+编写你的第一个 Django 程序，第1节
+=================================
 
-Let's learn by example.
+让我们通过例子来学习。
 
-Throughout this tutorial, we'll walk you through the creation of a basic
-poll application.
+通过这个教程，我们将循序渐进地创建一个基本的投票应用程序。
 
-It'll consist of two parts:
+它将会包含两部分：
 
-* A public site that lets people view polls and vote in them.
-* An admin site that lets you add, change and delete polls.
+* 一个公共网站，用于查看投票结果和让人们投票。
+* 一个管理员的网站，用于添加、修改和删除投票。
 
-We'll assume you have :doc:`Django installed </intro/install>` already. You can
-tell Django is installed by running the Python interactive interpreter and
-typing ``import django``. If that command runs successfully, with no errors,
-Django is installed.
+我们将假定您 :doc:`已经安装了 Django </intro/install>` 。你可以通过在
+Pyhton 解释器中输入 ``import django`` 来验证。 如果该命令运行成功，且没
+有错误，那就表明 Django 已经安装好了。
 
-.. admonition:: Where to get help:
+.. admonition:: 从哪里得到帮助:
 
-    If you're having trouble going through this tutorial, please post a message
-    to `django-users`__ or drop by `#django on irc.freenode.net`__ to chat
-    with other Django users who might be able to help.
+    如果您在学习本教程中遇到问题，请在 `django-users`__ 上发贴或在
+    `#django on irc.freenode.net`__ 与其他可能会帮助您的 Django 用户交
+    流。
 
 __ http://groups.google.com/group/django-users
 __ irc://irc.freenode.net/django
 
-Creating a project
-==================
+创建一个项目
+============
 
-If this is your first time using Django, you'll have to take care of some
-initial setup. Namely, you'll need to auto-generate some code that establishes a
-Django :term:`project` -- a collection of settings for an instance of Django,
-including database configuration, Django-specific options and
-application-specific settings.
+如果你是第一次使用 Django ，那么必须进行一些初始设置。可以通过自动生成
+一些代码来建立一个项目 :term:`project` -- 一个 Django 项目是一个
+Django 实例的设置的集合， 包括数据库配置， Django 的定义选项和程序定义
+的设置。
 
-From the command line, ``cd`` into a directory where you'd like to store your
-code, then run the following command:
+通过命令行, 使用 ``cd`` 命令进入你要存放代码的目录，然后运行下面的命令:
 
 .. code-block:: bash
 
    django-admin.py startproject mysite
 
-This will create a ``mysite`` directory in your current directory.
+它会在当前目录下创建一个 ``mysite`` 目录。
 
-.. admonition:: Script name may differ in distribution packages
+.. admonition:: 脚本的名称可能因发行的包不同而有所区别
 
-   If you installed Django using a Linux distribution's package manager
-   (e.g. apt-get or yum) ``django-admin.py`` may have been renamed to
-   ``django-admin``. You may continue through this documentation by omitting
-   ``.py`` from each command.
+   如果你是使用的Linux包管理器安装的Django(例如：apt-get 或 yum)
+   ``django-admin.py`` 可能被重命名为 ``django-admin`` 。你可能需要忽略
+   掉本教程中的每一条命令中的 ``.py`` 。
 
-.. admonition:: Mac OS X permissions
+.. admonition:: Mac OS X 权限问题
 
-   If you're using Mac OS X, you may see the message "permission denied" when
-   you try to run ``django-admin.py startproject``. This is because, on
-   Unix-based systems like OS X, a file must be marked as "executable" before it
-   can be run as a program. To do this, open Terminal.app and navigate (using
-   the ``cd`` command) to the directory where :doc:`django-admin.py
-   </ref/django-admin>` is installed, then run the command
-   ``sudo chmod +x django-admin.py``.
+   如果你是使用的 Mac OS X 操作系统，当你尝试运行 ``django-admin.py
+   startproject`` 你可能会看到 "permission denied" 的提示。这是因为在
+   Unix类型的操作系统比如 OS X 中，一个文件必须被标记上 "可执行" 属性，
+   你才可以运行它。要赋予权限，你首先需要打开 Terminal.app 终端程序，
+   (使用 ``cd`` 命令) 进入到 :doc:`django-admin.py
+   </ref/django-admin>` 所安装的目录，然后执行 ``sudo chmod +x
+   django-admin.py`` 。
 
 .. note::
 
-    You'll need to avoid naming projects after built-in Python or Django
-    components. In particular, this means you should avoid using names like
-    ``django`` (which will conflict with Django itself) or ``test`` (which
-    conflicts with a built-in Python package).
+    你需要避免使用 python 或 Django 的保留字作为项目名称，如
+    ``django`` （这是 Django 的保留字）或 ``test`` （与 Python 内建的包
+    名称冲突）。
 
-:doc:`django-admin.py </ref/django-admin>` should be on your system path if you
-installed Django via ``python setup.py``. If it's not on your path, you can find
-it in ``site-packages/django/bin``, where ``site-packages`` is a directory
-within your Python installation. Consider symlinking to :doc:`django-admin.py
-</ref/django-admin>` from some place on your path, such as
-:file:`/usr/local/bin`.
+如果你是通过 ``python setup.py`` 来安装的 Django 那么
+:doc:`django-admin.py </ref/django-admin>` 应该已经在你的系统路径当中了。
+如果它还不在你的系统路径中，你可以在 ``site-packages/django/bin`` 中找
+到它， 这里的 ``site-packages`` 是你系统中 Python 安装路径下的一个目录。
+同时建议你在你的系统路径中，比如 :file:`/usr/local/bin` 下建立一个
+:doc:`django-admin.py </ref/django-admin>` 的软连接。
 
-.. admonition:: Where should this code live?
+.. admonition:: 我的代码应该放在哪里？
 
-    If your background is in PHP, you're probably used to putting code under the
-    Web server's document root (in a place such as ``/var/www``). With Django,
-    you don't do that. It's not a good idea to put any of this Python code
-    within your Web server's document root, because it risks the possibility
-    that people may be able to view your code over the Web. That's not good for
-    security.
+    如果你有 PHP 语言编程背景的话，你可能会将你的代码放在 Web 服务器的
+    文档根目录 （例如 ``/var/www`` )。在 Django 中， 你不必这么做。将任
+    何 Python 代码放在你的 Web 服务器文档根目录不是一个好主意。因为这可
+    能会增加人们通过 Web 方式查看到你的代码的风险。这样很不安全。
 
-    Put your code in some directory **outside** of the document root, such as
-    :file:`/home/mycode`.
+    将你的代码放置在你的文档根目录 **之外** 例如 :file:`/home/mycode`
+    。
 
-Let's look at what :djadmin:`startproject` created::
+我们一起来看看 :djadmin:`startproject` 都创建了些什么::
 
     mysite/
         manage.py
@@ -97,14 +89,14 @@ Let's look at what :djadmin:`startproject` created::
             urls.py
             wsgi.py
 
-.. admonition:: Doesn't match what you see?
+.. admonition:: 和你看到的文件不一样么？
 
-    The default project layout recently changed. If you're seeing a "flat"
-    layout (with no inner :file:`mysite/` directory), you're probably using
-    a version of Django that doesn't match this tutorial version.  You'll
-    want to either switch to the older tutorial or the newer Django version.
+    默认的项目布局最近刚刚改变过。如果你看到的是一个"扁平"结构的目录布
+    局（不包含内部的 :file:`mysite/` 目录），你很可能正在使用一个和本教
+    程版本不一致的 Django 版本。你最好去查看对应的旧版教程，或者使用最
+    新的 Django 版本。
 
-These files are:
+这些文件是:
 
 * The outer :file:`mysite/` directory is just a container for your
   project. Its name doesn't matter to Django; you can rename it to anything

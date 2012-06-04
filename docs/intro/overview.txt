@@ -1,28 +1,23 @@
-==================
-Django at a glance
-==================
+===========
+初探 Django
+===========
 
-Because Django was developed in a fast-paced newsroom environment, it was
-designed to make common Web-development tasks fast and easy. Here's an informal
-overview of how to write a database-driven Web app with Django.
+因为 Django 是在一个快节奏的新闻编辑部中开发出来的，它被设计用来让普通的网站开发工作简单快
+捷。以下是一个教你使用 Django 创建一个数据库驱动的网站应用的大纲。
 
-The goal of this document is to give you enough technical specifics to
-understand how Django works, but this isn't intended to be a tutorial or
-reference -- but we've got both! When you're ready to start a project, you can
-:doc:`start with the tutorial </intro/tutorial01>` or :doc:`dive right into more
-detailed documentation </topics/index>`.
+这个文档的目标是让你有足够的技巧和能力了解 Django 是如何工作的，但是它并不是表示它是一个新
+手指南或者参考目录 -- 其实这些我们都有！当你准备好新建一个项目，你可以 :doc:`从新手指南开始
+</intro/tutorial01>` 或者 :doc:`深入阅读详细的文档 </topics/index>`.
 
-Design your model
-=================
+设计你的 model
+==============
 
-Although you can use Django without a database, it comes with an
-object-relational mapper in which you describe your database layout in Python
-code.
+尽管你在 Django 中可以不使用数据库，但是它提供了一个完善的可以用 Python 代码描述你的数据库
+结构的对象关联映射(ORM)。
 
-The :doc:`data-model syntax </topics/db/models>` offers many rich ways of
-representing your models -- so far, it's been solving two years' worth of
-database-schema problems. Here's a quick example, which might be saved in
-the file ``mysite/news/models.py``::
+:doc:`model 语法 </topics/db/models>` 提供了丰富的表现你的 models 的方法 -- 目前为止，它解
+决了不少关于数据库模式的问题。the file这里是一个简单的例子，一般保存在一个名为
+``mysite/news/models.py`` 的文件中::
 
     class Reporter(models.Model):
         full_name = models.CharField(max_length=70)
@@ -39,51 +34,49 @@ the file ``mysite/news/models.py``::
         def __unicode__(self):
             return self.headline
 
-Install it
-==========
+安装
+====
 
-Next, run the Django command-line utility to create the database tables
-automatically:
+下一步，运行 Django 命令行工具来自动创建数据库表:
 
 .. code-block:: bash
 
     manage.py syncdb
 
-The :djadmin:`syncdb` command looks at all your available models and creates
-tables in your database for whichever tables don't already exist.
+:djadmin:`syncdb` 命令会查找所有可用的 models 然后在数据库中创建还不存在的数据库表。
 
-Enjoy the free API
-==================
+享用便捷的 API
+==============
 
-With that, you've got a free, and rich, :doc:`Python API </topics/db/queries>` to
-access your data. The API is created on the fly, no code generation necessary::
+通过它，你可以使用一个方便功能丰富的 :doc:`Python API </topics/db/queries>` 来访问你的数据。
+API 是动态生成的，不需要生成代码::
 
-    # Import the models we created from our "news" app
+    # 导入我们在 "news" app 中创建的 models
     >>> from news.models import Reporter, Article
 
-    # No reporters are in the system yet.
+    # 在系统中目前还没有 reporters
     >>> Reporter.objects.all()
     []
 
-    # Create a new Reporter.
+    # 创建一个新的 Reporter 
     >>> r = Reporter(full_name='John Smith')
 
-    # Save the object into the database. You have to call save() explicitly.
+    # 将对象保存到数据库。你需要显示的调用 save() 方法。
     >>> r.save()
 
-    # Now it has an ID.
+    # 现在它有一个 ID 了。
     >>> r.id
     1
 
-    # Now the new reporter is in the database.
+    # 现在新的 reporter 已经在数据库里面了。
     >>> Reporter.objects.all()
     [<Reporter: John Smith>]
 
-    # Fields are represented as attributes on the Python object.
+    # 字段被表示为一个 Python 对象的属性。
     >>> r.full_name
     'John Smith'
 
-    # Django provides a rich database lookup API.
+    # Django 提供了丰富的数据库查询 API。
     >>> Reporter.objects.get(id=1)
     <Reporter: John Smith>
     >>> Reporter.objects.get(full_name__startswith='John')
@@ -95,45 +88,44 @@ access your data. The API is created on the fly, no code generation necessary::
         ...
     DoesNotExist: Reporter matching query does not exist.
 
-    # Create an article.
+    # 创建一个 article
     >>> from datetime import datetime
     >>> a = Article(pub_date=datetime.now(), headline='Django is cool',
     ...     content='Yeah.', reporter=r)
     >>> a.save()
 
-    # Now the article is in the database.
+    # 现在 article 已经在数据库中了。
     >>> Article.objects.all()
     [<Article: Django is cool>]
 
-    # Article objects get API access to related Reporter objects.
+    # Article 对象有 API 可以访问到关联到 Reporter 对象。
     >>> r = a.reporter
     >>> r.full_name
     'John Smith'
 
-    # And vice versa: Reporter objects get API access to Article objects.
+    # 反之亦然：Reporter 对象也有访问 Article 对象的API。
     >>> r.article_set.all()
     [<Article: Django is cool>]
 
-    # The API follows relationships as far as you need, performing efficient
-    # JOINs for you behind the scenes.
-    # This finds all articles by a reporter whose name starts with "John".
+    # API 会在后台有效的联合表，以便满足你的关联查询的要求。
+    # 以下这个例子会找出 名字以 "John" 开头的 reporter 的所有的 articles。
     >>> Article.objects.filter(reporter__full_name__startswith="John")
     [<Article: Django is cool>]
 
-    # Change an object by altering its attributes and calling save().
+    # 通过更改一个对象的属性，然后调用 save() 方法来改变一个对象的值。
     >>> r.full_name = 'Billy Goat'
     >>> r.save()
 
-    # Delete an object with delete().
+    # 使用 delete() 方法删除一个对象。
     >>> r.delete()
 
-A dynamic admin interface: it's not just scaffolding -- it's the whole house
-============================================================================
+一个动态站点管理接口：不只是一个脚手架，而是一栋完整的房子
+==========================================================
 
-Once your models are defined, Django can automatically create a professional,
-production ready :doc:`administrative interface </ref/contrib/admin/index>` -- a Web
-site that lets authenticated users add, change and delete objects. It's as easy
-as registering your model in the admin site::
+一旦你的 models 被定义好，Django 能自动创建一个专业的，可以用于生产环境
+的 :doc:`管理界面 </ref/contrib/admin/index>` -- 一个让满足权限的用户增
+加删除修改数据对象的网站。它使用起来也非常简单只需要在你的 admin site
+中注册你的 model 即可::
 
     # In models.py...
 
@@ -153,28 +145,26 @@ as registering your model in the admin site::
 
     admin.site.register(models.Article)
 
-The philosophy here is that your site is edited by a staff, or a client, or
-maybe just you -- and you don't want to have to deal with creating backend
-interfaces just to manage content.
+这种设计的哲学是你的网站一般会由一个员工或者客户编辑，或者仅仅是你自己
+-- 而你应该不会想要仅仅为了管理内容而去创建后台界面。
 
-One typical workflow in creating Django apps is to create models and get the
-admin sites up and running as fast as possible, so your staff (or clients) can
-start populating data. Then, develop the way data is presented to the public.
+在一个创建 Django 应用的典型工作流中，首先需要创建 models 并尽快让
+admin sites 工作起来，这样你的员工(或者客户)能够开始录入数据。然后，开
+发数据被展示给公众的方法。
 
-Design your URLs
-================
+设计你的 URLs
+=============
 
-A clean, elegant URL scheme is an important detail in a high-quality Web
-application. Django encourages beautiful URL design and doesn't put any cruft
-in URLs, like ``.php`` or ``.asp``.
+一个干净的，优雅的 URL 方案是一个高质量 Web 应用程序的重要细节。Django
+ 鼓励使用漂亮的 URL设计，并且不鼓励把没必要的东西放到 URLs 里面，像是
+ ``.php`` 或 ``.asp`` 。
 
-To design URLs for an app, you create a Python module called a :doc:`URLconf
-</topics/http/urls>`. A table of contents for your app, it contains a simple mapping
-between URL patterns and Python callback functions. URLconfs also serve to
-decouple URLs from Python code.
+为了给一个 app 设计 URLs，你需要创建一个 Python 模块叫做 :doc:`URLconf
+</topics/http/urls>` 。一个你的 app 内容的目录，他包含一个简单的 URL 模
+式与 Python 回调函数的映射关系。同时这有助于解耦 Python 代码和 URLs 。
 
-Here's what a URLconf might look like for the ``Reporter``/``Article``
-example above::
+这里是一个 URLconf 看起来的样子，针对上面的 ``Reporter`` / ``Article``
+例子::
 
     from django.conf.urls import patterns, url, include
 
@@ -184,54 +174,47 @@ example above::
         (r'^articles/(\d{4})/(\d{2})/(\d+)/$', 'news.views.article_detail'),
     )
 
-The code above maps URLs, as simple regular expressions, to the location of
-Python callback functions ("views"). The regular expressions use parenthesis to
-"capture" values from the URLs. When a user requests a page, Django runs
-through each pattern, in order, and stops at the first one that matches the
-requested URL. (If none of them matches, Django calls a special-case 404 view.)
-This is blazingly fast, because the regular expressions are compiled at load
-time.
+上面的代码映射了 URLs，从一个简单的正则表达式，到 Python 回调函数的位置
+("views")。正则表达式使用圆括号"捕获" URLs 的值。当用户请求一个页面时，
+Django 通过按照顺序的匹配每一个模式，并停在第一个匹配请求的 URL 上。(如
+果没有匹配到， Django 将会展示一个404错误页面。)整个过程是极快的，应为
+在加载时正则表达式就进行了编译。
 
-Once one of the regexes matches, Django imports and calls the given view, which
-is a simple Python function. Each view gets passed a request object --
-which contains request metadata -- and the values captured in the regex.
+一旦有一个正则表达式匹配上了，Django 将导入然后调用后面的视图中的函数，
+它其实就是调用了一个简单的 Python 函数。每个视图将得到一个 request 对象
+-- 它包含了 request 的 meta 信息(metadata) -- 和通过正则被捕获到的值。
 
-For example, if a user requested the URL "/articles/2005/05/39323/", Django
-would call the function ``news.views.article_detail(request,
-'2005', '05', '39323')``.
+例如，如果一个用户请求了这个 URL "/articles/2005/05/39323/" ， Django会
+这样调用函数 ``news.views.article_detail(request, '2005', '05',
+'39323')`` 。
 
-Write your views
-================
+编写你的 views
+==============
 
-Each view is responsible for doing one of two things: Returning an
-:class:`~django.http.HttpResponse` object containing the content for the
-requested page, or raising an exception such as :class:`~django.http.Http404`.
-The rest is up to you.
+每个视图都只做两件中一件事情：要么返回一个包含请求结果的页面的
+:class:`~django.http.HttpResponse` 对象，要么抛出一个异常，如
+:class:`~django.http.Http404` 。至于其他就看你自己了。
 
-Generally, a view retrieves data according to the parameters, loads a template
-and renders the template with the retrieved data. Here's an example view for
-``year_archive`` from above::
+通常来说，一个view视图会根据参数接受数据，加载模板，使用提供的数据渲染
+模板。下面是一个 ``按年归档`` 的例子::
 
     def year_archive(request, year):
         a_list = Article.objects.filter(pub_date__year=year)
         return render_to_response('news/year_archive.html', {'year': year, 'article_list': a_list})
 
-This example uses Django's :doc:`template system </topics/templates>`, which has
-several powerful features but strives to stay simple enough for non-programmers
-to use.
+这个例子使用了 Django 的 :doc:`模板系统 </topics/templates>` 。模板系统
+功能强大， 但是简单易用，甚至不会编程的人也会使用。
 
-Design your templates
-=====================
+设计你的模板 templates
+======================
 
-The code above loads the ``news/year_archive.html`` template.
+上面的例子中载入了 ``news/year_archive.html`` 模板。
 
-Django has a template search path, which allows you to minimize redundancy among
-templates. In your Django settings, you specify a list of directories to check
-for templates. If a template doesn't exist in the first directory, it checks the
-second, and so on.
+Django 有一个模板搜索路径，他让你能够尽可能的重复使用模板。在你的
+Django设置中，你可以指定一个查找模板的目录列表。如果一个模板没有在这个
+列表中的地一个文件夹中找到，那么它会去找下一个，然后以此类推。
 
-Let's say the ``news/year_archive.html`` template was found. Here's what that
-might look like:
+假设我们已经找到了 ``news/article_detail.html`` 模板，模板内容大概会是这样：
 
 .. code-block:: html+django
 
@@ -249,28 +232,24 @@ might look like:
     {% endfor %}
     {% endblock %}
 
-Variables are surrounded by double-curly braces. ``{{ article.headline }}``
-means "Output the value of the article's headline attribute." But dots aren't
-used only for attribute lookup: They also can do dictionary-key lookup, index
-lookup and function calls.
+模板中的变量都使用双花括号包围。 ``{{ article.headline }}`` 表示 “输出
+article 的headline 属性”。但是点符号不仅用于表示属性，还用于表示字典的
+键值查找、索引查找和函数调用。
 
-Note ``{{ article.pub_date|date:"F j, Y" }}`` uses a Unix-style "pipe" (the "|"
-character). This is called a template filter, and it's a way to filter the value
-of a variable. In this case, the date filter formats a Python datetime object in
-the given format (as found in PHP's date function; yes, there is one good idea
-in PHP).
+注意， ``{{ article.pub_date|date:"F j, Y" }}`` 中使用了 Unix类系统 中
+的“管道”（ Unix 中用“ | ”符号表示管道）。这里被称为模板过滤器。这是
+一种过滤变量的方式。 本例中， Python 的日期时间对象被过滤成了指定的格式。
+（在 PHP 的日期函数中可以见到这种变换;是的，PHP也是有优秀之处的）。
 
-You can chain together as many filters as you'd like. You can write custom
-filters. You can write custom template tags, which run custom Python code behind
-the scenes.
+你可以无限制地串联使用多种过滤器，还可以定制自己的过滤器。你可以定制自
+己的模板标记，在后台执行自定义的 Python 代码。
 
-Finally, Django uses the concept of "template inheritance": That's what the
-``{% extends "base.html" %}`` does. It means "First load the template called
-'base', which has defined a bunch of blocks, and fill the blocks with the
-following blocks." In short, that lets you dramatically cut down on redundancy
-in templates: each template has to define only what's unique to that template.
+最后，Django 使用了 “模板继承” 的概念。这是 ``{% extends "base.html"
+%}`` 所做的事情。他意味着 “首先载入名为‘base’的模板的内容到当前模板，
+然后再处理本模板中的其余内容。”简而言之，模板继承可以使用模板显著地缩
+短合并模板中相同的部分：每一个模板只需要定义它独特的部分即可。
 
-Here's what the "base.html" template might look like:
+下面是 "base.html" 模板看起来的样子:
 
 .. code-block:: html+django
 
@@ -284,41 +263,36 @@ Here's what the "base.html" template might look like:
     </body>
     </html>
 
-Simplistically, it defines the look-and-feel of the site (with the site's logo),
-and provides "holes" for child templates to fill. This makes a site redesign as
-easy as changing a single file -- the base template.
+模板内容相当清晰。例子模板定义了整个站点的外观（包括站点的 logo ），并
+留下了一个“洞”，等待子模板来填充。这种做法使站点的重新设计变得非常方
+便 -- 只要改动 base.html 这一个文件就可以了。
 
-It also lets you create multiple versions of a site, with different base
-templates, while reusing child templates. Django's creators have used this
-technique to create strikingly different cell-phone editions of sites -- simply
-by creating a new base template.
+这种做法还有一个好处：可以保持子模板不变，而方便地创建不同版本的站点。
+Django 的创建者已经使用这项技术创建了因手机号码不同而产生的不同版本站点，
+而所做的工作只是创建新的基础模板而已。
 
-Note that you don't have to use Django's template system if you prefer another
-system. While Django's template system is particularly well-integrated with
-Django's model layer, nothing forces you to use it. For that matter, you don't
-have to use Django's database API, either. You can use another database
-abstraction layer, you can read XML files, you can read files off disk, or
-anything you want. Each piece of Django -- models, views, templates -- is
-decoupled from the next.
+注意，如果你喜欢其他模板系统，那么你不必一定要使用 Django 的模板系统。
+虽然 Django 的模板系统非常适合 Django 的模型，但这不是必须的。同理，你
+也不必强迫 使用 Django 的数据库 API 。你可以使用其他数据库抽象工具、可
+以读取 XML 文件、 可以读取磁盘上的文件或者其他任何方法来操作数据库。
+Django 的每个组成部分： 模型、视图和模板都可以解耦，以后会谈到。
 
-This is just the surface
-========================
+这仅仅是一点皮毛
+================
 
-This has been only a quick overview of Django's functionality. Some more useful
-features:
+本文只是 Django 功能的一个快速概览。以下一些更有用的功能：
 
-* A :doc:`caching framework </topics/cache>` that integrates with memcached
-  or other backends.
+* 一个 :doc:`缓存框架 </topics/cache>` 它可以与 memcached 或者其他后台
+  缓存工具集成。
 
-* A :doc:`syndication framework </ref/contrib/syndication>` that makes
-  creating RSS and Atom feeds as easy as writing a small Python class.
+* 一个 :doc:`聚合框架 </ref/contrib/syndication>` 可以让创建 RSS 和
+  Atom 种子同写一个小小的 Python 类一样容易。
 
-* More sexy automatically-generated admin features -- this overview barely
-  scratched the surface.
+* 更性感的自动创建管理站点功能 -- 本文中的例子已经可以搭建出一个管理站
+  点的骨架了。
 
-The next obvious steps are for you to `download Django`_, read :doc:`the
-tutorial </intro/tutorial01>` and join `the community`_. Thanks for your
-interest!
+显然，下一步你应该 `下载 Django`_ ，阅读 :doc:`入门教程
+</intro/tutorial01>` 并加入 `社区`_ 。非常感谢您的关注。
 
-.. _download Django: https://www.djangoproject.com/download/
-.. _the community: https://www.djangoproject.com/community/
+.. _下载 Django: https://www.djangoproject.com/download/
+.. _社区: https://www.djangoproject.com/community/
