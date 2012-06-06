@@ -1,28 +1,23 @@
-==================
-Django at a glance
-==================
+===========
+初探 Django
+===========
 
-Because Django was developed in a fast-paced newsroom environment, it was
-designed to make common Web-development tasks fast and easy. Here's an informal
-overview of how to write a database-driven Web app with Django.
+因为 Django 是在一个快节奏的新闻编辑部中开发出来的，它被设计用来让普通的网站开发工作简单快
+捷。以下是一个教你使用 Django 创建一个数据库驱动的网站应用的大纲。
 
-The goal of this document is to give you enough technical specifics to
-understand how Django works, but this isn't intended to be a tutorial or
-reference -- but we've got both! When you're ready to start a project, you can
-:doc:`start with the tutorial </intro/tutorial01>` or :doc:`dive right into more
-detailed documentation </topics/index>`.
+这个文档的目标是让你有足够的技巧和能力了解 Django 是如何工作的，但是它并不是表示它是一个新
+手指南或者参考目录 -- 其实这些我们都有！当你准备好新建一个项目，你可以 :doc:`从新手指南开始
+</intro/tutorial01>` 或者 :doc:`深入阅读详细的文档 </topics/index>`.
 
-Design your model
-=================
+设计你的 model
+==============
 
-Although you can use Django without a database, it comes with an
-object-relational mapper in which you describe your database layout in Python
-code.
+尽管你在 Django 中可以不使用数据库，但是它提供了一个完善的可以用 Python 代码描述你的数据库
+结构的对象关联映射(ORM)。
 
-The :doc:`data-model syntax </topics/db/models>` offers many rich ways of
-representing your models -- so far, it's been solving two years' worth of
-database-schema problems. Here's a quick example, which might be saved in
-the file ``mysite/news/models.py``::
+:doc:`model 语法 </topics/db/models>` 提供了丰富的表现你的 models 的方法 -- 目前为止，它解
+决了不少关于数据库模式的问题。the file这里是一个简单的例子，一般保存在一个名为
+``mysite/news/models.py`` 的文件中::
 
     class Reporter(models.Model):
         full_name = models.CharField(max_length=70)
@@ -39,18 +34,16 @@ the file ``mysite/news/models.py``::
         def __unicode__(self):
             return self.headline
 
-Install it
-==========
+安装
+====
 
-Next, run the Django command-line utility to create the database tables
-automatically:
+下一步，运行 Django 命令行工具来自动创建数据库表:
 
 .. code-block:: bash
 
     manage.py syncdb
 
-The :djadmin:`syncdb` command looks at all your available models and creates
-tables in your database for whichever tables don't already exist.
+:djadmin:`syncdb` 命令会查找所有可用的 models 然后在数据库中创建还不存在的数据库表。
 
 Enjoy the free API
 ==================
