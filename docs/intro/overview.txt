@@ -153,17 +153,14 @@ API 是动态生成的，不需要生成代码::
 设计你的 URLs
 =============
 
-A clean, elegant URL scheme is an important detail in a high-quality Web
-application. Django encourages beautiful URL design and doesn't put any cruft
-in URLs, like ``.php`` or ``.asp``.
+一个干净的，优雅的 URL 方案是一个高质量 Web 应用程序的重要细节。Django 鼓励使用漂亮的 URL
+ 设计，并且不鼓励把没必要的东西放到 URLs 里面，像是 ``.php`` 或 ``.asp`` 。
 
-To design URLs for an app, you create a Python module called a :doc:`URLconf
-</topics/http/urls>`. A table of contents for your app, it contains a simple mapping
-between URL patterns and Python callback functions. URLconfs also serve to
-decouple URLs from Python code.
+为了给一个 app 设计 URLs，你需要创建一个 Python 模块叫做 :doc:`URLconf
+</topics/http/urls>` 。一个你的 app 内容的目录，他包含一个简单的 URL 模式与 Python 回调函数
+的映射关系。同时这有助于解耦 Python 代码和 URLs 。
 
-Here's what a URLconf might look like for the ``Reporter``/``Article``
-example above::
+这里是一个 URLconf 看起来的样子，针对上面的 ``Reporter`` / ``Article`` 例子::
 
     from django.conf.urls import patterns, url, include
 
@@ -172,6 +169,8 @@ example above::
         (r'^articles/(\d{4})/(\d{2})/$', 'news.views.month_archive'),
         (r'^articles/(\d{4})/(\d{2})/(\d+)/$', 'news.views.article_detail'),
     )
+
+上面的代码映射了 URLs，从一个简单的正则表达式，到 Python 回调函数的位置("views")。
 
 The code above maps URLs, as simple regular expressions, to the location of
 Python callback functions ("views"). The regular expressions use parenthesis to
