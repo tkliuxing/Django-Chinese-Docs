@@ -45,38 +45,38 @@
 
 :djadmin:`syncdb` 命令会查找所有可用的 models 然后在数据库中创建还不存在的数据库表。
 
-Enjoy the free API
-==================
+享用便捷的 API
+==============
 
-With that, you've got a free, and rich, :doc:`Python API </topics/db/queries>` to
-access your data. The API is created on the fly, no code generation necessary::
+通过它，你可以使用一个方便功能丰富的 :doc:`Python API </topics/db/queries>` 来访问你的数据。
+API 是动态生成的，不需要生成代码::
 
-    # Import the models we created from our "news" app
+    # 导入我们在 "news" app 中创建的 models
     >>> from news.models import Reporter, Article
 
-    # No reporters are in the system yet.
+    # 在系统中目前还没有 reporters
     >>> Reporter.objects.all()
     []
 
-    # Create a new Reporter.
+    # 创建一个新的 Reporter 
     >>> r = Reporter(full_name='John Smith')
 
-    # Save the object into the database. You have to call save() explicitly.
+    # 将对象保存到数据库。你需要显示的调用 save() 方法。
     >>> r.save()
 
-    # Now it has an ID.
+    # 现在它有一个 ID 了。
     >>> r.id
     1
 
-    # Now the new reporter is in the database.
+    # 现在新的 reporter 已经在数据库里面了。
     >>> Reporter.objects.all()
     [<Reporter: John Smith>]
 
-    # Fields are represented as attributes on the Python object.
+    # 字段被表示为一个 Python 对象的属性。
     >>> r.full_name
     'John Smith'
 
-    # Django provides a rich database lookup API.
+    # Django 提供了丰富的数据库查询 API。
     >>> Reporter.objects.get(id=1)
     <Reporter: John Smith>
     >>> Reporter.objects.get(full_name__startswith='John')
@@ -88,45 +88,43 @@ access your data. The API is created on the fly, no code generation necessary::
         ...
     DoesNotExist: Reporter matching query does not exist.
 
-    # Create an article.
+    # 创建一个 article
     >>> from datetime import datetime
     >>> a = Article(pub_date=datetime.now(), headline='Django is cool',
     ...     content='Yeah.', reporter=r)
     >>> a.save()
 
-    # Now the article is in the database.
+    # 现在 article 已经在数据库中了。
     >>> Article.objects.all()
     [<Article: Django is cool>]
 
-    # Article objects get API access to related Reporter objects.
+    # Article 对象有 API 可以访问到关联到 Reporter 对象。
     >>> r = a.reporter
     >>> r.full_name
     'John Smith'
 
-    # And vice versa: Reporter objects get API access to Article objects.
+    # 反之亦然：Reporter 对象也有访问 Article 对象的API。
     >>> r.article_set.all()
     [<Article: Django is cool>]
 
-    # The API follows relationships as far as you need, performing efficient
-    # JOINs for you behind the scenes.
-    # This finds all articles by a reporter whose name starts with "John".
+    # API 会在后台有效的联合表，以便满足你的关联查询的要求。
+    # 以下这个例子会找出 名字以 "John" 开头的 reporter 的所有的 articles。
     >>> Article.objects.filter(reporter__full_name__startswith="John")
     [<Article: Django is cool>]
 
-    # Change an object by altering its attributes and calling save().
+    # 通过更改一个对象的属性，然后调用 save() 方法来改变一个对象的值。
     >>> r.full_name = 'Billy Goat'
     >>> r.save()
 
-    # Delete an object with delete().
+    # 使用 delete() 方法删除一个对象。
     >>> r.delete()
 
-A dynamic admin interface: it's not just scaffolding -- it's the whole house
-============================================================================
+一个动态的 admin 管理界面: 它不只是个空架子 -- 它功能强大
+=========================================================
 
-Once your models are defined, Django can automatically create a professional,
-production ready :doc:`administrative interface </ref/contrib/admin/index>` -- a Web
-site that lets authenticated users add, change and delete objects. It's as easy
-as registering your model in the admin site::
+一旦你的 models 被定义好，Django 能自动创建一个专业的，可以用于生产环境的 :doc:`管理界面接
+口 </ref/contrib/admin/index>` -- 一个让满足权限的用户增加删除修改数据对象的网站。它使用起
+来也非常简单只需要在你的 admin site 中注册你的 model 即可::
 
     # In models.py...
 
@@ -146,16 +144,14 @@ as registering your model in the admin site::
 
     admin.site.register(models.Article)
 
-The philosophy here is that your site is edited by a staff, or a client, or
-maybe just you -- and you don't want to have to deal with creating backend
-interfaces just to manage content.
+这种设计的哲学是你的网站一般会由一个员工或者客户编辑，或者仅仅是你自己 -- 而你应该不会想要
+仅仅为了管理内容而去创建后台界面。
 
-One typical workflow in creating Django apps is to create models and get the
-admin sites up and running as fast as possible, so your staff (or clients) can
-start populating data. Then, develop the way data is presented to the public.
+在一个创建 Django 应用的典型工作流中，首先需要创建 models 并尽快让 admin sites 工作起来，这
+样你的员工(或者客户)能够开始录入数据。然后，开发数据被展示给公众的方法。
 
-Design your URLs
-================
+设计你的 URLs
+=============
 
 A clean, elegant URL scheme is an important detail in a high-quality Web
 application. Django encourages beautiful URL design and doesn't put any cruft

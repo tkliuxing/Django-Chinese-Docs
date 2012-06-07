@@ -22,6 +22,7 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
 
 已完成和正在进行中的文档::
 
+  [  40%] [      11967]  ./intro/overview.txt
   [ 100%] [       3378]  ./intro/install.txt  
   [ 100%] [       9919]  ./ref/models/options.txt
   [  50%] [      66276]  ./ref/settings.txt
@@ -83,7 +84,6 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [   0%] [       9050]  ./internals/release-process.txt
   [   0%] [      10303]  ./internals/svn.txt
   [   0%] [       1313]  ./intro/index.txt
-  [   0%] [      11967]  ./intro/overview.txt
   [   0%] [      28834]  ./intro/tutorial01.txt
   [   0%] [      19098]  ./intro/tutorial02.txt
   [   0%] [      21449]  ./intro/tutorial03.txt
