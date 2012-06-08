@@ -170,26 +170,19 @@ API 是动态生成的，不需要生成代码::
         (r'^articles/(\d{4})/(\d{2})/(\d+)/$', 'news.views.article_detail'),
     )
 
-上面的代码映射了 URLs，从一个简单的正则表达式，到 Python 回调函数的位置("views")。
+上面的代码映射了 URLs，从一个简单的正则表达式，到 Python 回调函数的位置("views")。正则表达
+式使用圆括号"捕获" URLs 的值。当用户请求一个页面时， Django 通过按照顺序的匹配每一个模式，
+并停在第一个匹配请求的 URL 上。(如果没有匹配到， Django 将会展示一个404错误页面。)整个过程
+是极快的，应为在加载时正则表达式就进行了编译。
 
-The code above maps URLs, as simple regular expressions, to the location of
-Python callback functions ("views"). The regular expressions use parenthesis to
-"capture" values from the URLs. When a user requests a page, Django runs
-through each pattern, in order, and stops at the first one that matches the
-requested URL. (If none of them matches, Django calls a special-case 404 view.)
-This is blazingly fast, because the regular expressions are compiled at load
-time.
+一旦有一个正则表达式匹配上了，Django 将导入然后调用后面的视图中的函数，它其实就是调用了一个简单的 Python 函数。
+每个视图将得到一个 request 对象 -- 它包含了 request 的 meta 信息(metadata) -- 和通过正则被捕获到的值。
 
-Once one of the regexes matches, Django imports and calls the given view, which
-is a simple Python function. Each view gets passed a request object --
-which contains request metadata -- and the values captured in the regex.
+例如，如果一个用户请求了这个 URL "/articles/2005/05/39323/" ， Django会这样调用函数
+``news.views.article_detail(request, '2005', '05', '39323')`` 。
 
-For example, if a user requested the URL "/articles/2005/05/39323/", Django
-would call the function ``news.views.article_detail(request,
-'2005', '05', '39323')``.
-
-Write your views
-================
+编写你的 views
+==============
 
 Each view is responsible for doing one of two things: Returning an
 :class:`~django.http.HttpResponse` object containing the content for the
