@@ -16,23 +16,34 @@ https://github.com/wrongwaycn/Django-Chinese-Docs
 
 http://readthedocs.org/docs/django-document-cn/en/latest/
 
+参与人员及进度
+==============
 
-翻译进度
-========
+wrongway
+--------
 
-已完成和正在进行中的文档::
+::
 
-  [  40%] [      11967]  ./intro/overview.txt
-  [ 100%] [       3378]  ./intro/install.txt  
-  [ 100%] [       9919]  ./ref/models/options.txt
   [  50%] [      66276]  ./ref/settings.txt
   [ 100%] [      24519]  ./topics/email.txt
   [ 100%] [       2871]  ./topics/i18n/index.txt
   [ 100%] [       8127]  ./topics/settings.txt
   [  30%] [      50383]  ./topics/db/models.txt
 
+pylemon
+-------
 
-未完成的文档::
+::
+
+  [  70%] [      11967]  ./intro/overview.txt
+  [ 100%] [       3378]  ./intro/install.txt  
+  [ 100%] [       9919]  ./ref/models/options.txt
+
+
+未完成的文档
+============
+
+::
 
   [   0%] [        678]  ./contents.txt
   [   0%] [       5808]  ./faq/admin.txt
