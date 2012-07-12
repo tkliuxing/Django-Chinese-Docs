@@ -35,9 +35,15 @@ pylemon
 
 ::
 
-  [  70%] [      11967]  ./intro/overview.txt
-  [ 100%] [       3378]  ./intro/install.txt  
+  [  40%] [       7728]  ./index.txt
   [ 100%] [       9919]  ./ref/models/options.txt
+  [ 100%] [       1313]  ./intro/index.txt
+  [ 100%] [      11967]  ./intro/overview.txt
+  [ 100%] [       3378]  ./intro/install.txt  
+  [  10%] [      28834]  ./intro/tutorial01.txt
+  [   0%] [      19098]  ./intro/tutorial02.txt
+  [   0%] [      21449]  ./intro/tutorial03.txt
+  [   0%] [      14605]  ./intro/tutorial04.txt
 
 
 未完成的文档
@@ -76,7 +82,6 @@ pylemon
   [   0%] [       5350]  ./howto/outputting-csv.txt
   [   0%] [       6170]  ./howto/outputting-pdf.txt
   [   0%] [      20418]  ./howto/static-files.txt
-  [   0%] [       7728]  ./index.txt
   [   0%] [      17515]  ./internals/committers.txt
   [   0%] [       9002]  ./internals/contributing/bugs-and-features.txt
   [   0%] [       5873]  ./internals/contributing/committing-code.txt
@@ -94,11 +99,6 @@ pylemon
   [   0%] [        665]  ./internals/index.txt
   [   0%] [       9050]  ./internals/release-process.txt
   [   0%] [      10303]  ./internals/svn.txt
-  [   0%] [       1313]  ./intro/index.txt
-  [   0%] [      28834]  ./intro/tutorial01.txt
-  [   0%] [      19098]  ./intro/tutorial02.txt
-  [   0%] [      21449]  ./intro/tutorial03.txt
-  [   0%] [      14605]  ./intro/tutorial04.txt
   [   0%] [       9417]  ./intro/whatsnext.txt
   [   0%] [       8133]  ./misc/api-stability.txt
   [   0%] [       9730]  ./misc/design-philosophies.txt

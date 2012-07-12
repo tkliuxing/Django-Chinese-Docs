@@ -35,11 +35,11 @@ Getting Help
 ========
 
 * **从零开始:**
-  :doc:`概要# <intro/overview>` |
+  :doc:`概要* <intro/overview>` |
   :doc:`安装* <intro/install>`
 
 * **新手教程:**
-  :doc:`第1节 <intro/tutorial01>` |
+  :doc:`第1节# <intro/tutorial01>` |
   :doc:`第2节 <intro/tutorial02>` |
   :doc:`第3节 <intro/tutorial03>` |
   :doc:`第4节 <intro/tutorial04>`
