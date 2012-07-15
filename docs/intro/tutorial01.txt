@@ -62,26 +62,24 @@ Django 实例的设置的集合， 包括数据库配置， Django 的定义选�
     ``django`` （这是 Django 的保留字）或 ``test`` （与 Python 内建的包
     名称冲突）。
 
-:doc:`django-admin.py </ref/django-admin>` should be on your system path if you
-installed Django via ``python setup.py``. If it's not on your path, you can find
-it in ``site-packages/django/bin``, where ``site-packages`` is a directory
-within your Python installation. Consider symlinking to :doc:`django-admin.py
-</ref/django-admin>` from some place on your path, such as
-:file:`/usr/local/bin`.
+如果你是通过 ``python setup.py`` 来安装的 Django 那么
+:doc:`django-admin.py </ref/django-admin>` 应该已经在你的系统路径当中了。
+如果它还不在你的系统路径中，你可以在 ``site-packages/django/bin`` 中找
+到它， 这里的 ``site-packages`` 是你系统中 Python 安装路径下的一个目录。
+同时建议你在你的系统路径中，比如 :file:`/usr/local/bin` 下建立一个
+:doc:`django-admin.py </ref/django-admin>` 的软连接。
 
-.. admonition:: Where should this code live?
+.. admonition:: 我的代码应该放在哪里？
 
-    If your background is in PHP, you're probably used to putting code under the
-    Web server's document root (in a place such as ``/var/www``). With Django,
-    you don't do that. It's not a good idea to put any of this Python code
-    within your Web server's document root, because it risks the possibility
-    that people may be able to view your code over the Web. That's not good for
-    security.
+    如果你有 PHP 语言编程背景的话，你可能会将你的代码放在 Web 服务器的
+    文档根目录 （例如 ``/var/www`` )。在 Django 中， 你不必这么做。将任
+    何 Python 代码放在你的 Web 服务器文档根目录不是一个好主意。因为这可
+    能会增加人们通过 Web 方式查看到你的代码的风险。这样很不安全。
 
-    Put your code in some directory **outside** of the document root, such as
-    :file:`/home/mycode`.
+    将你的代码放置在你的文档根目录 **之外** 例如 :file:`/home/mycode`
+    。
 
-Let's look at what :djadmin:`startproject` created::
+我们一起来看看 :djadmin:`startproject` 都创建了些什么::
 
     mysite/
         manage.py
@@ -91,14 +89,14 @@ Let's look at what :djadmin:`startproject` created::
             urls.py
             wsgi.py
 
-.. admonition:: Doesn't match what you see?
+.. admonition:: 和你看到的文件不一样么？
 
-    The default project layout recently changed. If you're seeing a "flat"
-    layout (with no inner :file:`mysite/` directory), you're probably using
-    a version of Django that doesn't match this tutorial version.  You'll
-    want to either switch to the older tutorial or the newer Django version.
+    默认的项目布局最近刚刚改变过。如果你看到的是一个"扁平"结构的目录布
+    局（不包含内部的 :file:`mysite/` 目录），你很可能正在使用一个和本教
+    程版本不一致的 Django 版本。你最好去查看对应的旧版教程，或者使用最
+    新的 Django 版本。
 
-These files are:
+这些文件是:
 
 * The outer :file:`mysite/` directory is just a container for your
   project. Its name doesn't matter to Django; you can rename it to anything
