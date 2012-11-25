@@ -48,6 +48,9 @@ The first step of writing views is to design your URL structure. You do this by
 creating a Python module, called a URLconf. URLconfs are how Django associates
 a given URL with given Python code.
 
+第一步是设计URL结构。首先创建Python模块，并命名为URLconf。Django通过URLconf连接
+和给定的URL和Python代码。
+
 When a user requests a Django-powered page, the system looks at the
 :setting:`ROOT_URLCONF` setting, which contains a string in Python dotted
 syntax. Django loads that module and looks for a module-level variable called
@@ -58,6 +61,15 @@ syntax. Django loads that module and looks for a module-level variable called
 Django starts at the first regular expression and makes its way down the list,
 comparing the requested URL against each regular expression until it finds one
 that matches.
+
+当用户获取一个Django页面，系统会查询 :setting:`ROOT_URLCONF`环境。`ROOT_URLCONF`含有
+Python语法中的字符串。Django载入指定模版并定位名为``urlpatterns``的变量。
+``urlpatterns``格式如下::
+
+    (regular expression, Python callback function [, optional dictionary])
+
+Django从第一个表达式开始读取整个list，比较requested URL和list中的每个表达式，
+直到找到符合的配对。
 
 When it finds a match, Django calls the Python callback function, with an
 :class:`~django.http.HttpRequest` object as the first argument, any "captured"
