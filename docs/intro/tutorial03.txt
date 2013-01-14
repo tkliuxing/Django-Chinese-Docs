@@ -1,47 +1,71 @@
 =====================================
 Writing your first Django app, part 3
+编写你的第一个Django应用,第三部分
 =====================================
 
 This tutorial begins where :doc:`Tutorial 2 </intro/tutorial02>` left off. We're
 continuing the Web-poll application and will focus on creating the public
 interface -- "views."
 
+本教程紧接着教程2</intro/tutorial02>。我们继续讨论“Web-poll”这个应用，并主要关注如何
+创建公共接口--“视图”。
+
 Philosophy
+设计原则
 ==========
 
 A view is a "type" of Web page in your Django application that generally serves
 a specific function and has a specific template. For example, in a Weblog
 application, you might have the following views:
 
+所谓的“视图”就是Django项目有明确的作用并且有特定的模板。例如，在一个网络日志应用中，
+你也许会需要以下视图：
+
 * Blog homepage -- displays the latest few entries.
+博客主页--显示最新的条目
 
 * Entry "detail" page -- permalink page for a single entry.
+“详细”页面--单一条目的链接
 
 * Year-based archive page -- displays all months with entries in the
   given year.
+按照年份归档的页面--显示给定年份每月月份的条目。
 
 * Month-based archive page -- displays all days with entries in the
   given month.
+按照月份归档的页面--显示给定月份每天的条目。
 
 * Day-based archive page -- displays all entries in the given day.
+按照日归档的页面--显示给定日期的所有条目
 
 * Comment action -- handles posting comments to a given entry.
+评论操作--处理条目的评论
 
 In our poll application, we'll have the following four views:
+在投票应用中，会有以下视图：
 
 * Poll "index" page -- displays the latest few polls.
+投票“主页” -- 显示最新的投票。
 
 * Poll "detail" page -- displays a poll question, with no results but
   with a form to vote.
+投票“详细”页面 -- 显示一个并未有结果的投票表格。
+
 
 * Poll "results" page -- displays results for a particular poll.
+投票“结果”页面 -- 显示对每个投票的结果
+
+
 
 * Vote action -- handles voting for a particular choice in a particular
   poll.
+投票操作 -- 处理特定的投票过程。
 
 In Django, each view is represented by a simple Python function.
+在Django中，每个视图由一个简单的Python函数代表
 
 Design your URLs
+设计自己的URLs
 ================
 
 The first step of writing views is to design your URL structure. You do this by
