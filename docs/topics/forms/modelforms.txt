@@ -1,26 +1,23 @@
-==========================
-Creating forms from models
-==========================
+==============
+从模型构造表单
+==============
 
 .. module:: django.forms.models
    :synopsis: ModelForm and ModelFormset.
 
 .. currentmodule:: django.forms
 
-``ModelForm``
+``模型表单``
 =============
 .. class:: ModelForm
 
-If you're building a database-driven app, chances are you'll have forms that
-map closely to Django models. For instance, you might have a ``BlogComment``
-model, and you want to create a form that lets people submit comments. In this
-case, it would be redundant to define the field types in your form, because
-you've already defined the fields in your model.
+如果你正开发数据库驱动程序，那么你的表单就会和Django模型映射结合得很紧密。举个例子，你可能有一个``BlogComment``对象，也希望创建一个表单，好让用户提交评论。在这个例子里，你可能会重复定义表单字段，因为有些字段已经在模型里定义过了。
 
+所以，Django提供了一个帮助类，来帮你从Django模型创建``表单``。
 For this reason, Django provides a helper class that let you create a ``Form``
 class from a Django model.
 
-For example::
+例子::
 
     >>> from django.forms import ModelForm
 
@@ -36,19 +33,15 @@ For example::
     >>> article = Article.objects.get(pk=1)
     >>> form = ArticleForm(instance=article)
 
-Field types
------------
+字段类型
+-------
 
-The generated ``Form`` class will have a form field for every model field. Each
-model field has a corresponding default form field. For example, a
-``CharField`` on a model is represented as a ``CharField`` on a form. A
-model ``ManyToManyField`` is represented as a ``MultipleChoiceField``. Here is
-the full list of conversions:
+生成的``表单``中的字段，都会对应到模型的各个字段上。每个模型字段对有其对应的默认表单字段。例如，模型中的一个``CharField``字段，将生成为表单中的``CharField``。模型中的``ManyToManyField``字段，将生成为表单中的``多选字段``。以下是对应表格：
 
 ===============================  ========================================
-Model field                      Form field
+模型字段                           表单字段
 ===============================  ========================================
-``AutoField``                    Not represented in the form
+``自生成字段（AutoField）``         不会在表单中显示
 
 ``BigIntegerField``              ``IntegerField`` with ``min_value`` set
                                  to -9223372036854775808 and ``max_value``
@@ -111,45 +104,31 @@ Model field                      Form field
 ===============================  ========================================
 
 .. versionadded:: 1.2
-    The ``BigIntegerField`` is new in Django 1.2.
+    ``BigIntegerField``是在Django 1.2版中新增的。
+
+在你的模型中，可能会有像``外键（ForeignKey）``和``多对多（ManyToManyField）``这样的特殊情况：
 
 
-As you might expect, the ``ForeignKey`` and ``ManyToManyField`` model field
-types are special cases:
+*``外键字段（ForeignKey）``将使用``django.forms.ModelChoiceField``呈现，其中的``ChoiceField``的来源是模型的``QuerySet``。
 
-* ``ForeignKey`` is represented by ``django.forms.ModelChoiceField``,
-  which is a ``ChoiceField`` whose choices are a model ``QuerySet``.
+*``多对多字段（ManyToManyField）``将使用``django.forms.ModelMultipleChoiceField``呈现，其中的``MultipleChoiceField``的来源是模型的``QuerySet``。
 
-* ``ManyToManyField`` is represented by
-  ``django.forms.ModelMultipleChoiceField``, which is a
-  ``MultipleChoiceField`` whose choices are a model ``QuerySet``.
+此外，各种生成的表单字段将有以下这些属性设置：
 
-In addition, each generated form field has attributes set as follows:
+*如果在模型中设置``blank=True``，那么生成的表单字段中``必填（required）``将设置为``False``。反之亦然。
 
-* If the model field has ``blank=True``, then ``required`` is set to
-  ``False`` on the form field. Otherwise, ``required=True``.
+*如果在模型中设置了``verbose_name``，那么生成的表单字段的首字母将会大写呈现。
 
-* The form field's ``label`` is set to the ``verbose_name`` of the model
-  field, with the first character capitalized.
+*模型中的``help_text``将对应表单字段中的``help_text``。
 
-* The form field's ``help_text`` is set to the ``help_text`` of the model
-  field.
+*如果模型字段中有``选项（choices）``，那么表单字段的``widget``将被设置为``Select``，其中的选项将会从模型字段中的``选项（choices）``而来。这个选项将默认选中一个空白项。如果该字段为必填字段，将会让用户必选该项。如果模型字段中设置了``blank=False``同时设置了``默认（default）``值，那么这个``默认（default）``值将会被默认选中。
 
-* If the model field has ``choices`` set, then the form field's ``widget``
-  will be set to ``Select``, with choices coming from the model field's
-  ``choices``. The choices will normally include the blank choice which is
-  selected by default. If the field is required, this forces the user to
-  make a selection. The blank choice will not be included if the model
-  field has ``blank=False`` and an explicit ``default`` value (the
-  ``default`` value will be initially selected instead).
+最后，要注意，你随时可以重写模型字段所对应的表单字段。参阅下面的`Overriding the default field types or widgets`_。
 
-Finally, note that you can override the form field used for a given model
-field. See `Overriding the default field types or widgets`_ below.
+完整示例
+--------
 
-A full example
---------------
-
-Consider this set of models::
+定义这样的模型::
 
     from django.db import models
     from django.forms import ModelForm
@@ -180,9 +159,7 @@ Consider this set of models::
         class Meta:
             model = Book
 
-With these models, the ``ModelForm`` subclasses above would be roughly
-equivalent to this (the only difference being the ``save()`` method, which
-we'll discuss in a moment.)::
+依照这些模型，上面的``ModelForm``子类就基本定义好了（``save()``方法的一些不同我们等会在探讨）。::
 
     from django import forms
 
@@ -196,25 +173,16 @@ we'll discuss in a moment.)::
         name = forms.CharField(max_length=100)
         authors = forms.ModelMultipleChoiceField(queryset=Author.objects.all())
 
-The ``is_valid()`` method and ``errors``
-----------------------------------------
+``is_valid()``方法和``errors``
+------------------------------
 
-The first time you call ``is_valid()`` or access the ``errors`` attribute of a
-``ModelForm`` triggers form validation as well as :ref:`model validation
-<validating-objects>`. This has the side-effect of cleaning the model you pass
-to the ``ModelForm`` constructor. For instance, calling ``is_valid()`` on your
-form will convert any date fields on your model to actual date objects.
+当你第一次调用``ModelForm``的``is_valid()``方法或访问``errors``属性，这将会触发表单的验证:ref:`model validation<validating-objects>`。这会对把你的模型传到``ModelForm``的构造方法时产生副作用。譬如，当你调用``is_valid()``方法，表单就会把所有日期字段转换为date对象。
 
 
-The ``save()`` method
----------------------
+``save()``方法
+---------------
 
-Every form produced by ``ModelForm`` also has a ``save()``
-method. This method creates and saves a database object from the data
-bound to the form. A subclass of ``ModelForm`` can accept an existing
-model instance as the keyword argument ``instance``; if this is
-supplied, ``save()`` will update that instance. If it's not supplied,
-``save()`` will create a new instance of the specified model::
+每个使用``ModelForm``开发表单时，都会有``save()``方法。这个方法会把绑定的表单数据创建及保存到数据库中。每个``ModelForm``对象，都可以通过关键字``instance``来访问模型实体，如果已经有了实体，那么``save()``方法将会更新这个实体。如果没有实体，那么``save()``将创建一个实体::
 
     # Create a form instance from POST data.
     >>> f = ArticleForm(request.POST)
@@ -233,24 +201,11 @@ supplied, ``save()`` will update that instance. If it's not supplied,
     >>> f = ArticleForm(request.POST, instance=a)
     >>> f.save()
 
-Note that ``save()`` will raise a ``ValueError`` if the data in the form
-doesn't validate -- i.e., if form.errors evaluates to True.
+注意， 如果表单中的数据没能通过验证，``save()``方法将引发``ValueError``。
 
-This ``save()`` method accepts an optional ``commit`` keyword argument, which
-accepts either ``True`` or ``False``. If you call ``save()`` with
-``commit=False``, then it will return an object that hasn't yet been saved to
-the database. In this case, it's up to you to call ``save()`` on the resulting
-model instance. This is useful if you want to do custom processing on the
-object before saving it, or if you want to use one of the specialized
-:ref:`model saving options <ref-models-force-insert>`. ``commit`` is ``True``
-by default.
+``save()``方法还接受一个可选参数``commit``，可接受``True``或``False``值。如果调用使用``commit=False``调用``save()``方法，那么这个返回值其实还没保存到数据库中。这时，你就可以通过``save()``来获取模型实例了。如果你希望在保存之前做些操作或者你希望使用:ref:`model saving options <ref-models-force-insert>`，这将非常有用。``commit``的默认值是``True``。
 
-Another side effect of using ``commit=False`` is seen when your model has
-a many-to-many relation with another model. If your model has a many-to-many
-relation and you specify ``commit=False`` when you save a form, Django cannot
-immediately save the form data for the many-to-many relation. This is because
-it isn't possible to save many-to-many data for an instance until the instance
-exists in the database.
+当你的模型和别的模型有多对多关系时，使用``commit=False``将有些副作用。当你保存表单时，设置``commit=False``，Django将不会马上保存这个多对多的关系。那是因为无法在没有实体时保存多对多数据。
 
 To work around this problem, every time you save a form using ``commit=False``,
 Django adds a ``save_m2m()`` method to your ``ModelForm`` subclass. After
