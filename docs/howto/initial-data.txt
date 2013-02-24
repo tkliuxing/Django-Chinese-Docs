@@ -1,22 +1,18 @@
-=================================
-Providing initial data for models
-=================================
+====================
+为模型提供初始化数据
+====================
 
-It's sometimes useful to pre-populate your database with hard-coded data when
-you're first setting up an app. There's a couple of ways you can have Django
-automatically create this data: you can provide `initial data via fixtures`_, or
-you can provide `initial data as SQL`_.
+有时你可能会硬编码一些数据来对程序进行初始化。有几种方法来自动构造这些数据：你可以提供 `initial data via fixtures`_ 或提供 `initial data as SQL`_。
 
-In general, using a fixture is a cleaner method since it's database-agnostic,
-but initial SQL is also quite a bit more flexible.
+一般情况下，使用fixture是一种与数据库无关的干净方法。但使用初始化SQL就更有可扩展性。
 
 .. _initial data as sql: `providing initial sql data`_
 .. _initial data via fixtures: `providing initial data with fixtures`_
 
 .. _initial-data-via-fixtures:
 
-Providing initial data with fixtures
-====================================
+使用fixture提供初始化数据
+========================
 
 A fixture is a collection of data that Django knows how to import into a
 database. The most straightforward way of creating a fixture if you've already
