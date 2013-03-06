@@ -2,7 +2,7 @@
 编写你的第一个Django应用,第三部分
 =====================================
 
-本教程紧接着教程2</intro/tutorial02>。我们继续讨论“Web-poll”这个应用，并主要关注如何
+本教程紧接着 :doc:`教程2 </intro/tutorial02>` 。我们继续讨论“Web-poll”这个应用，并主要关注如何
 创建公共接口--“视图”。
 
 设计原则
@@ -12,17 +12,17 @@
 所谓的“视图”就是Django项目有明确的作用并且有特定的模板。例如，在一个网络日志应用中，
 你也许会需要以下视图：
 
-*博客主页--显示最新的条目
+* 博客主页--显示最新的条目
 
-*“详细”页面--单一条目的链接
+* “详细”页面--单一条目的链接
 
-*按照年份归档的页面--显示给定年份每月月份的条目。
+* 按照年份归档的页面--显示给定年份每月月份的条目。
 
-*按照月份归档的页面--显示给定月份每天的条目。
+* 按照月份归档的页面--显示给定月份每天的条目。
 
-*按照日归档的页面--显示给定日期的所有条目
+* 按照日归档的页面--显示给定日期的所有条目
 
-*评论操作--处理条目的评论
+* 评论操作--处理条目的评论
 
 在投票应用中，会有以下视图：
 
@@ -32,7 +32,7 @@
 
 * 投票“结果”页面 -- 显示对每个投票的结果
 
-*投票操作 -- 处理特定的投票过程。
+* 投票操作 -- 处理特定的投票过程。
 
 在Django中，每个视图由一个简单的Python函数代表
 
@@ -43,20 +43,20 @@
 和给定的URL和Python代码。
 
 
-当用户获取一个Django页面，系统会查询 :setting:`ROOT_URLCONF`环境。`ROOT_URLCONF`含有
-Python语法中的字符串。Django载入指定模版并定位名为``urlpatterns``的变量。
-``urlpatterns``格式如下::
+当用户获取一个Django页面，系统会查询 :setting:`ROOT_URLCONF` 环境。 `ROOT_URLCONF` 含有
+Python语法中的字符串。Django载入指定模版并定位名为 ``urlpatterns`` 的变量。
+``urlpatterns`` 格式如下::
 
     (regular expression, Python callback function [, optional dictionary])
 
 Django从第一个表达式开始读取整个list，比较requested URL和list中的每个表达式，
 直到找到符合的配对。
 
-当找到一个匹配时，Django调用Python回调函数，这个回调函数第一个参数是类“django.http.HttpRequest”的
+当找到一个匹配时，Django调用Python回调函数，这个回调函数第一个参数是 :class:`~django.http.HttpRequest` 的
 对象，任何从正则表达式“捕获”到的值作为第二个参数，同时，字典中的关键字是可选参数(三元组第三项可选)
 
-`~django.http.HttpRequest`类的更多细节参照文档`/ref/request-response`。
-URLconfs的更多细节参照文档`/topics/http/urls`。
+:class:`~django.http.HttpRequest` 类的更多细节参照文档 :doc:`/ref/request-response`。
+URLconfs的更多细节参照文档 :doc:`/topics/http/urls`。
 
 
 When you ran ``django-admin.py startproject mysite`` at the beginning of
