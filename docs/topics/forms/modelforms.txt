@@ -11,11 +11,9 @@
 =============
 .. class:: ModelForm
 
-如果你正开发数据库驱动程序，那么你的表单就会和Django模型映射结合得很紧密。举个例子，你可能有一个``BlogComment``对象，也希望创建一个表单，好让用户提交评论。在这个例子里，你可能会重复定义表单字段，因为有些字段已经在模型里定义过了。
+如果你正开发数据库驱动程序，那么你的表单就会和Django模型映射结合得很紧密。举个例子，你可能有一个 ``BlogComment`` 对象，也希望创建一个表单，好让用户提交评论。在这个例子里，你可能会重复定义表单字段，因为有些字段已经在模型里定义过了。
 
-所以，Django提供了一个帮助类，来帮你从Django模型创建``表单``。
-For this reason, Django provides a helper class that let you create a ``Form``
-class from a Django model.
+所以，Django提供了一个帮助类，来帮你从Django模型创建 ``表单`` 。
 
 例子::
 
@@ -34,9 +32,9 @@ class from a Django model.
     >>> form = ArticleForm(instance=article)
 
 字段类型
--------
+-------------------------
 
-生成的``表单``中的字段，都会对应到模型的各个字段上。每个模型字段对有其对应的默认表单字段。例如，模型中的一个``CharField``字段，将生成为表单中的``CharField``。模型中的``ManyToManyField``字段，将生成为表单中的``多选字段``。以下是对应表格：
+生成的 ``表单`` 中的字段，都会对应到模型的各个字段上。每个模型字段对有其对应的默认表单字段。例如，模型中的一个 ``CharField`` 字段，将生成为表单中的 ``CharField`` 。模型中的 ``ManyToManyField`` 字段，将生成为表单中的``多选字段`` 。以下是对应表格：
 
 ===============================  ========================================
 模型字段                           表单字段
@@ -104,26 +102,26 @@ class from a Django model.
 ===============================  ========================================
 
 .. versionadded:: 1.2
-    ``BigIntegerField``是在Django 1.2版中新增的。
+    ``BigIntegerField`` 是在Django 1.2版中新增的。
 
-在你的模型中，可能会有像``外键（ForeignKey）``和``多对多（ManyToManyField）``这样的特殊情况：
+在你的模型中，可能会有像 ``外键（ForeignKey）`` 和 ``ManyToManyFiel`` 这样的特殊情况：
 
 
-*``外键字段（ForeignKey）``将使用``django.forms.ModelChoiceField``呈现，其中的``ChoiceField``的来源是模型的``QuerySet``。
+* ``外键字段（ForeignKey`` 将使用 ``django.forms.ModelChoiceField`` 呈现，其中的 ``ChoiceField`` 的来源是模型的 ``QuerySet`` 。
 
-*``多对多字段（ManyToManyField）``将使用``django.forms.ModelMultipleChoiceField``呈现，其中的``MultipleChoiceField``的来源是模型的``QuerySet``。
+* ``ManyToManyField`` 将使用 ``django.forms.ModelMultipleChoiceField`` 呈现，其中的 ``MultipleChoiceField`` 的来源是模型的 ``QuerySet`` 。
 
 此外，各种生成的表单字段将有以下这些属性设置：
 
-*如果在模型中设置``blank=True``，那么生成的表单字段中``必填（required）``将设置为``False``。反之亦然。
+* 如果在模型中设置 ``blank=True`` ，那么生成的表单字段中 ``required`` 将设置为 ``False`` 。反之亦然。
 
-*如果在模型中设置了``verbose_name``，那么生成的表单字段的首字母将会大写呈现。
+* 如果在模型中设置了 ``verbose_name`` ，那么生成的表单字段的首字母将会大写呈现。
 
-*模型中的``help_text``将对应表单字段中的``help_text``。
+* 模型中的 ``help_text`` 将对应表单字段中的 ``help_text`` 。
 
-*如果模型字段中有``选项（choices）``，那么表单字段的``widget``将被设置为``Select``，其中的选项将会从模型字段中的``选项（choices）``而来。这个选项将默认选中一个空白项。如果该字段为必填字段，将会让用户必选该项。如果模型字段中设置了``blank=False``同时设置了``默认（default）``值，那么这个``默认（default）``值将会被默认选中。
+* 如果模型字段中有 ``choices`` ，那么表单字段的 ``widget`` 将被设置为 ``Select`` ，其中的选项将会从模型字段中的 ``choices`` 而来。这个选项将默认选中一个空白项。如果该字段为必填字段，将会让用户必选该项。如果模型字段中设置了 ``blank=False`` 同时设置了 ``default`` 值，那么这个 ``default`` 值将会被默认选中。
 
-最后，要注意，你随时可以重写模型字段所对应的表单字段。参阅下面的`Overriding the default field types or widgets`_。
+最后，要注意，你随时可以重写模型字段所对应的表单字段。参阅下面的 `重写默认的组件或字段类型`_ 。
 
 完整示例
 --------
@@ -159,7 +157,7 @@ class from a Django model.
         class Meta:
             model = Book
 
-依照这些模型，上面的``ModelForm``子类就基本定义好了（``save()``方法的一些不同我们等会在探讨）。::
+依照这些模型，上面的 ``ModelForm`` 子类就基本定义好了（ ``save()`` 方法的一些不同我们等会在探讨）。::
 
     from django import forms
 
@@ -173,16 +171,23 @@ class from a Django model.
         name = forms.CharField(max_length=100)
         authors = forms.ModelMultipleChoiceField(queryset=Author.objects.all())
 
-``is_valid()``方法和``errors``
-------------------------------
+``is_valid()`` 方法和 ``errors``
+----------------------------------
 
-当你第一次调用``ModelForm``的``is_valid()``方法或访问``errors``属性，这将会触发表单的验证:ref:`model validation<validating-objects>`。这会对把你的模型传到``ModelForm``的构造方法时产生副作用。譬如，当你调用``is_valid()``方法，表单就会把所有日期字段转换为date对象。
+当你第一次调用 ``ModelForm`` 的 ``is_valid()`` 方法或访问 ``errors`` 属性，
+这将会触发表单的验证:ref:`model validation<validating-objects>`。
+这会对把你的模型传到 ``ModelForm`` 的构造方法时产生副作用。
+譬如，当你调用 ``is_valid()`` 方法，表单就会把所有日期字段转换为date对象。
 
 
-``save()``方法
----------------
+``save()`` 方法
+---------------------------------
 
-每个使用``ModelForm``开发表单时，都会有``save()``方法。这个方法会把绑定的表单数据创建及保存到数据库中。每个``ModelForm``对象，都可以通过关键字``instance``来访问模型实体，如果已经有了实体，那么``save()``方法将会更新这个实体。如果没有实体，那么``save()``将创建一个实体::
+每个使用 ``ModelForm`` 开发表单时，都会有 ``save()`` 方法。
+这个方法会把绑定的表单数据创建及保存到数据库中。
+每个 ``ModelForm`` 对象，都可以通过关键字 ``instance`` 来访问模型实体，
+如果已经有了实体，那么 ``save()`` 方法将会更新这个实体。
+如果没有实体，那么 ``save()`` 将创建一个实体::
 
     # Create a form instance from POST data.
     >>> f = ArticleForm(request.POST)
@@ -201,13 +206,21 @@ class from a Django model.
     >>> f = ArticleForm(request.POST, instance=a)
     >>> f.save()
 
-注意， 如果表单中的数据没能通过验证，``save()``方法将引发``ValueError``。
+注意， 如果表单中的数据没能通过验证， ``save()`` 方法将引发 ``ValueError`` 。
 
-``save()``方法还接受一个可选参数``commit``，可接受``True``或``False``值。如果调用使用``commit=False``调用``save()``方法，那么这个返回值其实还没保存到数据库中。这时，你就可以通过``save()``来获取模型实例了。如果你希望在保存之前做些操作或者你希望使用:ref:`model saving options <ref-models-force-insert>`，这将非常有用。``commit``的默认值是``True``。
+``save()`` 方法还接受一个可选参数 ``commit`` ，可接受 ``True`` 或 ``False`` 值。
+如果调用使用 ``commit=False`` 调用 ``save()`` 方法，那么这个返回值其实还没保存到数据库中。
+这时，你就可以通过 ``save()`` 来获取模型实例了。
+如果你希望在保存之前做些操作或者你希望使用 :ref:`model saving options <ref-models-force-insert>` ，这将非常有用。
+``commit`` 的默认值是 ``True`` 。
 
-当你的模型和别的模型有多对多关系时，使用``commit=False``将有些副作用。当你保存表单时，设置``commit=False``，Django将不会马上保存这个多对多的关系。那是因为无法在没有实体时保存对应的多对多数据。
+当你的模型和别的模型有多对多关系时，使用 ``commit=False`` 将有些副作用。
+当你保存表单时，设置 ``commit=False`` ，Django将不会马上保存这个多对多的关系。
+那是因为无法在没有实体时保存对应的多对多数据。
 
-要解决这个问题，每次你使用``commit=False``保存表单时，Django都会添加一个``save_m2m()``到你的``ModelForm``子类中。在你手动保存了实体后，你可以调用``save_m2m()``方法去保存你的多对多数据。例子::
+要解决这个问题，每次你使用 ``commit=False`` 保存表单时，Django都会添加一个 ``save_m2m()`` 到你的 ``ModelForm`` 子类中。
+在你手动保存了实体后，你可以调用 ``save_m2m()`` 方法去保存你的多对多数据。
+例子::
 
     # Create a form instance with POST data.
     >>> f = AuthorForm(request.POST)
@@ -224,8 +237,8 @@ class from a Django model.
     # Now, save the many-to-many data for the form.
     >>> f.save_m2m()
 
-``save_m2m()``仅需你使用``save(commit=False)``时调用。
-当你在表单上只简单地调用``save()``，所有的数据，包括多对多关系数据，就不需要再调用其它方法了。
+``save_m2m()`` 仅需你使用 ``save(commit=False)`` 时调用。
+当你在表单上只简单地调用 ``save()`` ，所有的数据，包括多对多关系数据，就不需要再调用其它方法了。
 例子::
 
     # Create a form instance with POST data.
@@ -235,20 +248,23 @@ class from a Django model.
     # Create and save the new author instance. There's no need to do anything else.
     >>> new_author = f.save()
 
-除了``save()``和``save_m2m()``方法，``ModelForm``和``forms``表单的其它调用方式完全一样。例如，``is_valid()``方法就是用来校验的，``is_multipart()``方法用来决定上传的文件是否需要分块（``request.FILES``就必须传给表单），诸如此类。参阅:ref:`binding-uploaded-files`获取更多信息。
+除了 ``save()`` 和 ``save_m2m()`` 方法， ``ModelForm`` 和 ``forms`` 表单的其它调用方式完全一样。
+例如， ``is_valid()`` 方法就是用来校验的，
+``is_multipart()`` 方法用来决定上传的文件是否需要分块（ ``request.FILES`` 就必须传给表单），诸如此类。
+参阅 :ref:`binding-uploaded-files <binding-uploaded-files>` 获取更多信息。
 
 在表单中使用字段的子集
-------------------
+------------------------------------
 
-在一些情况下，你可能不希望把模型中的所有字段都生成到表单中。这里有三种方法告诉``ModelForm``只使用模型字段的子集：
+在一些情况下，你可能不希望把模型中的所有字段都生成到表单中。这里有三种方法告诉 ``ModelForm`` 只使用模型字段的子集：
 
-1.设置模型中的字段为``editable=False``。那么，所有通过``ModelForm``生成的表单，都不会有这个字段出现了。
+1.设置模型中的字段为 ``editable=False`` 。那么，所有通过 ``ModelForm`` 生成的表单，都不会有这个字段出现了。
 
-2.设置``ModelForm``中内置类``Meta``的``fields``属性。如果有需要，你可以设置为需要在表单中显示的字段名称的列表。表单将按顺序显示列表中的字段。
+2.设置 ``ModelForm`` 中内置类 ``Meta`` 的 ``fields`` 属性。如果有需要，你可以设置为需要在表单中显示的字段名称的列表。表单将按顺序显示列表中的字段。
 
-3.设置``ModelForm``中内置类``Meta``的``exclude``属性。如果有需要，表单将不会显示你给的字段名称列表中的表单字段。
+3.设置 ``ModelForm`` 中内置类 ``Meta`` 的 ``exclude`` 属性。如果有需要，表单将不会显示你给的字段名称列表中的表单字段。
 
-例如，如果你想做一个``Author``模型的表单（上面定义的那个），只需要包括``name``和``title``字段，你像这样可以设置``fields``或``exclude``::
+例如，如果你想做一个 ``Author`` 模型的表单（上面定义的那个），只需要包括 ``name`` 和 ``title`` 字段，你像这样可以设置 ``fields`` 或 ``exclude`` ::
 
     class PartialAuthorForm(ModelForm):
         class Meta:
@@ -262,34 +278,32 @@ class from a Django model.
 
 Author只包括三个字段，'name', 'title', 和'birth_date'，上面的表单将包括完全一致的字段。
 
-.. 注意::
+.. note::
 
-    如果你在构造``ModelForm``表单时设置了``fields``或``exclude``，那么在你调用``save()``方法时，那些字段将不会被设置到表单中。同样的，如果你手动把字段添加到表单中，它们也不会跟随模型进行初始化。
+    如果你在构造 ``ModelForm`` 表单时设置了 ``fields`` 或 ``exclude`` ，那么在你调用 ``save()`` 方法时，那些字段将不会被设置到表单中。同样的，如果你手动把字段添加到表单中，它们也不会跟随模型进行初始化。
 
-    Django会阻止保存未完成的模型，所以，如果模型中含有非空字段，而又不提供默认值，那么调用``ModelForm``的``save()``将会失败。为了避免这些错误，你必须初始化这些非空字段::
+    Django会阻止保存未完成的模型，所以，如果模型中含有非空字段，而又不提供默认值，那么调用 ``ModelForm`` 的 ``save()`` 将会失败。为了避免这些错误，你必须初始化这些非空字段::
 
         author = Author(title='Mr')
         form = PartialAuthorForm(request.POST, instance=author)
         form.save()
 
-    又或者，你可以使用``save(commit=False)``然后设置这些非空字段::
+    又或者，你可以使用 ``save(commit=False)`` 然后设置这些非空字段::
 
         form = PartialAuthorForm(request.POST)
         author = form.save(commit=False)
         author.title = 'Mr'
         author.save()
 
-    查阅`section on saving forms`_获取更多关于``save(commit=False)``使用方法的咨询。
-
-.. _section on saving forms: `The save() method`_
+    查阅 ``section on saving forms`` _获取更多关于 ``save(commit=False)`` 使用方法的咨询。
 
 重写默认的组件或字段类型
---------------------
+--------------------------------------
 
 .. versionadded:: 1.2
-    ``widgets``属性是Django 1.2新增的。
+    ``widgets`` 属性是Django 1.2新增的。
 
-默认的字段类型，在上面的`Field types`表中已经描述过了。如果你的模型中有一个``DateField``字段，那么表单中就会出现一个``DateField``字段。但``ModelForm``也提供一种自适应的方式改变模型字段所对应的组件类型及字段类型。
+默认的字段类型，在上面的 `Field types` 表中已经描述过了。如果你的模型中有一个 ``DateField`` 字段，那么表单中就会出现一个 ``DateField`` 字段。但 ``ModelForm`` 也提供一种自适应的方式改变模型字段所对应的组件类型及字段类型。
 
 To specify a custom widget for a field, use the ``widgets`` attribute of the
 inner ``Meta`` class. This should be a dictionary mapping field names to widget
@@ -564,13 +578,12 @@ with the formset's ``save()`` method::
 The ``save()`` method returns the instances that have been saved to the
 database. If a given instance's data didn't change in the bound data, the
 instance won't be saved to the database and won't be included in the return
-value (``instances``, in the above example).
+value ( ``instances`` , in the above example).
 
 When fields are missing from the form (for example because they have
 been excluded), these fields will not be set by the ``save()``
 method. You can find more information about this restriction, which
-also holds for regular ``ModelForms``, in `Using a subset of fields on
-the form`_.
+also holds for regular ``ModelForms``, in `在表单中使用字段的子集`_.
 
 Pass ``commit=False`` to return the unsaved model instances::
 
