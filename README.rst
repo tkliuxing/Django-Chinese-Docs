@@ -21,10 +21,15 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
 ========================
 
   Wrongway_
+
   pylemon_
+
   congmo_
+
   `Chaney Lee`_
-  Ray_:
+
+  Ray_
+
   `Ronald Bai`_
 
 .. _Wrongway: https://github.com/wrongwaycn
