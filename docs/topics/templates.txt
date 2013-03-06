@@ -1,51 +1,42 @@
 ============================
-The Django template language
+Django模板语言
 ============================
 
-.. admonition:: About this document
+.. admonition:: 关于本文档
 
-    This document explains the language syntax of the Django template system. If
-    you're looking for a more technical perspective on how it works and how to
-    extend it, see :doc:`/ref/templates/api`.
+    本文档介绍了Django模板系统语言的语法。
+    如果你希望从一个更技术的角度来看它是如何工作的和如何扩展
+    它，请参阅 :doc:`/ref/templates/api` 。
 
-Django's template language is designed to strike a balance between power and
-ease. It's designed to feel comfortable to those used to working with HTML. If
-you have any exposure to other text-based template languages, such as Smarty_
-or CheetahTemplate_, you should feel right at home with Django's templates.
+Django模板语言设计的初衷是为了获得效率和易用性之间的平衡。
+HTML使用者会感觉到他设计的很舒服。如果你有使用其他基于文本的模板语言如 Smarty_
+或 CheetahTemplate_ 的使用经验,你会感觉到使用Django模板语言和那些东西没什么两样。
 
-.. admonition:: Philosophy
+.. admonition:: 设计哲学
 
-    If you have a background in programming, or if you're used to languages
-    like PHP which mix programming code directly into HTML, you'll want to
-    bear in mind that the Django template system is not simply Python embedded
-    into HTML. This is by design: the template system is meant to express
-    presentation, not program logic.
+    如果你有编程背景，或者你使用过PHP等嵌入HTML的程序语言，你要牢记，
+    Django的模板系统是不是简单的把Python嵌入到HTML中。
+    它的设计是:模板系统旨在展示内容，而不是程序逻辑。
 
-    The Django template system provides tags which function similarly to some
-    programming constructs -- an :ttag:`if` tag for boolean tests, a :ttag:`for`
-    tag for looping, etc. -- but these are not simply executed as the
-    corresponding Python code, and the template system will not execute
-    arbitrary Python expressions. Only the tags, filters and syntax listed below
-    are supported by default (although you can add :doc:`your own extensions
-    </howto/custom-template-tags>` to the template language as needed).
+    Django的模板系统提供的标签，其功能类似于一些编程结构 -- :ttag:`if` 标签用于布尔值测试,
+    :ttag:`for` 标签用来做for循环, 等等。但这些都不是简单的执行相应的Python代码，模板系统不会执行任意的Python表达式。
+    通常情况下, 模板系统仅支持接下来列出的这些标签和过滤 (仅当需要时你可以添加 :doc:`你自己的扩展
+    </howto/custom-template-tags>` 到模板语法中)。
 
 .. _`The Django template language: For Python programmers`: ../templates_python/
 .. _Smarty: http://smarty.php.net/
 .. _CheetahTemplate: http://www.cheetahtemplate.org/
 
-Templates
+模板
 =========
 
 .. highlightlang:: html+django
 
-A template is simply a text file. It can generate any text-based format (HTML,
-XML, CSV, etc.).
+模板是一个简单的文本文件。它可以生成任何基于文本的格式（如 HTML，XML，CSV等）。
 
-A template contains **variables**, which get replaced with values when the
-template is evaluated, and **tags**, which control the logic of the template.
+模板中包含的 **变量** 被替换为变量的值, **标签** 被替换为相应的模板控制逻辑。
 
-Below is a minimal template that illustrates a few basics. Each element will be
-explained later in this document.::
+下面的一小段模板代码可以说明一些基本的内容。 文中的每个元素都将在后面解释。::
 
     {% extends "base_generic.html" %}
 
@@ -64,48 +55,39 @@ explained later in this document.::
     {% endfor %}
     {% endblock %}
 
-.. admonition:: Philosophy
+.. admonition:: 设计哲学
 
-    Why use a text-based template instead of an XML-based one (like Zope's
-    TAL)? We wanted Django's template language to be usable for more than
-    just XML/HTML templates. At World Online, we use it for emails,
-    JavaScript and CSV. You can use the template language for any text-based
-    format.
+    为什么要使用基于文本的模板，而不是基于XML语法的（如Zope的TAL）？
+    我们希望Django的模板语言不止是 XML/HTML。
+    在网络世界，它可以不止被用在电子邮件，JavaScript和CSV中。
+    您可以在任何文本格式中使用它。
 
-    Oh, and one more thing: Making humans edit XML is sadistic!
+    哦，还有一件事: 让人写XML, 那就是虐待!
 
-Variables
+变量
 =========
 
-Variables look like this: ``{{ variable }}``. When the template engine
-encounters a variable, it evaluates that variable and replaces it with the
-result. Variable names consist of any combination of alphanumeric characters
-and the underscore (``"_"``). The dot (``"."``) also appears in variable
-sections, although that has a special meaning, as indicated below.
-Importantly, *you cannot have spaces or punctuation characters in variable
-names.*
+变量看起来是这样的: ``{{ 变量 }}``。 当模板系统遇到一个变量, 他直接被替换为他的值。
+变量名由字母数字和下划线 (``"_"``)组成。 点字符 (``"."``) 也可以出现在变量名中,但他有特殊的含义。比如下面的。
+更重要的是, *变量名中不能有空格或其他的标点符号。*
 
-Use a dot (``.``) to access attributes of a variable.
+使用点 (``.``) 来访问变量的属性。
 
-.. admonition:: Behind the scenes
+.. admonition:: 幕后
 
-    Technically, when the template system encounters a dot, it tries the
-    following lookups, in this order:
+    从技术上讲，当模板系统遇到一个点，它会尝试下面的动作，顺序如下:
 
-    * Dictionary lookup
-    * Attribute lookup
-    * Method call
-    * List-index lookup
+    * 字典查询
+    * 属性查询
+    * 方法调用
+    * 列表索引查找
 
-In the above example, ``{{ section.title }}`` will be replaced with the
-``title`` attribute of the ``section`` object.
+在上面的例子中， ``{{ section.title }}`` 将被替换为这个对象的title属性值。
 
-If you use a variable that doesn't exist, the template system will insert
-the value of the :setting:`TEMPLATE_STRING_IF_INVALID` setting, which is set
-to ``''`` (the empty string) by default.
+如果你使用一个不存在的变量，模板系统会替换它为settings中的 :setting:`TEMPLATE_STRING_IF_INVALID` 值，在默认情况下他被指定为 ``''`` (空字符串).
 
-Filters
-=======
+过滤器(Filters)
+===============
 
 You can modify variables for display by using **filters**.
 
@@ -168,8 +150,8 @@ You can also create your own custom template filters; see
     tags and filters available for a given site. See
     :doc:`/ref/contrib/admin/admindocs`.
 
-Tags
-====
+标签(Tags)
+==========
 
 Tags look like this: ``{% tag %}``. Tags are more complex than variables: Some
 create text in the output, some control flow by performing loops or logic, and
@@ -215,7 +197,7 @@ tags:
         {% endif %}
 
 :ttag:`block` and :ttag:`extends`
-    Set up `template inheritance`_ (see below), a powerful way
+    Set up `模板继承`_ (see below), a powerful way
     of cutting down on "boilerplate" in templates.
 
 Again, the above is only a selection of the whole list; see the :ref:`built-in
@@ -230,8 +212,8 @@ You can also create your own custom template tags; see
     tags and filters available for a given site. See
     :doc:`/ref/contrib/admin/admindocs`.
 
-Comments
-========
+注释(Comments)
+==============
 
 To comment-out part of a line in a template, use the comment syntax: ``{# #}``.
 
@@ -249,8 +231,8 @@ multiline portion of the template, see the :ttag:`comment` tag.
 
 .. _template-inheritance:
 
-Template inheritance
-====================
+模板继承
+=========
 
 The most powerful -- and thus the most complex -- part of Django's template
 engine is template inheritance. Template inheritance allows you to build a base
@@ -398,8 +380,8 @@ wouldn't know which one of the blocks' content to use.
 .. _next section: #automatic-html-escaping
 .. _automatic-html-escaping:
 
-Automatic HTML escaping
-=======================
+自动HTML转义
+=============
 
 When generating HTML from templates, there's always a risk that a variable will
 include characters that affect the resulting HTML. For example, consider this
@@ -462,8 +444,8 @@ template system, you're protected.
 
 .. _Cross Site Scripting: http://en.wikipedia.org/wiki/Cross-site_scripting
 
-How to turn it off
-------------------
+如何关闭它
+-----------
 
 If you don't want data to be auto-escaped, on a per-site, per-template level or
 per-variable level, you can turn it off in several ways.
@@ -475,7 +457,7 @@ HTML in your database and want to embed that directly into your template. Or,
 you might be using Django's template system to produce text that is *not* HTML
 -- like an email message, for instance.
 
-For individual variables
+对于单个变量
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 To disable auto-escaping for an individual variable, use the :tfilter:`safe`
@@ -491,7 +473,7 @@ the output will be::
     This will be escaped: &lt;b&gt;
     This will not be escaped: <b>
 
-For template blocks
+对于模板文本块
 ~~~~~~~~~~~~~~~~~~~
 
 To control auto-escaping for a template, wrap the template (or just a
@@ -542,7 +524,7 @@ HTML when the ``greeting`` variable contains the string ``<b>Hello!</b>``::
     <h1>This & that</h1>
     <b>Hello!</b>
 
-Notes
+注意
 -----
 
 Generally, template authors don't need to worry about auto-escaping very much.
@@ -558,8 +540,8 @@ danger of the :tfilter:`escape` filter *double-escaping* data -- the
 
 .. _string-literals-and-automatic-escaping:
 
-String literals and automatic escaping
---------------------------------------
+字符串和自动转义
+-----------------
 
 As we mentioned earlier, filter arguments can be strings::
 
@@ -585,8 +567,8 @@ they're beyond the control of the template author.
 
 .. _template-accessing-methods:
 
-Accessing method calls
-======================
+访问方法调用
+=============
 
 Most method calls attached to objects are also available from within templates.
 This means that templates have access to much more than just class attributes
@@ -624,8 +606,8 @@ to templates for display.
 
 .. _loading-custom-template-libraries:
 
-Custom tag and filter libraries
-===============================
+自定义标签和过滤器库
+====================
 
 Certain applications provide custom tag and filter libraries. To access them in
 a template, use the :ttag:`load` tag::
@@ -646,8 +628,8 @@ Example::
 See :doc:`/howto/custom-template-tags` for information on writing your own custom
 template libraries.
 
-Custom libraries and template inheritance
------------------------------------------
+自定义库和模板继承
+------------------
 
 When you load a custom tag or filter library, the tags/filters are only made
 available to the current template -- not any parent or child templates along

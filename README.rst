@@ -17,6 +17,24 @@ https://github.com/wrongwaycn/Django-Chinese-Docs
 http://readthedocs.org/docs/django-document-cn/en/latest/
 
 
+翻译人员 (排名不分先后)
+========================
+
+  Wrongway_
+  pylemon_
+  congmo_
+  `Chaney Lee`_
+  Ray_:
+  `Ronald Bai`_
+
+.. _Wrongway: https://github.com/wrongwaycn
+.. _pylemon: https://github.com/pylemon
+.. _congmo: https://github.com/congmo
+.. _`Chaney Lee`: https://github.com/chaneylee
+.. _Ray: https://github.com/raywuxing
+.. _`Ronald Bai`: https://github.com/tkliuxing
+
+
 翻译进度
 ========
 
@@ -29,7 +47,8 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [ 100%] [       2871]  ./topics/i18n/index.txt
   [ 100%] [       8127]  ./topics/settings.txt
   [  30%] [      50383]  ./topics/db/models.txt
-  [ 100%] [       3378]  ./intro/tutorial02.txt 
+  [  13%] [      23597]  ./topics/templates.txt
+  [ 100%] [       3378]  ./intro/tutorial02.txt
 
 未完成的文档::
 
@@ -255,5 +274,4 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [   0%] [      15867]  ./topics/serialization.txt
   [   0%] [       9676]  ./topics/signals.txt
   [   0%] [       5348]  ./topics/signing.txt
-  [   0%] [      23597]  ./topics/templates.txt
   [   0%] [      87788]  ./topics/testing.txt
