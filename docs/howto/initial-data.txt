@@ -7,12 +7,12 @@
 一般情况下，使用fixture是一种与数据库无关的干净方法。但使用初始化SQL就更有可扩展性。
 
 .. _initial data as sql: `providing initial sql data`_
-.. _initial data via fixtures: `providing initial data with fixtures`_
+.. _initial data via fixtures: `使用fixture提供初始化数据`_
 
 .. _initial-data-via-fixtures:
 
 使用fixture提供初始化数据
-========================
+=========================
 
 A fixture is a collection of data that Django knows how to import into a
 database. The most straightforward way of creating a fixture if you've already
