@@ -170,13 +170,13 @@ Django按如下算法编译配置模块:
 事实上，我们建议您这样做。
 
 因此，通过 ``settings.configure()`` 配置django时，并不会对当前进程的环境变量做任何修改。
-（可以查看:setting:`TIME_ZONE` 了解为什么要这么做）。这意味着在上述情况下你仍然完全掌控着当前环境。
+（可以查看 :setting:`TIME_ZONE` 了解为什么要这么做）。这意味着在上述情况下你仍然完全掌控着当前环境。
 
 
 定制默认配置项
 --------------
 
-如果你实在不想使用``django.conf.global_settings``，而想自定义配置默认值，
+如果你实在不想使用 ``django.conf.global_settings``，而想自定义配置默认值，
 你可以在调用 ``configure()`` 时使用 ``default_settings`` 参数(或是默认做为第一个参数传入)。该参数是一个提供默认值的模块或是类，
 
 在下面这个例子中，由 ``myapp_defaults`` 提供默认值，并令 :setting:`DEBUG` 被置为 ``True`` 而不是从 ``myapp_defaults`` 中获取::
@@ -201,7 +201,7 @@ configure() 或 DJANGO_SETTINGS_MODULE 两者必用其一
 在没有设置 ``DJANGO_SETTINGS_MODULE`` 环境的情况下，就 *必须* 在运行读取配置项的代码之前就调用 ``configure()`` 。
 
 如果你没有设置 set ``DJANGO_SETTINGS_MODULE`` 也没有调用 ``configure()`` ，
-那么Django会在第一次访问配置项时抛出``ImportError`` 异常。
+那么Django会在第一次访问配置项时抛出 ``ImportError`` 异常。
 
 如果已经调了 ``DJANGO_SETTINGS_MODULE`` ，再调用 ``configure()`` 的话，
 Django也会抛出一个 ``RuntimeError`` 异常，表明已经配置了settings。
