@@ -40,8 +40,8 @@ Getting Help
 
 * **新手教程:**
   :doc:`第1节# <intro/tutorial01>` |
-  :doc:`第2节 <intro/tutorial02>` |
-  :doc:`第3节 <intro/tutorial03>` |
+  :doc:`第2节* <intro/tutorial02>` |
+  :doc:`第3节# <intro/tutorial03>` |
   :doc:`第4节 <intro/tutorial04>`
 
 模型 (model) 层
@@ -78,7 +78,7 @@ Getting Help
 ==================
 
 * **For 设计师:**
-  :doc:`语法概要 <topics/templates>` |
+  :doc:`语法概要# <topics/templates>` |
   :doc:`内建标签和过滤器 <ref/templates/builtins>`
 
 * **For 程序员:**
@@ -140,7 +140,7 @@ The development process
 =======================
 
 * **Settings:**
-  :doc:`Overview/预览* <topics/settings>` |
+  :doc:`概述* <topics/settings>` |
   :doc:`Full list of settings <ref/settings>`
 
 * **Exceptions:**
@@ -153,7 +153,7 @@ The development process
 * **Testing:**  :doc:`Overview <topics/testing>`
 
 * **Deployment:**
-  :doc:`Overview <howto/deployment/index>` |
+  :doc:`概述* <howto/deployment/index>` |
   :doc:`WSGI servers <howto/deployment/wsgi/index>` |
   :doc:`FastCGI/SCGI/AJP <howto/deployment/fastcgi>` |
   :doc:`Apache/mod_python (deprecated) <howto/deployment/modpython>` |

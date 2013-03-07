@@ -20,17 +20,12 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
 翻译人员 (排名不分先后)
 ========================
 
-  Wrongway_
-
-  pylemon_
-
-  congmo_
-
-  `Chaney Lee`_
-
-  Ray_
-
-  `Ronald Bai`_
+* Wrongway_
+* pylemon_
+* congmo_
+* `Chaney Lee`_
+* Ray_
+* `Ronald Bai`_
 
 .. _Wrongway: https://github.com/wrongwaycn
 .. _pylemon: https://github.com/pylemon
@@ -45,7 +40,8 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
 
 已完成和正在进行中的文档::
 
-  [ 100%] [       3378]  ./intro/install.txt  
+  [ 100%] [       3378]  ./intro/install.txt
+  [ 100%] [       1014]  ./howto/deployment/index.txt
   [ 100%] [       9919]  ./ref/models/options.txt
   [  50%] [      66276]  ./ref/settings.txt
   [ 100%] [      24519]  ./topics/email.txt
@@ -53,7 +49,9 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [ 100%] [       8127]  ./topics/settings.txt
   [  30%] [      50383]  ./topics/db/models.txt
   [  13%] [      23597]  ./topics/templates.txt
+  [  10%] [      28834]  ./intro/tutorial01.txt
   [ 100%] [       3378]  ./intro/tutorial02.txt
+  [  10%] [      21449]  ./intro/tutorial03.txt
 
 未完成的文档::
 
@@ -74,7 +72,6 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [   0%] [      32601]  ./howto/custom-model-fields.txt
   [   0%] [      46313]  ./howto/custom-template-tags.txt
   [   0%] [      16721]  ./howto/deployment/fastcgi.txt
-  [   0%] [       1014]  ./howto/deployment/index.txt
   [   0%] [      17409]  ./howto/deployment/modpython.txt
   [   0%] [       2268]  ./howto/deployment/wsgi/gunicorn.txt
   [   0%] [       2678]  ./howto/deployment/wsgi/index.txt
@@ -108,8 +105,6 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [   0%] [      10303]  ./internals/svn.txt
   [   0%] [       1313]  ./intro/index.txt
   [   0%] [      11967]  ./intro/overview.txt
-  [   0%] [      28834]  ./intro/tutorial01.txt
-  [   0%] [      21449]  ./intro/tutorial03.txt
   [   0%] [      14605]  ./intro/tutorial04.txt
   [   0%] [       9417]  ./intro/whatsnext.txt
   [   0%] [       8133]  ./misc/api-stability.txt
