@@ -48,7 +48,7 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [ 100%] [       2871]  ./topics/i18n/index.txt
   [ 100%] [       8127]  ./topics/settings.txt
   [  30%] [      50383]  ./topics/db/models.txt
-  [  13%] [      23597]  ./topics/templates.txt
+  [  30%] [      23597]  ./topics/templates.txt
   [  10%] [      28834]  ./intro/tutorial01.txt
   [ 100%] [       3378]  ./intro/tutorial02.txt
   [  10%] [      21449]  ./intro/tutorial03.txt

@@ -4,24 +4,24 @@ Django模板语言
 
 .. admonition:: 关于本文档
 
-    本文档介绍了Django模板系统语言的语法。
+    本文档介绍了Django模板系统语言的语法.
     如果你希望从一个更技术的角度来看它是如何工作的和如何扩展
-    它，请参阅 :doc:`/ref/templates/api` 。
+    它,请参阅 :doc:`/ref/templates/api` .
 
-Django模板语言设计的初衷是为了获得效率和易用性之间的平衡。
-HTML使用者会感觉到他设计的很舒服。如果你有使用其他基于文本的模板语言如 Smarty_
-或 CheetahTemplate_ 的使用经验,你会感觉到使用Django模板语言和那些东西没什么两样。
+Django模板语言设计的初衷是为了获得效率和易用性之间的平衡.
+HTML使用者会感觉到他设计的很舒服.如果你有使用其他基于文本的模板语言如 Smarty_
+或 CheetahTemplate_ 的使用经验,你会感觉到使用Django模板语言和那些东西没什么两样.
 
 .. admonition:: 哲理
 
-    如果你有编程背景，或者你使用过PHP等嵌入HTML的程序语言，你要牢记，
-    Django的模板系统是不是简单的把Python嵌入到HTML中。
-    它的设计是:模板系统旨在展示内容，而不是程序逻辑。
+    如果你有编程背景,或者你使用过PHP等嵌入HTML的程序语言,你要牢记,
+    Django的模板系统是不是简单的把Python嵌入到HTML中.
+    它的设计是:模板系统旨在展示内容,而不是程序逻辑.
 
-    Django的模板系统提供的标签，其功能类似于一些编程结构 -- :ttag:`if` 标签用于布尔值测试,
-    :ttag:`for` 标签用来做for循环, 等等。但这些都不是简单的执行相应的Python代码，模板系统不会执行任意的Python表达式。
+    Django的模板系统提供的标签,其功能类似于一些编程结构 -- :ttag:`if` 标签用于布尔值测试,
+    :ttag:`for` 标签用来做for循环, 等等.但这些都不是简单的执行相应的Python代码,模板系统不会执行任意的Python表达式.
     通常情况下, 模板系统仅支持接下来列出的这些标签和过滤 (仅当需要时你可以添加 :doc:`你自己的扩展
-    </howto/custom-template-tags>` 到模板语法中)。
+    </howto/custom-template-tags>` 到模板语法中).
 
 .. _`The Django template language: For Python programmers`: ../templates_python/
 .. _Smarty: http://smarty.php.net/
@@ -32,11 +32,11 @@ HTML使用者会感觉到他设计的很舒服。如果你有使用其他基于�
 
 .. highlightlang:: html+django
 
-模板是一个简单的文本文件。它可以生成任何基于文本的格式（如 HTML，XML，CSV等）。
+模板是一个简单的文本文件.它可以生成任何基于文本的格式（如 HTML,XML,CSV等）.
 
-模板中包含的 **变量** 被替换为变量的值, **标签** 被替换为相应的模板控制逻辑。
+模板中包含的 **变量** 被替换为变量的值, **标签** 被替换为相应的模板控制逻辑.
 
-下面的一小段模板代码可以说明一些基本的内容。 文中的每个元素都将在后面解释。::
+下面的一小段模板代码可以说明一些基本的内容. 文中的每个元素都将在后面解释.::
 
     {% extends "base_generic.html" %}
 
@@ -57,117 +57,108 @@ HTML使用者会感觉到他设计的很舒服。如果你有使用其他基于�
 
 .. admonition:: 哲理
 
-    为什么要使用基于文本的模板，而不是基于XML语法的（如Zope的TAL）？
-    我们希望Django的模板语言不止是 XML/HTML。
-    在网络世界，它可以不止被用在电子邮件，JavaScript和CSV中。
-    您可以在任何文本格式中使用它。
+    为什么要使用基于文本的模板,而不是基于XML语法的（如Zope的TAL）？
+    我们希望Django的模板语言不止是 XML/HTML.
+    在网络世界,它可以不止被用在电子邮件,JavaScript和CSV中.
+    您可以在任何文本格式中使用它.
 
-    哦，还有一件事: 让人写XML, 那就是虐待!
+    哦,还有一件事: 让人写XML, 那就是虐待!
 
 变量
 =========
 
-变量看起来是这样的: ``{{ 变量 }}``。 当模板系统遇到一个变量, 他直接被替换为他的值。
-变量名由字母数字和下划线 (``"_"``)组成。 点字符 (``"."``) 也可以出现在变量名中,但他有特殊的含义。比如下面的。
-更重要的是, *变量名中不能有空格或其他的标点符号。*
+变量看起来是这样的: ``{{ 变量 }}``. 当模板系统遇到一个变量, 他直接被替换为他的值.
+变量名由字母数字和下划线 (``"_"``)组成. 点字符 (``"."``) 也可以出现在变量名中,但他有特殊的含义.比如下面的.
+更重要的是, *变量名中不能有空格或其他的标点符号.*
 
-使用点 (``.``) 来访问变量的属性。
+使用点 (``.``) 来访问变量的属性.
 
 .. admonition:: 幕后
 
-    从技术上讲，当模板系统遇到一个点，它会尝试下面的动作，顺序如下:
+    从技术上讲,当模板系统遇到一个点,它会尝试下面的动作,顺序如下:
 
     * 字典查询
     * 属性查询
     * 方法调用
     * 列表索引查找
 
-在上面的例子中， ``{{ section.title }}`` 将被替换为这个对象的title属性值。
+在上面的例子中, ``{{ section.title }}`` 将被替换为这个对象的title属性值.
 
-如果你使用一个不存在的变量，模板系统会替换它为settings中的 :setting:`TEMPLATE_STRING_IF_INVALID` 值，在默认情况下他被指定为 ``''`` (空字符串).
+如果你使用一个不存在的变量,模板系统会替换它为settings中的 :setting:`TEMPLATE_STRING_IF_INVALID` 值,在默认情况下他被指定为 ``''`` (空字符串).
 
 过滤器(Filters)
 ===============
 
-You can modify variables for display by using **filters**.
+通过使用 **过滤器** ,您可以修改变量的显示.
 
-Filters look like this: ``{{ name|lower }}``. This displays the value of the
-``{{ name }}`` variable after being filtered through the :tfilter:`lower`
-filter, which converts text to lowercase. Use a pipe (``|``) to apply a filter.
+过滤器用起来像这样： ``{{ name|lower }}`` .
+通过过滤器 :tfilter:`lower` 变量 ``{{ name }}`` 变为了小写字符.
+通过管道符 (``|``) 间隔变量和过滤器来使用过滤器.
 
-Filters can be "chained." The output of one filter is applied to the next.
-``{{ text|escape|linebreaks }}`` is a common idiom for escaping text contents,
-then converting line breaks to ``<p>`` tags.
+过滤器可以是 "链式的". 一个过滤器的输出作为下一个过滤器的输入.
+``{{ text|escape|linebreaks }}`` 是一种常用的转换方式,
+在这之后换行符被替换为了 ``<p>`` 标签.
 
-Some filters take arguments. A filter argument looks like this: ``{{
-bio|truncatewords:30 }}``. This will display the first 30 words of the ``bio``
-variable.
+有些过滤器是带有参数的. 一个带参数的过滤器看起来像这样: ``{{
+bio|truncatewords:30 }}``. 他会显示 ``bio`` 变量的前30个字符.
 
-Filter arguments that contain spaces must be quoted; for example, to join a
-list with commas and spaced you'd use ``{{ list|join:", " }}``.
+如果过滤器的参数包含空格, 那么参数必须被引号包起来; 比如, 用逗号和空格来间隔列表内的元素, 你可以像这样用
+``{{ list|join:", " }}``.
 
-Django provides about thirty built-in template filters. You can read all about
-them in the :ref:`built-in filter reference <ref-templates-builtins-filters>`.
-To give you a taste of what's available, here are some of the more commonly
-used template filters:
+Django提供了约30个内置的过滤器. 有关这些过滤器你可以在
+:ref:`内置过滤器参考 <ref-templates-builtins-filters>` 中找到更详尽的描述.
+这儿有一些过滤器的例子,可以让你尝到一些过滤器的甜头:
 
 :tfilter:`default`
-    If a variable is false or empty, use given default. Otherwise, use the
-    value of the variable
+    如果一个变量是假的或空的,使用默认值. 否则,使用变量的值
 
-    For example::
+    例如::
 
         {{ value|default:"nothing" }}
 
-    If ``value`` isn't provided or is empty, the above will display
-    "``nothing``".
+    如果 ``value`` 没有提供或者为空，那么他将显示为 "``nothing``" 。
 
 :tfilter:`length`
-    Returns the length of the value. This works for both strings and lists;
+    返回的值的长度。可以被用于字符串或者列表;
+
     for example::
 
         {{ value|length }}
 
-    If ``value`` is ``['a', 'b', 'c', 'd']``, the output will be ``4``.
+    如果 ``value`` 为 ``['a', 'b', 'c', 'd']``, 那么他将被显示为 ``4``.
 
 :tfilter:`striptags`
-    Strips all [X]HTML tags. For example::
+    去掉所有 [X]HTML 标签. 比如::
 
         {{ value|striptags }}
 
-    If ``value`` is ``"<b>Joel</b> <button>is</button> a
-    <span>slug</span>"``, the output will be ``"Joel is a slug"``.
+    如果 ``value`` 为 ``"<b>Joel</b> <button>is</button> a
+    <span>slug</span>"``, 那么输出就会是 ``"Joel is a slug"``.
 
-Again, these are just a few examples; see the :ref:`built-in filter reference
-<ref-templates-builtins-filters>` for the complete list.
+这些只是几个例子，请参阅  :ref:`内置过滤器参考 <ref-templates-builtins-filters>` 的完整列表。
 
-You can also create your own custom template filters; see
-:doc:`/howto/custom-template-tags`.
+您还可以创建自己的自定义模板过滤器，请参见 :doc:`/howto/custom-template-tags`.
 
-.. seealso::
+.. admonition:: 查看更多
 
-    Django's admin interface can include a complete reference of all template
-    tags and filters available for a given site. See
-    :doc:`/ref/contrib/admin/admindocs`.
+    Django的管理界面可以在一个给定的站点中包含所有的模板标签和过滤器的完整参考。
+    请参阅 :doc:`/ref/contrib/admin/admindocs`.
 
 标签(Tags)
 ==========
 
-Tags look like this: ``{% tag %}``. Tags are more complex than variables: Some
-create text in the output, some control flow by performing loops or logic, and
-some load external information into the template to be used by later variables.
+标签看起来像这样: ``{% tag %}``. 标签要比变量更复杂: 有些标签会创建一段文本,
+有些标签会控制输出流的方式比如循环或逻辑条件, 还有些标签会添加一些扩展内容到模板中,
+比如另外的标签和过滤器.
 
-Some tags require beginning and ending tags (i.e. ``{% tag %} ... tag contents
+有些标签在使用时需要有开始和结束标签 (像这样 ``{% tag %} ... 内容
 ... {% endtag %}``).
 
-Django ships with about two dozen built-in template tags. You can read all about
-them in the :ref:`built-in tag reference <ref-templates-builtins-tags>`. To give
-you a taste of what's available, here are some of the more commonly used
-tags:
+Django内置了大约二十几个标签. 你可以在 :ref:`内置标签参考 <ref-templates-builtins-tags>` 阅读有关内置标签的内容.
+为了让你尝试有什么可用的, 这里有一些常用标签的例子:
 
 :ttag:`for`
-    Loop over each item in an array.  For example, to display a list of athletes
-    provided in ``athlete_list``::
+    循环数组中的每个元素.  比如, 显示列表 ``athlete_list`` 中每个元素的 ``name`` 属性::
 
         <ul>
         {% for athlete in athlete_list %}
@@ -176,8 +167,7 @@ tags:
         </ul>
 
 :ttag:`if` and ``else``
-    Evaluates a variable, and if that variable is "true" the contents of the
-    block are displayed::
+    判断一个变量的布尔值, 如果它为 "true" 则显示 ``if`` 块儿内的内容, 否则显示 ``else`` 块儿内的文字::
 
         {% if athlete_list %}
             Number of athletes: {{ athlete_list|length }}
@@ -185,10 +175,9 @@ tags:
             No athletes.
         {% endif %}
 
-    In the above, if ``athlete_list`` is not empty, the number of athletes
-    will be displayed by the ``{{ athlete_list|length }}`` variable.
+    在上面的例子中, 如果 ``athlete_list`` 不是空的, 那么变量 ``{{ athlete_list|length }}`` 就会被显示出来.
 
-    You can also use filters and various operators in the :ttag:`if` tag::
+    也可以在 :ttag:`if` 标签里使用过滤器和各种操作符::
 
         {% if athlete_list|length > 1 %}
            Team: {% for athlete in athlete_list %} ... {% endfor %}
@@ -197,35 +186,33 @@ tags:
         {% endif %}
 
 :ttag:`block` and :ttag:`extends`
-    Set up `模板继承`_ (see below), a powerful way
-    of cutting down on "boilerplate" in templates.
+    请看 `模板继承`_ (在下面), 一个强大的方法, 在模板上切割下来的"样板".
 
-Again, the above is only a selection of the whole list; see the :ref:`built-in
-tag reference <ref-templates-builtins-tags>` for the complete list.
+以上的例子只是整个标签列表的一小部分; 请参看
+:ref:`内置标签参考 <ref-templates-builtins-tags>` 完整阅览.
 
-You can also create your own custom template tags; see
+您还可以创建自己的自定义模板标签, 请参看
 :doc:`/howto/custom-template-tags`.
 
-.. seealso::
+.. admonition:: 查看更多
 
-    Django's admin interface can include a complete reference of all template
-    tags and filters available for a given site. See
-    :doc:`/ref/contrib/admin/admindocs`.
+    Django的管理界面可以在一个给定的站点中包含所有的模板标签和过滤器的完整参考。
+    请参阅 :doc:`/ref/contrib/admin/admindocs`.
 
 注释(Comments)
 ==============
 
-要注释掉行的一部分，在模板中使用注释语法: ``{# #}``.
+要注释掉行的一部分,在模板中使用注释语法: ``{# #}``.
 
-例如，该模板将呈现为 ``'hello'``::
+例如,该模板将呈现为 ``'hello'``::
 
     {# greeting #}hello
 
-注释可以包含任何模板代码, 使其生效或无效。 例如::
+注释可以包含任何模板代码, 使其生效或无效. 例如::
 
     {# {% if foo %}bar{% else %} #}
 
-这个语法只能用于单行注释 (不允许在 ``{#`` 和 ``#}`` 之间换行)。
+这个语法只能用于单行注释 (不允许在 ``{#`` 和 ``#}`` 之间换行).
 如果您需要注释掉多行部分的模板, 参见 :ttag:`comment` 标签.
 
 .. _template-inheritance:
