@@ -348,66 +348,56 @@ Django模板中最强大和最复杂的部分就是模板继承. 模板继承允
 自动HTML转义
 =============
 
-When generating HTML from templates, there's always a risk that a variable will
-include characters that affect the resulting HTML. For example, consider this
-template fragment::
+从模板生成HTML时, 总是有一种风险, 即一个变量将会影响生成的HTML字符. 例如, 考虑这个模板片段::
 
     Hello, {{ name }}.
 
-At first, this seems like a harmless way to display a user's name, but consider
-what would happen if the user entered his name as this::
+用这种方法显示用户的姓名似乎没什么问题, 但考虑一下, 如果用户输入下面的文字作为他的名字, 会发生什么::
 
     <script>alert('hello')</script>
 
-With this name value, the template would be rendered as::
+当名字为这个值, 该模板将呈现为::
 
     Hello, <script>alert('hello')</script>
 
-...which means the browser would pop-up a JavaScript alert box!
+...这意味着浏览器将弹出一个JavaScript警告框!
 
-Similarly, what if the name contained a ``'<'`` symbol, like this?
+同样的, 如果名字中包含一个 ``'<'`` 符号, 像这样::
 
 .. code-block:: html
 
     <b>username
 
-That would result in a rendered template like this::
+这将导致呈现出这样的模板::
 
     Hello, <b>username
 
-...which, in turn, would result in the remainder of the Web page being bolded!
+...这意味着在此之后的文字将呈现为粗体!
 
-Clearly, user-submitted data shouldn't be trusted blindly and inserted directly
-into your Web pages, because a malicious user could use this kind of hole to
-do potentially bad things. This type of security exploit is called a
-`Cross Site Scripting`_ (XSS) attack.
+显然, 用户提交的数据是不可靠的且不应被直接插入到您的网页,
+因为恶意用户可以使用这种潜在的漏洞做不好的事情.
+这种类型的安全漏洞被称为 `Cross Site Scripting (跨站脚本)`_ (XSS) 攻击.
 
-To avoid this problem, you have two options:
+为了避免这个问题, 你有两种选择:
 
-* One, you can make sure to run each untrusted variable through the
-  :tfilter:`escape` filter (documented below), which converts potentially
-  harmful HTML characters to unharmful ones. This was the default solution
-  in Django for its first few years, but the problem is that it puts the
-  onus on *you*, the developer / template author, to ensure you're escaping
-  everything. It's easy to forget to escape data.
+* 一, 确保让不受信任的变量经过了 :tfilter:`escape` 过滤器 (下文介绍),
+  将危险的HTML字符替换为无害的HTML转义字符. 这在Django最初时是默认的方案,
+  它使得 *你*, 开发者, 有责任确保在必要时转义了变量. 但是人们很容易忽略它.
 
-* Two, you can take advantage of Django's automatic HTML escaping. The
-  remainder of this section describes how auto-escaping works.
+* 二, 你可以用Django的自动HTML转义. 本节的其余部分介绍了自动转义如何工作.
 
-By default in Django, every template automatically escapes the output
-of every variable tag. Specifically, these five characters are
-escaped:
+在Django中, 默认每个模板会自动转义输出的每一个变量标签.
+具体来说, 这五个字符会被转义:
 
-* ``<`` is converted to ``&lt;``
-* ``>`` is converted to ``&gt;``
-* ``'`` (single quote) is converted to ``&#39;``
-* ``"`` (double quote) is converted to ``&quot;``
-* ``&`` is converted to ``&amp;``
+* ``<`` 被替换为 ``&lt;``
+* ``>`` 被替换为 ``&gt;``
+* ``'`` (单引号) 被替换为 ``&#39;``
+* ``"`` (双引号) 被替换为 ``&quot;``
+* ``&`` 被替换为 ``&amp;``
 
-Again, we stress that this behavior is on by default. If you're using Django's
-template system, you're protected.
+再次强调, 这种行为是默认的. 如果你使用的是Django的模板系统, 你是受保护的.
 
-.. _Cross Site Scripting: http://en.wikipedia.org/wiki/Cross-site_scripting
+.. _Cross Site Scripting (跨站脚本): http://en.wikipedia.org/wiki/Cross-site_scripting
 
 如何关闭它
 -----------
