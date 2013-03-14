@@ -78,7 +78,7 @@ Getting Help
 ==================
 
 * **For 设计师:**
-  :doc:`语法概要# <topics/templates>` |
+  :doc:`语法概要* <topics/templates>` |
   :doc:`内建标签和过滤器 <ref/templates/builtins>`
 
 * **For 程序员:**

@@ -23,7 +23,6 @@ HTML使用者会感觉到他设计的很舒服.如果你有使用其他基于文
     通常情况下, 模板系统仅支持接下来列出的这些标签和过滤 (仅当需要时你可以添加 :doc:`你自己的扩展
     </howto/custom-template-tags>` 到模板语法中).
 
-.. _`The Django template language: For Python programmers`: ../templates_python/
 .. _Smarty: http://smarty.php.net/
 .. _CheetahTemplate: http://www.cheetahtemplate.org/
 
@@ -402,60 +401,53 @@ Django模板中最强大和最复杂的部分就是模板继承. 模板继承允
 如何关闭它
 -----------
 
-If you don't want data to be auto-escaped, on a per-site, per-template level or
-per-variable level, you can turn it off in several ways.
+如果你不希望数据被自动转义, 你可以在站点/模板/变量这三个层面关闭它.
 
-Why would you want to turn it off? Because sometimes, template variables
-contain data that you *intend* to be rendered as raw HTML, in which case you
-don't want their contents to be escaped. For example, you might store a blob of
-HTML in your database and want to embed that directly into your template. Or,
-you might be using Django's template system to produce text that is *not* HTML
--- like an email message, for instance.
+为什么你会想要把它关掉? 因为有时候, 你希望把模板变量中包含的数据作为原始的HTML渲染,
+在这种情况下, 你不希望自己的内容被转义.
+例如, 你可能在你的数据库的BLOB字段存储HTML, 并希望直接嵌入到您的模板.
+或者你使用Django的模板系统生成不是HTML的文本 -- 比如电子邮件正文.
 
 对于单个变量
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-To disable auto-escaping for an individual variable, use the :tfilter:`safe`
-filter::
+要为一个单独的变量禁用自动转义, 使用 :tfilter:`safe` 过滤器::
 
-    This will be escaped: {{ data }}
-    This will not be escaped: {{ data|safe }}
+    这个会被自动转义: {{ data }}
+    这个不会被自动转义: {{ data|safe }}
 
-Think of *safe* as shorthand for *safe from further escaping* or *can be
-safely interpreted as HTML*. In this example, if ``data`` contains ``'<b>'``,
-the output will be::
+*safe* 可以被认为是 *safe from further escaping* 或 *can be
+safely interpreted as HTML* 的简写. 在这个例子中, 如果 ``data`` 是 ``'<b>'``,
+那么输出将会是::
 
-    This will be escaped: &lt;b&gt;
-    This will not be escaped: <b>
+    这个会被自动转义: &lt;b&gt;
+    这个不会被自动转义: <b>
 
 对于模板文本块
 ~~~~~~~~~~~~~~~~~~~
 
-To control auto-escaping for a template, wrap the template (or just a
-particular section of the template) in the :ttag:`autoescape` tag, like so::
+要在模板中控制自动转义, 可以在整个模板 (或者模板的特定区域) 使用 :ttag:`autoescape` 标签, 如::
 
     {% autoescape off %}
         Hello {{ name }}
     {% endautoescape %}
 
-The :ttag:`autoescape` tag takes either ``on`` or ``off`` as its argument. At
-times, you might want to force auto-escaping when it would otherwise be
-disabled. Here is an example template::
+:ttag:`autoescape` 标签接受 ``on`` 或 ``off`` 作为参数. 有时,
+你希望自动转义在某个区域被禁用. 如这个模板的例子::
 
-    Auto-escaping is on by default. Hello {{ name }}
+    自动转义是默认被开启的. 你好 {{ name }}
 
     {% autoescape off %}
-        This will not be auto-escaped: {{ data }}.
+        这个不会被自动转义: {{ data }}.
 
-        Nor this: {{ other_data }}
+        这个也不会: {{ other_data }}
         {% autoescape on %}
-            Auto-escaping applies again: {{ name }}
+            自动转义被开启: {{ name }}
         {% endautoescape %}
     {% endautoescape %}
 
-The auto-escaping tag passes its effect onto templates that extend the
-current one as well as templates included via the :ttag:`include` tag,
-just like all block tags. For example::
+自动转义标签的效果会传递至继承它的模板中, 包括使用 :ttag:`include` 标签所包含的内容,
+就像所有的块标签一样. 例如::
 
     # base.html
 
@@ -472,9 +464,8 @@ just like all block tags. For example::
     {% block title %}This & that{% endblock %}
     {% block content %}{{ greeting }}{% endblock %}
 
-Because auto-escaping is turned off in the base template, it will also be
-turned off in the child template, resulting in the following rendered
-HTML when the ``greeting`` variable contains the string ``<b>Hello!</b>``::
+由于自动转义在base模板中被关闭了, 所以在子模板中他也是被关闭了的, 导致了在呈现HTML时,
+``greeting`` 变量被输出为 ``<b>Hello!</b>``::
 
     <h1>This & that</h1>
     <b>Hello!</b>
@@ -482,69 +473,59 @@ HTML when the ``greeting`` variable contains the string ``<b>Hello!</b>``::
 注意
 -----
 
-Generally, template authors don't need to worry about auto-escaping very much.
-Developers on the Python side (people writing views and custom filters) need to
-think about the cases in which data shouldn't be escaped, and mark data
-appropriately, so things Just Work in the template.
+一般情况下, 模板的开发者并不需要对自动转义太过关注.
+这是编写Python的开发者 (写视图和写自定义模板标签的人) 需要考虑的事.
+所以, 你只需要做和模板有关的活.
 
-If you're creating a template that might be used in situations where you're
-not sure whether auto-escaping is enabled, then add an :tfilter:`escape` filter
-to any variable that needs escaping. When auto-escaping is on, there's no
-danger of the :tfilter:`escape` filter *double-escaping* data -- the
-:tfilter:`escape` filter does not affect auto-escaped variables.
+如果你不确定模板在何时会进行自动转义(或不进行),
+那么就向所有需要转义的变量添加 :tfilter:`escape` 过滤器.
+当自动转义被打开, 这么做不会有任何问题, :tfilter:`escape` 过滤器不会再次转义 --
+:tfilter:`escape` 过滤器不会影响自动转义的变量.
 
 .. _string-literals-and-automatic-escaping:
 
 字符串和自动转义
 -----------------
 
-As we mentioned earlier, filter arguments can be strings::
+正如我们前面提到的, 过滤器参数可以是字符串::
 
     {{ data|default:"This is a string literal." }}
 
-All string literals are inserted **without** any automatic escaping into the
-template -- they act as if they were all passed through the :tfilter:`safe`
-filter. The reasoning behind this is that the template author is in control of
-what goes into the string literal, so they can make sure the text is correctly
-escaped when the template is written.
+这些作为过滤器参数的字符串 **都不经过** 自动转义, 他们是被认为经过了 :tfilter:`safe` 过滤器的.
+这么做的原因是, 模板的开发者是在控制字符的输出, 所以他们能确保正确的使用转义后的HTML字面值.
 
-This means you would write ::
+这意味着你应当这么写 ::
 
     {{ data|default:"3 &lt; 2" }}
 
-...rather than ::
+...而不是这样 ::
 
     {{ data|default:"3 < 2" }}  <-- Bad! Don't do this.
 
-This doesn't affect what happens to data coming from the variable itself.
-The variable's contents are still automatically escaped, if necessary, because
-they're beyond the control of the template author.
+这不会影响来自变量本身的数据. 如果必要, 变量本身仍会被自动转义, 因为他们无法控制的模板作者.
 
 .. _template-accessing-methods:
 
 访问方法调用
 =============
 
-Most method calls attached to objects are also available from within templates.
-This means that templates have access to much more than just class attributes
-(like field names) and variables passed in from views. For example, the Django
-ORM provides the :ref:`"entry_set"<topics-db-queries-related>` syntax for
-finding a collection of objects related on a foreign key. Therefore, given
-a model called "comment" with a foreign key relationship to a model called
-"task" you can loop through all comments attached to a given task like this::
+大多附加到对象上的方法都可以在模板中被调用.
+这意味着模板可以从视图中传递过来变量中获得对象属性之外的值.
+例如, Django ORM 提供了 :ref:`"entry_set"<topics-db-queries-related>` 语法
+寻找一个外键所关联的对象的集合. 因此, 架设一个叫 "comment" 的模型有外键指向了模型 "task",
+你可以通过给定一个实际的 task , 像这样循环输出它所有的 comment::
 
     {% for comment in task.comment_set.all %}
         {{ comment }}
     {% endfor %}
 
-Similarly, :doc:`QuerySets</ref/models/querysets>` provide a ``count()`` method
-to count the number of objects they contain. Therefore, you can obtain a count
-of all comments related to the current task with::
+同样, :doc:`QuerySets</ref/models/querysets>`
+提供了一个 ``count()`` 方法来统计它所包含的对象数目.
+因此, 您可以得到当前 task 相关的所有 comment 的数目::
 
     {{ task.comment_set.all.count }}
 
-And of course you can easily access methods you've explicitly defined on your
-own models::
+当然, 你可以很容易地访问你自己的模型中明确地定义的方法::
 
     # In model
     class Task(models.Model):
@@ -554,45 +535,38 @@ own models::
     # In template
     {{ task.foo }}
 
-Because Django intentionally limits the amount of logic processing available
-in the template language, it is not possible to pass arguments to method calls
-accessed from within templates. Data should be calculated in views, then passed
-to templates for display.
+由于Django有意限制了模板中语言逻辑的处理, 所以不能在模板内调用方法时传递参数.
+数据应当在视图中计算, 然后再传递给模板.
 
 .. _loading-custom-template-libraries:
 
 自定义标签和过滤器库
 ====================
 
-Certain applications provide custom tag and filter libraries. To access them in
-a template, use the :ttag:`load` tag::
+某些应用提供了自定义的标签和过滤器库. 要在模板中访问这些, 应使用 :ttag:`load` 标签::
 
     {% load comments %}
 
     {% comment_form for blogs.entries entry.id with is_public yes %}
 
-In the above, the :ttag:`load` tag loads the ``comments`` tag library, which then
-makes the ``comment_form`` tag available for use. Consult the documentation
-area in your admin to find the list of custom libraries in your installation.
+在上文中, :ttag:`load` 标签加载了 ``comments`` 标签库, 然后 ``comment_form`` 标签就能用了.
+你可以在管理员文档中找到用户自定义库的安装列表.
 
-The :ttag:`load` tag can take multiple library names, separated by spaces.
-Example::
+:ttag:`load` 标签可以根据名字加载多个标签库, 名字间使用空格分隔.
+例如::
 
     {% load comments i18n %}
 
-See :doc:`/howto/custom-template-tags` for information on writing your own custom
-template libraries.
+请参考 :doc:`/howto/custom-template-tags` 以获得更多的有关自定义标签的内容.
 
 自定义库和模板继承
 ------------------
 
-When you load a custom tag or filter library, the tags/filters are only made
-available to the current template -- not any parent or child templates along
-the template-inheritance path.
+当你加载一个自定义标签和过滤器库, 这些被加载的标签/过滤器只能在当前模板中使用 -- 
+其他与此模板有继承关系的(父/子)模板均不能使用这些标签/过滤器.
 
-For example, if a template ``foo.html`` has ``{% load comments %}``, a child
-template (e.g., one that has ``{% extends "foo.html" %}``) will *not* have
-access to the comments template tags and filters. The child template is
-responsible for its own ``{% load comments %}``.
+例如, 如果一个模板 ``foo.html`` 使用了 ``{% load comments %}``, 一个子模板
+(就是使用了 ``{% extends "foo.html" %}``) 是不能访问 comments 库中的标签和过滤器的.
+子模板需要具有自己的 ``{% load comments %}``.
 
-This is a feature for the sake of maintainability and sanity.
+这是因为这能使模板更健全且更好维护.
