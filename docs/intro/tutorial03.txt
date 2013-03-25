@@ -1,52 +1,88 @@
 =====================================
 Writing your first Django app, part 3
+编写你的地一个Django程序 第三部分
 =====================================
 
 This tutorial begins where :doc:`Tutorial 2 </intro/tutorial02>` left off. We're
 continuing the Web-poll application and will focus on creating the public
 interface -- "views."
 
+这部分教程延续了:doc:' 第二部分 </intro/totorial02>'。我们将继续完善我们的Web-poll程序，
+我们将把焦点放在创建公共的接口上——也就是‘视图’。
+
 Philosophy
+哲理
 ==========
 
 A view is a "type" of Web page in your Django application that generally serves
 a specific function and has a specific template. For example, in a Weblog
 application, you might have the following views:
 
+视图通常是一个在你创建的Django程序中拥有特定功能并拥有一个特定模板的页面。
+比如说，在一个Weblog程序中，你可能会有一下几个“视图”：
+
 * Blog homepage -- displays the latest few entries.
 
+* Bolg 首页 -- 显示最新的几项内容
+
 * Entry "detail" page -- permalink page for a single entry.
+
+* 条目的详细页面 -- 一个条目的永久链接页面
 
 * Year-based archive page -- displays all months with entries in the
   given year.
 
+* 以年归类的页面 -- 显示给定年份所有月份的内容条目
+
 * Month-based archive page -- displays all days with entries in the
   given month.
 
+* 以月归类的页面 -- 显示给定月份所有天的内容条目
+
 * Day-based archive page -- displays all entries in the given day.
+
+* 以天归类的页面 -- 显示给定天的所有内容条目
 
 * Comment action -- handles posting comments to a given entry.
 
+* 评论功能 -- 处理给某个内容的评价
+
 In our poll application, we'll have the following four views:
+在我们的投票程序中，我们将会实现一下四个视图：
 
 * Poll "index" page -- displays the latest few polls.
+
+* 投票的“首页” -- 显示最新的几个投票。
 
 * Poll "detail" page -- displays a poll question, with no results but
   with a form to vote.
 
+* 投票的“详细”页面 -- 显示一个投票的问题，只显示投票的表单，不显示投票的结果。
+
 * Poll "results" page -- displays results for a particular poll.
+
+* 投票的“结果”页面 -- 显示一个投票的详细结果
 
 * Vote action -- handles voting for a particular choice in a particular
   poll.
 
+* 投票处理 -- 处理一个投票中的一个选项
+
 In Django, each view is represented by a simple Python function.
 
+Django中，每个视图表现为一个简单的Python函数
+
 Design your URLs
+
+设计你的URL
 ================
 
 The first step of writing views is to design your URL structure. You do this by
 creating a Python module, called a URLconf. URLconfs are how Django associates
 a given URL with given Python code.
+
+编写视图的地一个步骤是设计你的URL结构。你需要通过编写一个Python的模块来完成这项工作，
+这个模块叫做URLconfs。这个模块会将Python代码和给定的URL联系起来。
 
 When a user requests a Django-powered page, the system looks at the
 :setting:`ROOT_URLCONF` setting, which contains a string in Python dotted
@@ -54,6 +90,8 @@ syntax. Django loads that module and looks for a module-level variable called
 ``urlpatterns``, which is a sequence of tuples in the following format::
 
     (regular expression, Python callback function [, optional dictionary])
+
+
 
 Django starts at the first regular expression and makes its way down the list,
 comparing the requested URL against each regular expression until it finds one
