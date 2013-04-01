@@ -41,7 +41,7 @@ Getting Help
 * **新手教程:**
   :doc:`第1节# <intro/tutorial01>` |
   :doc:`第2节* <intro/tutorial02>` |
-  :doc:`第3节# <intro/tutorial03>` |
+  :doc:`第3节* <intro/tutorial03>` |
   :doc:`第4节 <intro/tutorial04>`
 
 模型 (model) 层
@@ -79,7 +79,7 @@ Getting Help
 
 * **For 设计师:**
   :doc:`语法概要* <topics/templates>` |
-  :doc:`内建标签和过滤器 <ref/templates/builtins>`
+  :doc:`内建标签和过滤器# <ref/templates/builtins>`
 
 * **For 程序员:**
   :doc:`模板 API <ref/templates/api>` |
