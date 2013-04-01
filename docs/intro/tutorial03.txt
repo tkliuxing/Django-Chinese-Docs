@@ -174,7 +174,7 @@ O'Reilly出版的由Jeffrey Friedl 编写的 "Mastering Regular Expressions" 这
 Django只关心你返回的 :class:`~django.http.HttpResponse` 对象, 或者是返回的异常.
 
 因为Django自己的数据库API使用非常方便, 这里就使用 :doc:`Tutorial 1 </intro/tutorial01>`
-中介绍过的方法. 下面这个方法获取了五条最新的投票内容, 并用逗号进行分隔. 
+中介绍过的方法. 下面这个方法获取了五条最新的投票内容, 并用逗号进行分隔::
 
     from polls.models import Poll
     from django.http import HttpResponse
