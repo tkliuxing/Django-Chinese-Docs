@@ -1,72 +1,68 @@
 =====================================
-编写你的第一个Django应用,第三部分
+编写你的第一个 Django 程序, 第3节
 =====================================
 
-本教程紧接着 :doc:`教程2 </intro/tutorial02>` 。我们继续讨论“Web-poll”这个应用，并主要关注如何
-创建公共接口--“视图”。
+这部分教程延续了 :doc:`第二部分 </intro/tutorial02>`. 我们将继续完善我们的 Web-poll 程序,
+我们将把焦点放在创建公共的接口上 -- 也就是"视图". 
 
-设计原则
+哲理
 ==========
 
 
-所谓的“视图”就是Django项目有明确的作用并且有特定的模板。例如，在一个网络日志应用中，
-你也许会需要以下视图：
+视图通常是一个在你创建的Django程序中拥有特定功能并拥有一个特定模板的页面. 
+比如说,在一个Weblog程序中,你可能会有一下几个视图:
 
-* 博客主页--显示最新的条目
+* Bolg 首页 -- 显示最新的几项内容
 
-* “详细”页面--单一条目的链接
+* 条目的详细页面 -- 一个条目的永久链接页面
 
-* 按照年份归档的页面--显示给定年份每月月份的条目。
+* 以年归类的页面 -- 显示给定年份所有月份的内容条目
 
-* 按照月份归档的页面--显示给定月份每天的条目。
+* 以月归类的页面 -- 显示给定月份所有天的内容条目
 
-* 按照日归档的页面--显示给定日期的所有条目
+* 以天归类的页面 -- 显示给定天的所有内容条目
 
-* 评论操作--处理条目的评论
+* 评论功能 -- 处理给某个内容的评价
 
-在投票应用中，会有以下视图：
+在我们的投票程序中, 将会实现以下四个视图:
 
-* 投票“主页” -- 显示最新的投票。
+* 投票的 "首页" -- 显示最新的几个投票.
 
-* 投票“详细”页面 -- 显示一个并未有结果的投票表格。
+* 投票的 "详细" 页面 -- 显示一个投票的问题,只显示投票的表单,不显示投票的结果.
 
-* 投票“结果”页面 -- 显示对每个投票的结果
+* 投票的 "结果" 页面 -- 显示一个投票的详细结果
 
-* 投票操作 -- 处理特定的投票过程。
+* 投票处理 -- 处理一个投票中的一个选项
 
-在Django中，每个视图由一个简单的Python函数代表
+Django中,每个视图表现为一个简单的Python函数
 
-设计自己的URLs
+设计你的URL
 ================
+编写视图的地一个步骤是设计你的URL结构. 你需要通过编写一个Python的模块来完成这项工作,
+这个模块叫做URLconfs. 这个模块会将Python代码和给定的URL联系起来. 
 
-第一步是设计URL结构。首先创建Python模块，并命名为URLconf。Django通过URLconf连接
-和给定的URL和Python代码。
-
-
-当用户获取一个Django页面，系统会查询 :setting:`ROOT_URLCONF` 环境。 `ROOT_URLCONF` 含有
-Python语法中的字符串。Django载入指定模版并定位名为 ``urlpatterns`` 的变量。
+当用户获取一个Django页面, Django会查询 :setting:`ROOT_URLCONF` 配置项. 其中含有
+Python代码. Django载入指定模块并定位名为 ``urlpatterns`` 的变量. 
 ``urlpatterns`` 格式如下::
 
     (regular expression, Python callback function [, optional dictionary])
 
-Django从第一个表达式开始读取整个list，比较requested URL和list中的每个表达式，
-直到找到符合的配对。
+Django会根据请求的URL从列表中的地一个正则表达式开始进行匹配,直到寻找到相应的匹配.
 
-当找到一个匹配时，Django调用Python回调函数，这个回调函数第一个参数是 :class:`~django.http.HttpRequest` 的
-对象，任何从正则表达式“捕获”到的值作为第二个参数，同时，字典中的关键字是可选参数(三元组第三项可选)
+当寻找到相应的匹配后,Django会调用Python的回调函数, 以 :class:`~django.http.HttpRequest` 对象
+作为这个回调函数的第一个参数, 任何从正则表达式 "捕获" 到的值作为关键字参数,
+``optional dictionary`` 中的key-value作为可选的关键字参数(元组的第三项).
 
-:class:`~django.http.HttpRequest` 类的更多细节参照文档 :doc:`/ref/request-response`。
-URLconfs的更多细节参照文档 :doc:`/topics/http/urls`。
+:class:`~django.http.HttpRequest` 类的更多细节, 请参阅 :doc:`/ref/request-response`.
+URLconfs的更多细节, 请参阅 :doc:`/topics/http/urls`.
 
-
-When you ran ``django-admin.py startproject mysite`` at the beginning of
-Tutorial 1, it created a default URLconf in ``mysite/urls.py``. It also
-automatically set your :setting:`ROOT_URLCONF` setting (in ``settings.py``) to
-point at that file::
+当你在第一部分中运行 ``django-admin.py startproject mysite`` 命令的时候, 
+程序在 ``mysite/urls.py`` 中创建了一个默认的URLconf配置. 并且自动设置了 :setting:`ROOT_URLCONF` 配置
+来指向相应的文件::
 
     ROOT_URLCONF = 'mysite.urls'
 
-Time for an example. Edit ``mysite/urls.py`` so it looks like this::
+示例:编辑 ``mysite/urls.py`` 文件,如下::
 
     from django.conf.urls import patterns, include, url
 
@@ -81,85 +77,74 @@ Time for an example. Edit ``mysite/urls.py`` so it looks like this::
         url(r'^admin/', include(admin.site.urls)),
     )
 
-This is worth a review. When somebody requests a page from your Web site -- say,
-"/polls/23/", Django will load this Python module, because it's pointed to by
-the :setting:`ROOT_URLCONF` setting. It finds the variable named ``urlpatterns``
-and traverses the regular expressions in order. When it finds a regular
-expression that matches -- ``r'^polls/(?P<poll_id>\d+)/$'`` -- it loads the
-function ``detail()`` from ``polls/views.py``. Finally, it calls that
-``detail()`` function like so::
+让我们来回顾下. 当某个人访问你网站的某个页面的时候 -- 如"/poll/23/", Django将加载
+这个Python的模块, 因为他通过 :setting:`ROOT_URLCONF` 设置中的 ``urlpatterns`` 变量寻找
+到了相应的匹配.
+
+当寻找到 ``r'^polls/(?P<poll_id>\d+)/$'`` 这个匹配时, Django就会
+加载 ``polls/view.py`` 中的 ``detail()`` 函数. 最后会调用这个函数::
 
     detail(request=<HttpRequest object>, poll_id='23')
 
-The ``poll_id='23'`` part comes from ``(?P<poll_id>\d+)``. Using parentheses
-around a pattern "captures" the text matched by that pattern and sends it as an
-argument to the view function; the ``?P<poll_id>`` defines the name that will be
-used to identify the matched pattern; and ``\d+`` is a regular expression to
-match a sequence of digits (i.e., a number).
+``poll_id='23'`` 这部分来自于 ``(?P<poll_id>\d+)``. 使用括号将变量包围,
+并将匹配到的内容作为变量传递给视图函数; ``?P<poll_id>`` 定义了用于匹配的名称;
+``\d+`` 是一个表示数字的正则表达式.
 
-Because the URL patterns are regular expressions, there really is no limit on
-what you can do with them. And there's no need to add URL cruft such as ``.php``
--- unless you have a sick sense of humor, in which case you can do something
-like this::
+由于URL的定义是正则表达式, 它和你要做什么没有任何相似点. 而且也不需要写丑陋的如
+``.php`` 这样的扩展名 -- 除非你有种病态的幽默感, 你可以想这样做::
 
     (r'^polls/latest\.php$', 'polls.views.index'),
 
-But, don't do that. It's silly.
+但是, 千万不要这样做, 这样做非常不和谐.
 
-Note that these regular expressions do not search GET and POST parameters, or
-the domain name. For example, in a request to ``http://www.example.com/myapp/``,
-the URLconf will look for ``myapp/``. In a request to
-``http://www.example.com/myapp/?page=3``, the URLconf will look for ``myapp/``.
+请注意, 正则表达式不会搜索GET和POST参数, 或者是域名参数. 例如在 ``http://www.ex.com/myapp/``
+这个请求中, URLconf会寻找 ``myapp/`` 这个匹配. 在 ``http://www.example.com/myapp/?page=3``
+这个请求中, URLconf也会来寻找 ``myapp/`` 这个匹配. 
 
-If you need help with regular expressions, see `Wikipedia's entry`_ and the
-documentation of the :mod:`re` module. Also, the O'Reilly book "Mastering
-Regular Expressions" by Jeffrey Friedl is fantastic.
+如果你在正则表达式上遇到困难,请参照 `Wikipedia's entry`_ 和 :mod:`re` 模块的文档.
+O'Reilly出版的由Jeffrey Friedl 编写的 "Mastering Regular Expressions" 这本书是很好的参考书.
 
-Finally, a performance note: these regular expressions are compiled the first
-time the URLconf module is loaded. They're super fast.
+最后提下性能上的问题: 这些正则表达式会在第一次执行的时候编译加载, 执行速度非常快.
 
 .. _Wikipedia's entry: http://en.wikipedia.org/wiki/Regular_expression
 
-Write your first view
+
+编写你的第一个视图
 =====================
 
-Well, we haven't created any views yet -- we just have the URLconf. But let's
-make sure Django is following the URLconf properly.
+目前为止我们之编写了URLconf配置, 并没有编写任何的视图代码. 但是,
+让我们确保我们配置的URLconf可以被Django正确的加载执行.
 
-Fire up the Django development Web server:
+运行Django的开发服务器:
 
 .. code-block:: bash
 
     python manage.py runserver
 
-Now go to "http://localhost:8000/polls/" on your domain in your Web browser.
-You should get a pleasantly-colored error page with the following message::
+启动后我们访问 "http://localhost:8000/polls/",
+你将会看到一个包含以下错误信息的漂亮的错误页面::
 
     ViewDoesNotExist at /polls/
 
     Could not import polls.views.index. View does not exist in module polls.views.
 
-This error happened because you haven't written a function ``index()`` in the
-module ``polls/views.py``.
+这个错误产生的原因是因为你没有在 ``polls/views.py`` 这个模块中编写 ``index()``
+这个处理函数.
 
-Try "/polls/23/", "/polls/23/results/" and "/polls/23/vote/". The error
-messages tell you which view Django tried (and failed to find, because you
-haven't written any views yet).
+尝试访问 "/polls/23/", "/polls/23/results/" 和 "/polls/23/vote/" 这几个页面.
+这个错误信息会直观的告诉你Django可以访问的url包括哪些, 不可访问的有哪些.
 
-Time to write the first view. Open the file ``polls/views.py``
-and put the following Python code in it::
+现在是编写地一个视图的时候了. 打开 ``polls/view.py`` 文件, 并且将以下代码编写在文件中::
 
     from django.http import HttpResponse
 
     def index(request):
         return HttpResponse("Hello, world. You're at the poll index.")
 
-This is the simplest view possible. Go to "/polls/" in your browser, and you
-should see your text.
+这可能是一个最简单的视图了. 现在让我们访问下 "/polls/" 这个url, 你会看到写在文件中的字符串.
 
-Now lets add a few more views. These views are slightly different, because
-they take an argument (which, remember, is passed in from whatever was
-captured by the regular expression in the URLconf)::
+现在让我们多编写几个视图. 这些视图有一些小小的不同, 因为他们会带有一个参数
+（请记访问地址会被任何匹配的正则表达式所拦截）
 
     def detail(request, poll_id):
         return HttpResponse("You're looking at poll %s." % poll_id)
@@ -170,30 +155,26 @@ captured by the regular expression in the URLconf)::
     def vote(request, poll_id):
         return HttpResponse("You're voting on poll %s." % poll_id)
 
-Take a look in your browser, at "/polls/34/". It'll run the `detail()` method
-and display whatever ID you provide in the URL. Try "/polls/34/results/" and
-"/polls/34/vote/" too -- these will display the placeholder results and voting
-pages.
+现在再让我们来查看下 "/polls/34" 这个地址. 这个地址的访问会运行 `detail()`
+这个方法并且会显示你在URL中传递的的参数的值. 然后在尝试访问 "/polls/34/results/"
+和 "/polls/34/vote/" 这两个地址会分别显示投票的结果页面和投票页面.
 
-Write views that actually do something
+编写一个真正有实际作用的视图
 ======================================
 
-Each view is responsible for doing one of two things: Returning an
-:class:`~django.http.HttpResponse` object containing the content for the
-requested page, or raising an exception such as :exc:`~django.http.Http404`. The
-rest is up to you.
+每个视图的相应都会做相应的一件事或者更多的事情: 返回一个包含含有请求页面内容的
+:class:`~django.http.HttpResponse` 对象,或者抛出一个类似于 :exc:`~django.http.Http404`
+这样的错误,这完全取决与你自己的处理方式.
 
-Your view can read records from a database, or not. It can use a template
-system such as Django's -- or a third-party Python template system -- or not.
-It can generate a PDF file, output XML, create a ZIP file on the fly, anything
-you want, using whatever Python libraries you want.
+你的视图可以访问数据库中的数据, 也可以不访问.
+他可以使用Django自己的模板系统或者第三方的模板系统来渲染页面.
+也可以创建PDF文件, XML文件或者一个ZIP文件,
+使用你想使用的python库来做任何你想做的事情.
 
-All Django wants is that :class:`~django.http.HttpResponse`. Or an exception.
+Django只关心你返回的 :class:`~django.http.HttpResponse` 对象, 或者是返回的异常.
 
-Because it's convenient, let's use Django's own database API, which we covered
-in :doc:`Tutorial 1 </intro/tutorial01>`. Here's one stab at the ``index()``
-view, which displays the latest 5 poll questions in the system, separated by
-commas, according to publication date::
+因为Django自己的数据库API使用非常方便, 这里就使用 :doc:`Tutorial 1 </intro/tutorial01>`
+中介绍过的方法. 下面这个方法获取了五条最新的投票内容, 并用逗号进行分隔. 
 
     from polls.models import Poll
     from django.http import HttpResponse
@@ -203,9 +184,10 @@ commas, according to publication date::
         output = ', '.join([p.question for p in latest_poll_list])
         return HttpResponse(output)
 
-There's a problem here, though: The page's design is hard-coded in the view. If
-you want to change the way the page looks, you'll have to edit this Python code.
-So let's use Django's template system to separate the design from Python::
+这里会产生一个问题, 试想一下, 在视图中设计页面代码是十分困难的.
+如果你想改变页面的整体设计, 你必须要编辑视图中的Python代码.
+所以让我们使用Django中提供的模板系统来解决页面的设计问题,
+将python代码和前台页面分离开来::
 
     from django.template import Context, loader
     from polls.models import Poll
@@ -219,28 +201,24 @@ So let's use Django's template system to separate the design from Python::
         })
         return HttpResponse(t.render(c))
 
-That code loads the template called "polls/index.html" and passes it a context.
-The context is a dictionary mapping template variable names to Python objects.
+这部分代码加载了叫做 "polls/index.html" 的模板, 并且将一部分内容传递给了模板,
+这部分内容是一个字典组成的变量,用于将Python的对象和模板的变量进行对应. 
 
-Reload the page. Now you'll see an error::
+重新加载这个页面, 现在你将会看到如下的错误::
 
     TemplateDoesNotExist at /polls/
     polls/index.html
 
-Ah. There's no template yet. First, create a directory, somewhere on your
-filesystem, whose contents Django can access. (Django runs as whatever user your
-server runs.) Don't put them under your document root, though. You probably
-shouldn't make them public, just for security's sake.
-Then edit :setting:`TEMPLATE_DIRS` in your ``settings.py`` to tell Django where
-it can find templates -- just as you did in the "Customize the admin look and
-feel" section of Tutorial 2.
+目前我们还没有创建模板. 首先需要在你的文件系统上创建一个Django系统可以访问的目录,
+不要把他们放在你的文档目录下面. 为了安全着想, 你可能不会把他们设置成任何人都可以浏览的.
+然后编辑你工程中的 ``settings.py`` 文件中的 :setting:`TEMPLATE_DIRS`
+选项来告诉Django应该去哪里寻找你编辑的模板, 就像你在本教程第二部分做的那样. 
 
-When you've done that, create a directory ``polls`` in your template directory.
-Within that, create a file called ``index.html``. Note that our
-``loader.get_template('polls/index.html')`` code from above maps to
-"[template_directory]/polls/index.html" on the filesystem.
+当你完成以上的工作后,在你的模板目录中创建一个 ``poll`` 目录,并创建一个叫做
+``index.html`` 的文件. 请确认 ``loader.get_template('polls/index.html')`` 代码对应的
+"[template_directory]/polls/index.html" 文件在当前的文件系统中可以找到.
 
-Put the following code in that template:
+把下面这部分代码放在你的模板文件中:
 
 .. code-block:: html+django
 
@@ -254,17 +232,14 @@ Put the following code in that template:
         <p>No polls are available.</p>
     {% endif %}
 
-Load the page in your Web browser, and you should see a bulleted-list
-containing the "What's up" poll from Tutorial 1. The link points to the poll's
-detail page.
+在浏览器中访问这个页面你会得到一个包含有 "What's up" 内容的投票条目,
+这个链接会链接到投票的详细页面.
 
-A shortcut: render_to_response()
+捷径: render_to_response()
 --------------------------------
 
-It's a very common idiom to load a template, fill a context and return an
-:class:`~django.http.HttpResponse` object with the result of the rendered
-template. Django provides a shortcut. Here's the full ``index()`` view,
-rewritten::
+这是个常用的加载模板,填充内容并且返回一个带有模板渲染内容的 :class:`~django.http.HttpResponse`
+对象的Django方法. 这里是个完整的改写后的 ``index()`` 视图::
 
     from django.shortcuts import render_to_response
     from polls.models import Poll
@@ -273,20 +248,18 @@ rewritten::
         latest_poll_list = Poll.objects.all().order_by('-pub_date')[:5]
         return render_to_response('polls/index.html', {'latest_poll_list': latest_poll_list})
 
-Note that once we've done this in all these views, we no longer need to import
-:mod:`~django.template.loader`, :class:`~django.template.Context` and
+一旦我们在所有的视图中完成上面的工作,我们就不需要再引入如下内容
+:mod:`~django.template.loader`, :class:`~django.template.Context` 和
 :class:`~django.http.HttpResponse`.
 
-The :func:`~django.shortcuts.render_to_response` function takes a template name
-as its first argument and a dictionary as its optional second argument. It
-returns an :class:`~django.http.HttpResponse` object of the given template
-rendered with the given context.
+:func:`~django.shortcuts.render_to_response` 函数需要一个模板的名称作为地一个输入参数,
+第二个参数为可选的字典对象. 这个函数会返回一个根据指定内容渲染后的包含
+:class:`~django.http.HttpResponse` 的模板对象. 
 
-Raising 404
+抛出404错误
 ===========
 
-Now, let's tackle the poll detail view -- the page that displays the question
-for a given poll. Here's the view::
+现在让我们处理投票的详细页面 -- 显示给定投票的所有问题选项, 下面是他的视图::
 
     from django.http import Http404
     # ...
@@ -297,22 +270,22 @@ for a given poll. Here's the view::
             raise Http404
         return render_to_response('polls/detail.html', {'poll': p})
 
-The new concept here: The view raises the :exc:`~django.http.Http404` exception
-if a poll with the requested ID doesn't exist.
+这里会出现一个新的概念: 这个视图会在所请求的投票ID不存在的情况下返回一个
+:exc:`~django.http.Http404` 错误.
 
-We'll discuss what you could put in that ``polls/detail.html`` template a bit
-later, but if you'd like to quickly get the above example working, just::
+我们晚点再来讨论在 ``polls/detail.html`` 中需要放哪些内容,
+如果你想尽快的使模板工作起来,就在模板中输入一下内容好了::
 
     {{ poll }}
 
-will get you started for now.
+现在就可以使用了.
 
-A shortcut: get_object_or_404()
+介绍: get_object_or_404()
 -------------------------------
 
-It's a very common idiom to use :meth:`~django.db.models.query.QuerySet.get`
-and raise :exc:`~django.http.Http404` if the object doesn't exist. Django
-provides a shortcut. Here's the ``detail()`` view, rewritten::
+这是个在你使用 :meth:`~django.db.models.query.QuerySet.get`
+对象查询的结果不存在的情况下并且抛出 :exc:`~django.http.Http404` 异常时常用的语法.
+Django提供了这个简单的方式来进行处理. 下面是修改后的 ``detail()`` 视图::
 
     from django.shortcuts import render_to_response, get_object_or_404
     # ...
@@ -320,69 +293,60 @@ provides a shortcut. Here's the ``detail()`` view, rewritten::
         p = get_object_or_404(Poll, pk=poll_id)
         return render_to_response('polls/detail.html', {'poll': p})
 
-The :func:`~django.shortcuts.get_object_or_404` function takes a Django model
-as its first argument and an arbitrary number of keyword arguments, which it
-passes to the module's :meth:`~django.db.models.query.QuerySet.get` function.
-It raises :exc:`~django.http.Http404` if the object doesn't exist.
+:func:`~django.shortcuts.get_object_or_404` 函数使用一个Django的数据模型作为第一个输入参数,
+传递到 :meth:`~django.db.models.query.QuerySet.get` 函数中任意一个数字作为第二个关键字参数.
+当查询的对象不存在的时候会产生 :exc:`~django.http.Http404` 错误.
 
-.. admonition:: Philosophy
+.. admonition:: 哲学
 
-    Why do we use a helper function :func:`~django.shortcuts.get_object_or_404`
-    instead of automatically catching the
-    :exc:`~django.core.exceptions.ObjectDoesNotExist` exceptions at a higher
-    level, or having the model API raise :exc:`~django.http.Http404` instead of
+    为什么我们会使用 :func:`~django.shortcuts.get_object_or_404` 这个方法来自动捕获
+    :exc:`~django.core.exceptions.ObjectDoesNotExist` 异常,
+    或者使用模型API来产生 :exc:`~django.http.Http404` 错误来取代
     :exc:`~django.core.exceptions.ObjectDoesNotExist`?
 
-    Because that would couple the model layer to the view layer. One of the
-    foremost design goals of Django is to maintain loose coupling.
+    因为这样做会将模型层和视图层联系起来, Django设计的目的很重要的一个理念就是松耦合.
 
-There's also a :func:`~django.shortcuts.get_list_or_404` function, which works
-just as :func:`~django.shortcuts.get_object_or_404` -- except using
-:meth:`~django.db.models.query.QuerySet.filter` instead of
-:meth:`~django.db.models.query.QuerySet.get`. It raises
-:exc:`~django.http.Http404` if the list is empty.
+这里还有个类似的 :func:`~django.shortcuts.get_list_or_404` 函数,
+工作方式和 :func:`~django.shortcuts.get_object_or_404` 类似 --
+使用 :meth:`~django.db.models.query.QuerySet.filter`
+来取代 :meth:`~django.db.models.query.QuerySet.get`.
+查询对象不存在的情况下会产生 :exc:`~django.http.Http404` 异常.
 
-Write a 404 (page not found) view
+编写一个404错误页面
 =================================
 
-When you raise :exc:`~django.http.Http404` from within a view, Django
-will load a special view devoted to handling 404 errors. It finds it
-by looking for the variable ``handler404`` in your root URLconf (and
-only in your root URLconf; setting ``handler404`` anywhere else will
-have no effect), which is a string in Python dotted syntax -- the same
-format the normal URLconf callbacks use. A 404 view itself has nothing
-special: It's just a normal view.
+当你在视图中抛出一个 :exc:`~django.http.Http404` 异常的时候,
+Django会加载一个特殊的视图来处理相应的404错误. Django会在你的URLconf
+（仅仅是这个文件中其他任何地方的配置均无效）中来寻找 ``handler404`` 变量,
+是由 python 语法来进行编写的 -- 格式同普通的url配置相同.
+404视图和普通视图没有任何差别.
 
-You normally won't have to bother with writing 404 views. If you don't set
-``handler404``, the built-in view :func:`django.views.defaults.page_not_found`
-is used by default. In this case, you still have one obligation: create a
-``404.html`` template in the root of your template directory. The default 404
-view will use that template for all 404 errors. If :setting:`DEBUG` is set to
-``False`` (in your settings module) and if you didn't create a ``404.html``
-file, an ``Http500`` is raised instead. So remember to create a ``404.html``.
+通常情况下你不需要为编写404视图而困惑. 如果你不设置 ``handler404`` 变量, Django
+内置的 :func:`django.views.defaults.page_not_found` 会被在默认情况下调用.
+这个例子中你需要在你模板根目录下创建一个 ``404.html`` 页面.
+默认的404视图将会使用这个页面来处理所有的404错误. 如果 :setting:`DEBUG` 被设置为 ``False``
+（在设置文件内）并且你没有创建相应的 ``404.html`` 文件, 服务器就会产生 ``Http500`` 错误,
+所以请记得创建 ``404.html`` 文件.
 
-A couple more things to note about 404 views:
+一些404视图需要注意的地方:
 
-* If :setting:`DEBUG` is set to ``True`` (in your settings module) then your
-  404 view will never be used (and thus the ``404.html`` template will never
-  be rendered) because the traceback will be displayed instead.
+* 如果 :setting:`DEBUG` 的值被设置成了 ``True`` ,你自定义的404页面永远都不会被执行,
+  因为Django自己的调试页面会取代这个页面.
 
-* The 404 view is also called if Django doesn't find a match after checking
-  every regular expression in the URLconf.
+* 404错误视图也会在Django没有通过正则表达式找到任何匹配的url时产生.
 
-Write a 500 (server error) view
+编写一个500视图
 ===============================
 
-Similarly, your root URLconf may define a ``handler500``, which points
-to a view to call in case of server errors. Server errors happen when
-you have runtime errors in view code.
+与404错误类似,你需要在URLconf中定义一个 ``handler500`` 变量,
+来将服务器的错误和你自定义的视图联系起来.
+当程序运行出现错误的时候服务器会产生这个错误.
 
-Use the template system
+使用模板系统
 =======================
 
-Back to the ``detail()`` view for our poll application. Given the context
-variable ``poll``, here's what the "polls/detail.html" template might look
-like:
+让我们回到投票程序的 ``detail()`` 视图中来. 根据定义的``poll``变量,
+我们设计的 "polls/detail.html" 模板内容如下所示:
 
 .. code-block:: html+django
 
@@ -393,24 +357,21 @@ like:
     {% endfor %}
     </ul>
 
-The template system uses dot-lookup syntax to access variable attributes. In
-the example of ``{{ poll.question }}``, first Django does a dictionary lookup
-on the object ``poll``. Failing that, it tries an attribute lookup -- which
-works, in this case. If attribute lookup had failed, it would've tried a
-list-index lookup.
+模板系统会使用圆点语法来访问变量的属性. ``{{ poll.question }}`` 这个例子中, Django
+首先对 ``poll`` 对象进行字典搜索. 如果没找到相应的结果, 就会尝试对象的属性查找.
+如果属性查找仍然失败,就会尝试进行列表查找. 
 
-Method-calling happens in the :ttag:`{% for %}<for>` loop:
-``poll.choice_set.all`` is interpreted as the Python code
-``poll.choice_set.all()``, which returns an iterable of Choice objects and is
-suitable for use in the :ttag:`{% for %}<for>` tag.
+:ttag:`{% for %}<for>` 循环中代码执行的过程:
+``poll.choice_set.all`` 会被解释成为python中的
+``poll.choice_set.all()`` 代码, 这部分代码会返交给 :ttag:`{% for %}<for>`
+标签使用的包含查询对象的字典对象.
 
-See the :doc:`template guide </topics/templates>` for more about templates.
+请查看 :doc:`模板概述 </topics/templates>` 来了解更多使用模板的方法.
 
-Simplifying the URLconfs
+简化URLconfs的配置
 ========================
 
-Take some time to play around with the views and template system. As you edit
-the URLconf, you may notice there's a fair bit of redundancy in it::
+多次使用模板系统后, 在我们的 URLconf 文件中你可能注意到了配置文件中的一点冗余::
 
     urlpatterns = patterns('',
         url(r'^polls/$', 'polls.views.index'),
@@ -419,11 +380,10 @@ the URLconf, you may notice there's a fair bit of redundancy in it::
         url(r'^polls/(?P<poll_id>\d+)/vote/$', 'polls.views.vote'),
     )
 
-Namely, ``polls.views`` is in every callback.
+我们每次都要输入 ``polls.views`` 这部分代码.
 
-Because this is a common case, the URLconf framework provides a shortcut for
-common prefixes. You can factor out the common prefixes and add them as the
-first argument to :func:`~django.conf.urls.patterns`, like so::
+因为这是一个经常出现的状况,所以URLconf框架提供了一个简单的配置方式.
+你可以将重复的代码放在 :func:`~django.conf.urls.patterns` 中作为地一个输入参数, 例如::
 
     urlpatterns = patterns('polls.views',
         url(r'^polls/$', 'index'),
@@ -432,13 +392,10 @@ first argument to :func:`~django.conf.urls.patterns`, like so::
         url(r'^polls/(?P<poll_id>\d+)/vote/$', 'vote'),
     )
 
-This is functionally identical to the previous formatting. It's just a bit
-tidier.
+这样做所实现的功能与之前完全相同, 只是看起来稍微整洁一点点.
 
-Since you generally don't want the prefix for one app to be applied to every
-callback in your URLconf, you can concatenate multiple
-:func:`~django.conf.urls.patterns`. Your full ``mysite/urls.py`` might
-now look like this::
+通常情况下不需要在每个回调函数中加上前缀, 你可以将多个 :func:`~django.conf.urls.patterns`
+连接起来. 你完整的 ``mysite.urls.py`` 文件有可能像下面这样::
 
     from django.conf.urls import patterns, include, url
 
@@ -456,25 +413,22 @@ now look like this::
         url(r'^admin/', include(admin.site.urls)),
     )
 
-Decoupling the URLconfs
+URLconfs中的去耦合
 =======================
 
-While we're at it, we should take the time to decouple our poll-app URLs from
-our Django project configuration. Django apps are meant to be pluggable -- that
-is, each particular app should be transferable to another Django installation
-with minimal fuss.
+当真正开始工作的时候, 我们会花时间将我们投票程序URL和项目配置进行解耦. Django
+工程下面每个应用都应该是可插拔的 -- 也就是说,
+每个应用都可以在最小的改动下移植到另一个Django的工程中去.
 
-Our poll app is pretty decoupled at this point, thanks to the strict directory
-structure that ``python manage.py startapp`` created, but one part of it is
-coupled to the Django settings: The URLconf.
+多亏 ``python manage.py startapp`` 创建的严格的目录结构, 我们的投票程序解耦做的
+非常好, 但是有一个部分和Django的联系还比较紧密, 那就是URLconf配置. 
 
-We've been editing the URLs in ``mysite/urls.py``, but the URL design of an
-app is specific to the app, not to the Django installation -- so let's move the
-URLs within the app directory.
+我们已经在 ``mysite/url.py`` 中配置了相应的URL,
+但是这部分URL配置只是单独给这个应用编写的, 而不是给整个Django的项目编写的 --
+所以让我们吧这部分配置移动到应用自己的目录下面去.
 
-Copy the file ``mysite/urls.py`` to ``polls/urls.py``. Then, change
-``mysite/urls.py`` to remove the poll-specific URLs and insert an
-:func:`~django.conf.urls.include`, leaving you with::
+将 ``mysite/urls.py`` 文件拷贝到 ``polls/urls.py``. 然后去掉 ``mysite/urls.py``
+中专门为投票应所编写的URL, 并插入一个 :func:`~django.conf.urls.include` 函数::
 
     from django.conf.urls import patterns, include, url
 
@@ -486,25 +440,22 @@ Copy the file ``mysite/urls.py`` to ``polls/urls.py``. Then, change
         url(r'^admin/', include(admin.site.urls)),
     )
 
-:func:`~django.conf.urls.include` simply references another URLconf.
-Note that the regular expression doesn't have a ``$`` (end-of-string match
-character) but has the trailing slash. Whenever Django encounters
-:func:`~django.conf.urls.include`, it chops off whatever part of the
-URL matched up to that point and sends the remaining string to the included
-URLconf for further processing.
+:func:`~django.conf.urls.include` 简单的引用了另一个URLconf配置. 请注意,
+这里的正则表达式没有 ``$`` 符号, 但是有一个反斜线. 无论什么时候Django遇到
+:func:`~django.conf.urls.include`,
+处理时都会将匹配到的结果的后半部分字符串发送给被包含的那部分URLconf配置中去,
+来进行进一步的处理.
 
-Here's what happens if a user goes to "/polls/34/" in this system:
+下面是说明当你访问 "/polls/34/" 这个地址时系统的处理方式:
 
-* Django will find the match at ``'^polls/'``
+* 首先Django会寻找到相应的匹配也就是 ``'^polls/'``
 
-* Then, Django will strip off the matching text (``"polls/"``) and send the
-  remaining text -- ``"34/"`` -- to the 'polls.urls' URLconf for
-  further processing.
+* 然后, Django会截断匹配到的字符串, 并将截断后的后半部分也就是 ``"34/"``, 发送给
+  'polls.urls' 这个URLconf配置文件进行进一步的处理. 
 
-Now that we've decoupled that, we need to decouple the ``polls.urls``
-URLconf by removing the leading "polls/" from each line, and removing the
-lines registering the admin site. Your ``polls/urls.py`` file should now look like
-this::
+现在我们已经将这部分进行了解耦,我们现在需要修改 ``polls.urls``,
+去掉每行代码中前面的 "polls/", 并且去掉在Django管理站点中的注册.
+你最后配置的 ``polls/urls.py`` 文件看起来会像是下面的这个样则::
 
     from django.conf.urls import patterns, include, url
 
@@ -515,12 +466,13 @@ this::
         url(r'^(?P<poll_id>\d+)/vote/$', 'vote'),
     )
 
-The idea behind :func:`~django.conf.urls.include` and URLconf
-decoupling is to make it easy to plug-and-play URLs. Now that polls are in their
-own URLconf, they can be placed under "/polls/", or under "/fun_polls/", or
-under "/content/polls/", or any other path root, and the app will still work.
+:func:`~django.conf.urls.include` 方法和URLconf的解耦合是想创建一个易插拔的URL配置.
+现在我们床及爱你的投票应用完全使用他自己的URL配置文件了,
+现在这个应用可以放在 "/polls/", 或者 "/fun_polls/", 或者 "/content/polls/" 目录下面,
+或者任何其他目录, 而且这个应用仍然会正常的运行.
 
-All the poll app cares about is its relative path, not its absolute path.
+所有的投票应用之关心相对的路径, 与绝对路径无关.
 
-When you're comfortable with writing views, read :doc:`part 4 of this tutorial
-</intro/tutorial04>` to learn about simple form processing and generic views.
+如果你想更好的处理你的视图,请阅读 :doc:`第四部分文档 </intro/tutorial04>`
+来了解如何处理和生成试图的例子.
+
