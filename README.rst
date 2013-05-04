@@ -30,6 +30,8 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [ 100%] [       8127]  ./topics/settings.txt
   [  30%] [      50383]  ./topics/db/models.txt
   [ 100%] [       3378]  ./intro/tutorial02.txt 
+  [ 100%] [      11287]  ./topics/db/optimization.txt
+  [  22%] [       9677]  ./topics/http/middleware.txt
 
 未完成的文档::
 
@@ -223,7 +225,6 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [   0%] [        425]  ./topics/db/index.txt
   [   0%] [      16414]  ./topics/db/managers.txt
   [   0%] [      23259]  ./topics/db/multi-db.txt
-  [   0%] [      11287]  ./topics/db/optimization.txt
   [   0%] [      50471]  ./topics/db/queries.txt
   [   0%] [      11418]  ./topics/db/sql.txt
   [   0%] [       2755]  ./topics/db/tablespaces.txt
@@ -239,7 +240,6 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [   0%] [      15646]  ./topics/http/file-uploads.txt
   [   0%] [         74]  ./topics/http/generic-views.txt
   [   0%] [        233]  ./topics/http/index.txt
-  [   0%] [       9677]  ./topics/http/middleware.txt
   [   0%] [      21526]  ./topics/http/sessions.txt
   [   0%] [       9218]  ./topics/http/shortcuts.txt
   [   0%] [      38520]  ./topics/http/urls.txt
