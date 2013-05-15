@@ -31,7 +31,7 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [  30%] [      50383]  ./topics/db/models.txt
   [ 100%] [       3378]  ./intro/tutorial02.txt 
   [ 100%] [      11287]  ./topics/db/optimization.txt
-  [  22%] [       9677]  ./topics/http/middleware.txt
+  [ 100%] [       9677]  ./topics/http/middleware.txt
 
 未完成的文档::
 
