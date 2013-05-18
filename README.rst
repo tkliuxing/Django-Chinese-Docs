@@ -32,6 +32,8 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [ 100%] [       3378]  ./intro/tutorial02.txt 
   [ 100%] [      11287]  ./topics/db/optimization.txt
   [ 100%] [       9677]  ./topics/http/middleware.txt
+  [ 100%] [       7588]  ./ref/middleware.txt
+  [ 100%] [      23873]  ./topics/class-based-views.txt
 
 未完成的文档::
 
@@ -162,7 +164,6 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [   0%] [      16508]  ./ref/forms/widgets.txt
   [   0%] [      42813]  ./ref/generic-views.txt
   [   0%] [        452]  ./ref/index.txt
-  [   0%] [       7588]  ./ref/middleware.txt
   [   0%] [      42115]  ./ref/models/fields.txt
   [   0%] [        191]  ./ref/models/index.txt
   [   0%] [      24176]  ./ref/models/instances.txt
@@ -215,7 +216,6 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [   0%] [       1433]  ./releases/index.txt
   [   0%] [      74962]  ./topics/auth.txt
   [   0%] [      47276]  ./topics/cache.txt
-  [   0%] [      23873]  ./topics/class-based-views.txt
   [   0%] [       8576]  ./topics/conditional-view-processing.txt
   [   0%] [      17384]  ./topics/db/aggregation.txt
   [   0%] [        199]  ./topics/db/examples/index.txt
