@@ -1,68 +1,56 @@
-=========================
-Class-based generic views
-=========================
+==================================================
+Class-based generic views 基于类的通用视图
+==================================================
 
 .. versionadded:: 1.3
 
 .. note::
-    Prior to Django 1.3, generic views were implemented as functions. The
-    function-based implementation has been deprecated in favor of the
-    class-based approach described here.
+    在Django1.3之前，通用视图是以函数的方式来实现的。基于函数的实现已经不
+    建议使用，建议使用这里介绍的基于类的实现方式。
 
-    For details on the previous generic views implementation,
-    see the :doc:`topic guide </topics/generic-views>` and
+    要了解更多上面说的通过视图的实现可以查看
+    :doc:`topic guide </topics/generic-views>` 和
     :doc:`detailed reference </ref/generic-views>`.
 
-Writing Web applications can be monotonous, because we repeat certain patterns
-again and again. Django tries to take away some of that monotony at the model
-and template layers, but Web developers also experience this boredom at the view
-level.
+编写Web应用可能是单调的，因为你需要不断的重复某一种模式。Django尝试从model和
+template层移除一些单调的情况，但是Web开发者依然会在view（视图）层经历这种厌烦。
 
-Django's *generic views* were developed to ease that pain. They take certain
-common idioms and patterns found in view development and abstract them so that
-you can quickly write common views of data without having to write too much
-code.
+Django的 *通用视图* 被开发用来消除这一痛苦。它们采用某些常见的习语和在开发过
+程中发现的模式然后把它们抽象出来，以便你能够写更少的代码快速的实现基础的视图。
 
-We can recognize certain common tasks, like displaying a list of objects, and
-write code that displays a list of *any* object. Then the model in question can
-be passed as an extra argument to the URLconf.
+我们能够识别一些基础的任务，比如展示对象的列表，以及编写代码来展示任何对象的
+列表。此外，有问题的模型可以作为一个额外的参数传递到URLconf中。
 
-Django ships with generic views to do the following:
+Django通过通用视图来完成下面一些功能：
 
-* Perform common "simple" tasks: redirect to a different page and
-  render a given template.
+* 执行基础的"简单的"任务：重定向到一个不同的页面以及渲染一个给定
+  的模板。
 
-* Display list and detail pages for a single object. If we were creating an
-  application to manage conferences then a ``TalkListView`` and a
-  ``RegisteredUserListView`` would be examples of list views. A single
-  talk page is an example of what we call a "detail" view.
+* 为单一的对象展示列表和一个详细页面。如果我们创建一个应用来管理会议，那么
+  一个 ``TalkListView`` (讨论列表视图)和一个 ``RegisteredUserListView`` （
+  注册用户列表视图）就是列表视图的一个例子。一个单独的讨论信息页面就是我们称
+  之为 "详细" 视图的例子。
 
-* Present date-based objects in year/month/day archive pages,
-  associated detail, and "latest" pages.
-  `The Django Weblog <https://www.djangoproject.com/weblog/>`_'s
-  year, month, and day archives are built with these, as would be a typical
-  newspaper's archives.
+* 在 年/月/日的归档页面中，有关联的详细页面以及"最近更新"页面中提供基于日期
+  的对象。 `The Django Weblog <https://www.djangoproject.com/weblog/>`_ 中的
+  年，月，日归档就是基于此来构建的，就像典型的新闻归档一样。
 
-* Allow users to create, update, and delete objects -- with or
-  without authorization.
+* 允许用户创建，更新和删除对象 -- 以授权或者无需授权的方式。
 
-Taken together, these views provide easy interfaces to perform the most common
-tasks developers encounter.
+总的来说，这些视图提供了一些简单的接口来完成开发者遇到的大多数的常见任务。
 
 
-Simple usage
-============
+Simple usage 简单使用
+====================================
 
-Class-based generic views (and any class-based views that inherit from
-the base classes Django provides) can be configured in two
-ways: subclassing, or passing in arguments directly in the URLconf.
+基于类的通用视图（以及任何继承了Django提供的基础类的基于类的视图）都能够
+以下面两种方式被配置：子类化，或者直接通过URLconf来传递参数。
 
-When you subclass a class-based view, you can override attributes
-(such as the ``template_name``) or methods (such as ``get_context_data``)
-in your subclass to provide new values or methods. Consider, for example,
-a view that just displays one template, ``about.html``. Django has a
-generic view to do this - :class:`~django.views.generic.base.TemplateView` -
-so we can just subclass it, and override the template name::
+当你子类化一个类视图时，你可以重写一些属性（比如 ``template_name`` ）或者
+一些方法（比如 ``get_context_data`` ）在你的子类中来提供一些新的值或者方
+法。考虑一下，比如，一个仅仅需要展示一个模板的视图， ``about.html`` 。
+Django有一个通用视图来完成这个功能 - :class:`~django.view.generic.base.TemplateView`
+- 因此你可以子类化它，然后重写模板的名称::
 
     # some_app/views.py
     from django.views.generic import TemplateView
@@ -70,9 +58,8 @@ so we can just subclass it, and override the template name::
     class AboutView(TemplateView):
         template_name = "about.html"
 
-Then, we just need to add this new view into our URLconf. As the class-based
-views themselves are classes, we point the URL to the ``as_view`` class method
-instead, which is the entry point for class-based views::
+这时，你只需要添加这个新的视图到你的URLconf配置中。因为类视图本身是一个类，我
+们把URL指向 ``as_view`` 这个类方法来替代类本身，这是类视图的入口点::
 
     # urls.py
     from django.conf.urls import patterns, url, include
@@ -82,9 +69,8 @@ instead, which is the entry point for class-based views::
         (r'^about/', AboutView.as_view()),
     )
 
-Alternatively, if you're only changing a few simple attributes on a
-class-based view, you can simply pass the new attributes into the ``as_view``
-method call itself::
+作为一个选择，如果你仅仅修改类视图中少量简单的属性，你可以直接传递新的属性
+到类本身调用 ``as_view`` 方法中::
 
     from django.conf.urls import patterns, url, include
     from django.views.generic import TemplateView
@@ -93,22 +79,19 @@ method call itself::
         (r'^about/', TemplateView.as_view(template_name="about.html")),
     )
 
-A similar overriding pattern can be used for the ``url`` attribute on
-:class:`~django.views.generic.base.RedirectView`, another simple
-generic view.
+一个类似的重写模式可以用在 :class:`~django.views.generic.base.RedirectView`
+的 ``url`` 属性上，这是另外一个简单的通用视图。
 
 
-Generic views of objects
-========================
+Generic views of objects 对象的通用视图
+================================================
 
-:class:`~django.views.generic.base.TemplateView` certainly is useful,
-but Django's generic views really shine when it comes to presenting
-views of your database content. Because it's such a common task,
-Django comes with a handful of built-in generic views that make
-generating list and detail views of objects incredibly easy.
+:class:`~django.views.generic.base.TemplateView` 确实很有用，但是当你需要
+呈现你数据库中的内容时Django的通用视图才真的会脱颖而出。因为这是如此常见
+的任务，Django提供了一大把内置的通用视图，使生成对象的展示列表和详细视图
+的变得极其容易。
 
-Let's take a look at one of these generic views: the "object list" view. We'll
-be using these models::
+让我们来看一下这些通用视图中的："对象列表"视图。我们将使用下面的模型(models)::
 
     # models.py
     from django.db import models
@@ -133,7 +116,7 @@ be using these models::
         publisher = models.ForeignKey(Publisher)
         publication_date = models.DateField()
 
-To build a list page of all publishers, we'd use a URLconf along these lines::
+为了给所有的Publisher建立一个列表页，我们将按照这样的方式来配置URLconf::
 
     from django.conf.urls import patterns, url, include
     from django.views.generic import ListView
@@ -145,27 +128,23 @@ To build a list page of all publishers, we'd use a URLconf along these lines::
         )),
     )
 
-That's all the Python code we need to write. We still need to write a template,
-however. We could explicitly tell the view which template to use
-by including a ``template_name`` key in the arguments to as_view, but in
-the absence of an explicit template Django will infer one from the object's
-name. In this case, the inferred template will be
-``"books/publisher_list.html"`` -- the "books" part comes from the name of the
-app that defines the model, while the "publisher" bit is just the lowercased
-version of the model's name.
+这就是我们要写的所有Python代码。无论如何，我们仍然需要写一个模板。我们可以明确
+的告诉视图(view)来使用哪个模板，通过在给as_view传递参数时包含一个
+``template_name`` 的关键字参数，但是在缺乏template参数时Django会推断名字就是对
+象的名字。在这种情况下，推断出来的模板将是这样的 ``"books/publisher_list.html"`` 
+-- 其中的 "books" 部分来自模型(model)所属的app的名字，而 "publisher" 部分仅仅
+是模型名字的小写字母。
 
 .. note::
-    Thus, when (for example) the :class:`django.template.loaders.app_directories.Loader`
-    template loader is enabled in :setting:`TEMPLATE_LOADERS`, the template
-    location would be::
+    因此，当（比如说） :class:`django.template.loaders.app_directories.Loader`
+    这个模板加载器在添加到 :setting:`TEMPLATE_LOADERS`  中时，这个模板的路径将是::
 
         /path/to/project/books/templates/books/publisher_list.html
 
 .. highlightlang:: html+django
 
-This template will be rendered against a context containing a variable called
-``object_list`` that contains all the publisher objects. A very simple template
-might look like the following::
+这个模板将会依据于一个上下文(context)来渲染，这个context包含一个名为 ``object_list``
+包含所有publisher对象的变量。一个非常简单的模板可能看起来就像下面这个::
 
     {% extends "base.html" %}
 
@@ -178,51 +157,42 @@ might look like the following::
         </ul>
     {% endblock %}
 
-That's really all there is to it. All the cool features of generic views come
-from changing the "info" dictionary passed to the generic view. The
-:doc:`generic views reference</ref/class-based-views>` documents all the generic
-views and their options in detail; the rest of this document will consider
-some of the common ways you might customize and extend generic views.
+这确实就是全部代码了。所有通用视图中酷的特性来自于修改被传递到通用视图中的"信息"
+字典。这篇文档 :doc:`generic views reference</ref/class-based-views>` 详细的
+介绍了通用视图以及它的选项;本篇文档剩余的部分将会考虑你可以自定义以及扩展通用
+视图的常见方法。
 
 
-Extending generic views
-=======================
+Extending generic views 扩展通用视图
+==============================================
 
 .. highlightlang:: python
 
-There's no question that using generic views can speed up development
-substantially. In most projects, however, there comes a moment when the
-generic views no longer suffice. Indeed, the most common question asked by new
-Django developers is how to make generic views handle a wider array of
-situations.
+这是毫无疑问的，使用通用视图可以极大的提高开发速度。然而，在大多数工程中，
+总会遇到这样的时刻，通用视图无法满足需求。的确，大多数来自Django开发新手
+的问题是如何能使得通用视图的使用范围更广。
 
-This is one of the reasons generic views were redesigned for the 1.3 release -
-previously, they were just view functions with a bewildering array of options;
-now, rather than passing in a large amount of configuration in the URLconf,
-the recommended way to extend generic views is to subclass them, and override
-their attributes or methods.
+这是通用视图在1.3发布中被重新设计的原因之一 - 之前，它们仅仅是一些函数视图加上
+一列令人疑惑的选项;现在，比起传递大量的配置到URLconf中，更推荐的扩展通用视图的
+方法是子类化它们，并且重写它们的属性或者方法。
 
 
-Making "friendly" template contexts
------------------------------------
+Making "friendly" template contexts 编写"友好的"模板上下文
+----------------------------------------------------------------------
 
-You might have noticed that our sample publisher list template stores
-all the publishers in a variable named ``object_list``. While this
-works just fine, it isn't all that "friendly" to template authors:
-they have to "just know" that they're dealing with publishers here.
+你可能已经注意到了，我们在publisher列表的例子中把所有的publisher对象
+放到 ``object_list`` 变量中。虽然这能正常工作，但这对模板作者并不是
+"友好的"。他们只需要知道在这里要处理publishers就行了。
 
-Well, if you're dealing with a model object, this is already done for
-you. When you are dealing with an object or queryset, Django is able
-to populate the context using the verbose name (or the plural verbose
-name, in the case of a list of objects) of the object being displayed.
-This is provided in addition to the default ``object_list`` entry, but
-contains exactly the same data.
+因此，如果你在处理一个模型(model)对象，这对你来说已经足够了。当你处理
+一个object或者queryset时，Django能够使用你定义对象显示用的verbose name
+（或者plural verbose name，对于对象列表）来填充上下文(context)。这被
+提供添加到默认的 ``object_list`` 实体中，但是包含完全相同的数据。
 
-If the verbose name (or plural verbose name) still isn't a good match,
-you can manually set the name of the context variable. The
-``context_object_name`` attribute on a generic view specifies the
-context variable to use. In this example, we'll override it in the
-URLconf, since it's a simple change:
+如果verbase name(或者plural verbose name) 仍然不能很好的符合要求，你
+可以手动的设置上下文(context)变量的名字。通用视图中的这个属性 :
+``context_object_name`` 指定上下文(context)变量要使用的名字。在这个例子
+中我们在URLconf中重写了它，因为这只是简单的修改:
 
 .. parsed-literal::
 
@@ -233,27 +203,22 @@ URLconf, since it's a simple change:
         )),
     )
 
-Providing a useful ``context_object_name`` is always a good idea. Your
-coworkers who design templates will thank you.
+提供一个有用的 ``context_object_name`` 总是个好主意。和你一起工作的设计
+模板的同事会感谢你的。
 
 
-Adding extra context
---------------------
+Adding extra context 添加额外的上下文
+----------------------------------------
 
-Often you simply need to present some extra information beyond that
-provided by the generic view. For example, think of showing a list of
-all the books on each publisher detail page. The
-:class:`~django.views.generic.detail.DetailView` generic view provides
-the publisher to the context, but it seems there's no way to get
-additional information in that template.
+经常的你需要提供一些通用视图没有提供的额外的信息。比如，考虑到每个publisher
+详细页面上的图书列表的展示。 :class:`~django.views.generic.detail.DetailView`
+通用视图提供了一个publisher对象给context，但是看起来在模板中没
+有获取附加信息的途径。
 
-However, there is; you can subclass
-:class:`~django.views.generic.detail.DetailView` and provide your own
-implementation of the ``get_context_data`` method. The default
-implementation of this that comes with
-:class:`~django.views.generic.detail.DetailView` simply adds in the
-object being displayed to the template, but you can override it to show
-more::
+然而，是有方法的;你可以子类化 :class:`~django.views.generic.detail.DetailView`
+然后提供你自己的 ``get_context_data`` 方法的实现。 
+:class:`~django.views.generic.detail.DetailView` 中默认的实现只是简单的
+给模板添加了要展示的对象，但是你这可以这么重写来展示更多信息::
 
     from django.views.generic import DetailView
     from books.models import Publisher, Book
@@ -271,16 +236,14 @@ more::
             return context
 
 
-Viewing subsets of objects
---------------------------
+Viewing subsets of objects 查看对象的子集合
+----------------------------------------------------
 
-Now let's take a closer look at the ``model`` argument we've been
-using all along. The ``model`` argument, which specifies the database
-model that the view will operate upon, is available on all the
-generic views that operate on a single object or a collection of
-objects. However, the ``model`` argument is not the only way to
-specify the objects that the view will operate upon -- you can also
-specify the list of objects using the ``queryset`` argument::
+现在让我们来近距离查看下我们一直在用的 ``model`` 参数。这个 ``model``
+参数指定了视图(view)在哪个数据库模型之上进行操作，这适用于所有的需要
+操作一个单独的对象或者一个对象集合的通用视图。然而，这个 ``model`` 
+参数并不是唯一能够指明视图(view)要基于哪个对象进行操作的方法 -- 
+你同样可以使用 ``queryset`` 参数来指定一个对象列表::
 
     from django.views.generic import DetailView
     from books.models import Publisher, Book
@@ -290,16 +253,15 @@ specify the list of objects using the ``queryset`` argument::
         context_object_name = "publisher"
         queryset = Publisher.objects.all()
 
-Specifying ``model = Publisher`` is really just shorthand for saying
-``queryset = Publisher.objects.all()``. However, by using ``queryset``
-to define a filtered list of objects you can be more specific about the
-objects that will be visible in the view (see :doc:`/topics/db/queries`
-for more information about :class:`QuerySet` objects, and see the
-:doc:`class-based views reference </ref/class-based-views>` for the complete
-details).
+指明 ``model = Publisher`` 等价于快速声明的 ``queryset = Publisher.objects.all()``
+。然而，通过使用 ``queryset`` 来定义一个过滤的对象列表，你可以更加详细
+的了解哪些对象将会被显示的视图(view)中(看 :doc:`/topics/db/queries`
+来获取更多关于 :class:`QuerySet` 对象的更对信息，以及看
+:doc:`class-based views reference </ref/class-based-views>` 来获取全部
+细节)。
 
-To pick a simple example, we might want to order a list of books by
-publication date, with the most recent first::
+选择一个简单的例子，我们可能想要对books列表按照出版日期进行排序，把
+最近的放到前面::
 
     urlpatterns = patterns('',
         (r'^publishers/$', ListView.as_view(
@@ -313,11 +275,9 @@ publication date, with the most recent first::
     )
 
 
-That's a pretty simple example, but it illustrates the idea nicely. Of course,
-you'll usually want to do more than just reorder objects. If you want to
-present a list of books by a particular publisher, you can use the same
-technique (here, illustrated using subclassing rather than by passing arguments
-in the URLconf)::
+这是个非常简单的列子，但是它很好的诠释了处理思路。当然，你通常想做的不仅仅只是
+对对象列表进行排序。如果你想要展现某个publisher的所有图书(book)列表，你可以使用
+同样的手法（这次，通过子类化的而不是传递参数到URLconf的方式来说明）::
 
     from django.views.generic import ListView
     from books.models import Book
@@ -328,42 +288,38 @@ in the URLconf)::
         queryset = Book.objects.filter(publisher__name="Acme Publishing")
         template_name = "books/acme_list.html"
 
-Notice that along with a filtered ``queryset``, we're also using a custom
-template name. If we didn't, the generic view would use the same template as the
-"vanilla" object list, which might not be what we want.
+注意，和经过过滤之后的 ``queryset`` 一起定义的还有我们自定义的模板名称。
+如果我们不这么做，通过视图会使用和 "vanilla" 对象列表名称一样的模板，这可
+能不是我们想要的。
 
-Also notice that this isn't a very elegant way of doing publisher-specific
-books. If we want to add another publisher page, we'd need another handful of
-lines in the URLconf, and more than a few publishers would get unreasonable.
-We'll deal with this problem in the next section.
+另外需要注意，这并不是非常优雅的方法来处理特定publisher的图书(book)。如果我们 
+要创建另外一个publisher页面，我们需要添加另外几行代码到URLconf中，并且再多几个
+publisher就会觉得这么做不合理。我们会在下一个章节处理这个问题。
 
 .. note::
 
-    If you get a 404 when requesting ``/books/acme/``, check to ensure you
-    actually have a Publisher with the name 'ACME Publishing'.  Generic
-    views have an ``allow_empty`` parameter for this case.  See the
-    :doc:`class-based-views reference</ref/class-based-views>` for more details.
+    如果你在访问 ``/books/acme/`` 是出现404错误，检查确保你确实有一个名字为
+    'ACME Publishing'的Publisher。通用视图在这种情况下提供一个 ``allow_empty``
+    的参数。看 :doc:`class-based-views reference</ref/class-based-views>` 
+    获取更多信息。
 
 
-Dynamic filtering
------------------
+Dynamic filtering 动态过滤
+----------------------------------
 
-Another common need is to filter down the objects given in a list page by some
-key in the URL. Earlier we hard-coded the publisher's name in the URLconf, but
-what if we wanted to write a view that displayed all the books by some arbitrary
-publisher?
+另一个普遍的需求是在给定的列表页面中根据URL中的关键字来过滤对象。前面我们把出版
+商的名字硬编码到URLconf中，但是如果我们想要编写一个视图来展示任何publisher的所有
+图书，怎么处理？
 
-Handily, the ``ListView`` has a
-:meth:`~django.views.generic.detail.ListView.get_queryset` method we can
-override. Previously, it has just been returning the value of the ``queryset``
-attribute, but now we can add more logic.
+很方便， ``ListView`` 有一个 
+:meth:`~django.views.generic.detail.ListView.get_queryset` 方法来供我们重写。
+在之前，它只是返回一个 ``queryset`` 属性值，但是现在我们可以添加更多的逻辑。
 
-The key part to making this work is that when class-based views are called,
-various useful things are stored on ``self``; as well as the request
-(``self.request``) this includes the positional (``self.args``) and name-based
-(``self.kwargs``) arguments captured according to the URLconf.
+让这种方式能够工作的关键点在于当类视图被调用时，各种有用的对象被存储在 ``self`` 上;
+同request(``self.request``)一样，其中包含了从URLconf中获取到的位置参数
+(``self.args``)和基于名字的参数(``self.kwargs``)(关键字参数，译者注)。
 
-Here, we have a URLconf with a single captured group::
+这里，我们有一个URLconf定义了一组供捕获的参数::
 
     from books.views import PublisherBookListView
 
@@ -371,7 +327,7 @@ Here, we have a URLconf with a single captured group::
         (r'^books/(\w+)/$', PublisherBookListView.as_view()),
     )
 
-Next, we'll write the ``PublisherBookListView`` view itself::
+下一个，我们定义了 ``PublisherBookListView`` 视图::
 
     from django.shortcuts import get_object_or_404
     from django.views.generic import ListView
@@ -386,12 +342,10 @@ Next, we'll write the ``PublisherBookListView`` view itself::
             publisher = get_object_or_404(Publisher, name__iexact=self.args[0])
             return Book.objects.filter(publisher=publisher)
 
-As you can see, it's quite easy to add more logic to the queryset selection;
-if we wanted, we could use ``self.request.user`` to filter using the current
-user, or other more complex logic.
+如你所见，可以非常容易的在queryset区域添加更多的逻辑;如果我们想的话，我们可以
+使用 ``self.request.user`` 来过滤当前用户，或者添加其他更复杂的逻辑。
 
-We can also add the publisher into the context at the same time, so we can
-use it in the template::
+同时我们可以把publisher添加到context中，这样我们就可以在模板中使用它::
 
     class PublisherBookListView(ListView):
 
@@ -409,14 +363,15 @@ use it in the template::
             context['publisher'] = self.publisher
             return context
 
-Performing extra work
----------------------
+Performing extra work 执行额外的工作
+------------------------------------------
 
+我们需要考虑的最后的共同模式在调用通用视图之前或者之后会引起额外的开销。
 The last common pattern we'll look at involves doing some extra work before
 or after calling the generic view.
 
-Imagine we had a ``last_accessed`` field on our ``Author`` object that we were
-using to keep track of the last time anybody looked at that author::
+想象一下，在我们的 ``Author`` 对象上有一个 ``last_accessed`` 字段，这个字段用来
+跟踪某人最后一次查看了这个作者的时间。
 
     # models.py
 
@@ -428,12 +383,10 @@ using to keep track of the last time anybody looked at that author::
         headshot = models.ImageField(upload_to='/tmp')
         last_accessed = models.DateTimeField()
 
-The generic ``DetailView`` class, of course, wouldn't know anything about this
-field, but once again we could easily write a custom view to keep that field
-updated.
+通用的 ``DetailView`` 类，当然不知道关于这个字段的事情，但再一次我们可以很容易
+编写一个自定义的视图来保持这个字段的更新。
 
-First, we'd need to add an author detail bit in the URLconf to point to a
-custom view:
+首先，我们需要添加author详情页的代码配置到URLconf中，指向自定义的视图。
 
 .. parsed-literal::
 
@@ -444,8 +397,8 @@ custom view:
         **(r'^authors/(?P<pk>\\d+)/$', AuthorDetailView.as_view()),**
     )
 
-Then we'd write our new view -- ``get_object`` is the method that retrieves the
-object -- so we simply override it and wrap the call::
+然后，编写我们新的视图 -- ``get_object`` 是用来获取对象的方法 -- 因此我们简单的
+重写它并封装调用::
 
     import datetime
     from books.models import Author
@@ -467,33 +420,30 @@ object -- so we simply override it and wrap the call::
 
 .. note::
 
-    This code won't actually work unless you create a
-    ``books/author_detail.html`` template.
+    这段代码并不能运行，除非你创建一个 ``books/author_detail.html``
+    的模板。
 
 .. note::
 
-    The URLconf here uses the named group ``pk`` - this name is the default
-    name that ``DetailView`` uses to find the value of the primary key used to
-    filter the queryset.
+    这里的URLconf使用参数组的名字 ``pk`` - 这个名字是 ``DetailView`` 用来查找
+    用来queryset的主键的值的默认名称。
 
-    If you want to change it, you'll need to do your own ``get()`` call
-    on ``self.queryset`` using the new named parameter from ``self.kwargs``.
+    如果你想要修改它，你需要在你的 ``get()`` 中使用从 ``self.kwargs`` 中获取
+    到的新的参数名称来调用 ```self.queryset`。
 
-More than just HTML
--------------------
+More than just HTML 不仅仅是HTML
+--------------------------------------
 
-So far, we've been focusing on rendering templates to generate
-responses. However, that's not all generic views can do.
+到目前为止，我们关注在渲染模板到生成responses(响应)上。然而，
+通用视图能够做的远不止这些。
 
-Each generic view is composed out of a series of mixins, and each
-mixin contributes a little piece of the entire view. Some of these
-mixins -- such as
-:class:`~django.views.generic.base.TemplateResponseMixin` -- are
-specifically designed for rendering content to an HTML response using a
-template. However, you can write your own mixins that perform
-different rendering behavior.
+每一个通用视图都是由一系列的mixin组成的，而每个mixin给整个视图贡献
+了一小片代码。其中一些mixin -- 比如
+:class:`~django.views.generic.base.TemplateResponseMixin` -- 是为
+使用一个模板渲染内容到html特殊设计的。无论如何，你都可以编写自己的
+mixin来完成不同的渲染行为。
 
-For example, a simple JSON mixin might look something like this::
+比如，一个简单的处理JSON的mixin可能看起来是这样的::
 
     from django import http
     from django.utils import simplejson as json
@@ -517,29 +467,26 @@ For example, a simple JSON mixin might look something like this::
             # -- can be serialized as JSON.
             return json.dumps(context)
 
-Then, you could build a JSON-returning
-:class:`~django.views.generic.detail.DetailView` by mixing your
-:class:`JSONResponseMixin` with the
-:class:`~django.views.generic.detail.BaseDetailView` -- (the
-:class:`~django.views.generic.detail.DetailView` before template
-rendering behavior has been mixed in)::
+这时，你就可以构建一个返回JSON数据的
+:class:`~django.views.generic.detail.DetailView` 通过混合你的
+:class:`JSONResponseMixin` 和
+:class:`~django.views.generic.detail.BaseDetailView` -- (类
+:class:`~django.views.generic.detail.DetailView` 在模板渲染行
+为之前被混入其他行为)::
 
     class JSONDetailView(JSONResponseMixin, BaseDetailView):
         pass
 
-This view can then be deployed in the same way as any other
-:class:`~django.views.generic.detail.DetailView`, with exactly the
-same behavior -- except for the format of the response.
+这个视图这次可以像其它任何 :class:`~django.views.generic.detail.DetailView` 
+类一样被部署，用完全相同的行为 -- 除了响应的格式之外。
 
-If you want to be really adventurous, you could even mix a
-:class:`~django.views.generic.detail.DetailView` subclass that is able
-to return *both* HTML and JSON content, depending on some property of
-the HTTP request, such as a query argument or a HTTP header. Just mix
-in both the :class:`JSONResponseMixin` and a
+如果你想要冒险，你甚至可以混入一个 :class:`~django.views.generic.detail.DetailView`
+的子类，这个子类能够同时返回HTML和JSON内容，依赖于HTTP请求中的一些属性，
+比如一个查询参数或者是一个HTTP头部。仅仅是混合
+:class:`JSONResponseMixin` 和
 :class:`~django.views.generic.detail.SingleObjectTemplateResponseMixin`,
-and override the implementation of :func:`render_to_response()` to defer
-to the appropriate subclass depending on the type of response that the user
-requested::
+然后重写方法 :func:`render_to_response()` 依靠用户请求中需要的响应类型
+把实现延迟到适当的子类中::
 
     class HybridDetailView(JSONResponseMixin, SingleObjectTemplateResponseMixin, BaseDetailView):
         def render_to_response(self, context):
@@ -549,26 +496,24 @@ requested::
             else:
                 return SingleObjectTemplateResponseMixin.render_to_response(self, context)
 
-Because of the way that Python resolves method overloading, the local
-``render_to_response()`` implementation will override the versions provided by
-:class:`JSONResponseMixin` and
+因为Python解析方法重载的方式，局部的 ``render_to_response()`` 实现将会
+覆盖由
+:class:`JSONResponseMixin` 和
 :class:`~django.views.generic.detail.SingleObjectTemplateResponseMixin`.
+提供的版本。
 
-Decorating class-based views
-============================
+Decorating class-based views 装饰类视图
+========================================================
 
 .. highlightlang:: python
 
-The extension of class-based views isn't limited to using mixins. You
-can use also use decorators.
+对于类视图的扩展并不局限于使用mixin。你也可以使用装饰器。
 
-Decorating in URLconf
----------------------
+Decorating in URLconf URLconf中的装饰器
+------------------------------------------
 
-The simplest way of decorating class-based views is to decorate the
-result of the :meth:`~django.views.generic.base.View.as_view` method.
-The easiest place to do this is in the URLconf where you deploy your
-view::
+最简单的装饰类视图的方式是装饰 :meth:`~django.views.generic.base.View.as_view` 
+方法返回的结果。最容易装饰的地方是你配置你的视图的地方URLconf中::
 
     from django.contrib.auth.decorators import login_required, permission_required
     from django.views.generic import TemplateView
@@ -580,24 +525,22 @@ view::
         (r'^vote/', permission_required('polls.can_vote')(VoteView.as_view())),
     )
 
-This approach applies the decorator on a per-instance basis. If you
-want every instance of a view to be decorated, you need to take a
-different approach.
+这种方法适用于装饰每个实例的基础。如果你想要视图的每个实例都被装饰，
+你需要采用别的方法。
 
 .. _decorating-class-based-views:
 
-Decorating the class
---------------------
+Decorating the class 装饰类
+----------------------------------------
 
-To decorate every instance of a class-based view, you need to decorate
-the class definition itself. To do this you apply the decorator to the
-:meth:`~django.views.generic.base.View.dispatch` method of the class.
+要装饰类视图的每一个实例，你需要装饰类自身的定义。要实现这个目的，你要
+应用这个装饰器到类的 :meth:`~django.views.generic.base.View.dispatch` 
+方法上。
 
-A method on a class isn't quite the same as a standalone function, so
-you can't just apply a function decorator to the method -- you need to
-transform it into a method decorator first. The ``method_decorator``
-decorator transforms a function decorator into a method decorator so
-that it can be used on an instance method. For example::
+类方法和独立的函数并不完全一样，因此你不能仅仅应用函数的装饰器 --
+你需要先把它转换为一个类方法的装饰器。 ``method_decorator`` 这个装饰器
+能把一个函数装饰器转变为类方法装饰器，因此它就可以被用在实例方法上了。
+比如::
 
     from django.contrib.auth.decorators import login_required
     from django.utils.decorators import method_decorator
@@ -610,12 +553,9 @@ that it can be used on an instance method. For example::
         def dispatch(self, *args, **kwargs):
             return super(ProtectedView, self).dispatch(*args, **kwargs)
 
-In this example, every instance of ``ProtectedView`` will have
-login protection.
+在这个例子中， ``ProtectedView`` 的每个实例都将拥有登录保护的功能。
 
 .. note::
 
-    ``method_decorator`` passes ``*args`` and ``**kwargs``
-    as parameters to the decorated method on the class. If your method
-    does not accept a compatible set of parameters it will raise a
-    ``TypeError`` exception.
+    ``method_decorator`` 方法传递 ``*args`` 和 ``**kwargs`` 给这个类上的
+    装饰器。如果你的方法不接受兼容参数集合，它会抛出 ``TypeError`` 异常。

@@ -26,6 +26,7 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
 * `Chaney Lee`_
 * Ray_
 * `Ronald Bai`_
+* the5fire_
 
 .. _Wrongway: https://github.com/wrongwaycn
 .. _pylemon: https://github.com/pylemon
@@ -33,6 +34,7 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
 .. _`Chaney Lee`: https://github.com/chaneylee
 .. _Ray: https://github.com/raywuxing
 .. _`Ronald Bai`: https://github.com/tkliuxing
+.. _the5fire: https://github.com/the5fire
 
 
 翻译进度
@@ -52,6 +54,10 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [  10%] [      28834]  ./intro/tutorial01.txt
   [ 100%] [       3378]  ./intro/tutorial02.txt
   [  10%] [      21449]  ./intro/tutorial03.txt
+  [ 100%] [      11287]  ./topics/db/optimization.txt
+  [ 100%] [       9677]  ./topics/http/middleware.txt
+  [ 100%] [       7588]  ./ref/middleware.txt
+  [ 100%] [      23873]  ./topics/class-based-views.txt
 
 未完成的文档::
 
@@ -179,7 +185,6 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [   0%] [      16508]  ./ref/forms/widgets.txt
   [   0%] [      42813]  ./ref/generic-views.txt
   [   0%] [        452]  ./ref/index.txt
-  [   0%] [       7588]  ./ref/middleware.txt
   [   0%] [      42115]  ./ref/models/fields.txt
   [   0%] [        191]  ./ref/models/index.txt
   [   0%] [      24176]  ./ref/models/instances.txt
@@ -232,7 +237,6 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [   0%] [       1433]  ./releases/index.txt
   [   0%] [      74962]  ./topics/auth.txt
   [   0%] [      47276]  ./topics/cache.txt
-  [   0%] [      23873]  ./topics/class-based-views.txt
   [   0%] [       8576]  ./topics/conditional-view-processing.txt
   [   0%] [      17384]  ./topics/db/aggregation.txt
   [   0%] [        199]  ./topics/db/examples/index.txt
@@ -242,7 +246,6 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [   0%] [        425]  ./topics/db/index.txt
   [   0%] [      16414]  ./topics/db/managers.txt
   [   0%] [      23259]  ./topics/db/multi-db.txt
-  [   0%] [      11287]  ./topics/db/optimization.txt
   [   0%] [      50471]  ./topics/db/queries.txt
   [   0%] [      11418]  ./topics/db/sql.txt
   [   0%] [       2755]  ./topics/db/tablespaces.txt
@@ -258,7 +261,6 @@ http://readthedocs.org/docs/django-document-cn/en/latest/
   [   0%] [      15646]  ./topics/http/file-uploads.txt
   [   0%] [         74]  ./topics/http/generic-views.txt
   [   0%] [        233]  ./topics/http/index.txt
-  [   0%] [       9677]  ./topics/http/middleware.txt
   [   0%] [      21526]  ./topics/http/sessions.txt
   [   0%] [       9218]  ./topics/http/shortcuts.txt
   [   0%] [      38520]  ./topics/http/urls.txt

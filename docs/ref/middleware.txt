@@ -1,15 +1,14 @@
 ==========
-Middleware
+中间件
 ==========
 
 .. module:: django.middleware
    :synopsis: Django's built-in middleware classes.
 
-This document explains all middleware components that come with Django. For
-information on how to use them and how to write your own middleware, see
-the :doc:`middleware usage guide </topics/http/middleware>`.
+这篇文档Django中的所有中间件组件。要查看关于如何使用它们以及如何编写自己的
+中间件，看这里 :doc:`middleware usage guide </topics/http/middleware>` 。
 
-Available middleware
+可用的中间件
 ====================
 
 Cache middleware
@@ -22,9 +21,9 @@ Cache middleware
 
 .. class:: FetchFromCacheMiddleware
 
-Enable the site-wide cache. If these are enabled, each Django-powered page will
-be cached for as long as the :setting:`CACHE_MIDDLEWARE_SECONDS` setting
-defines. See the :doc:`cache documentation </topics/cache>`.
+开启全站范围的缓存。如果开始了这些缓存，任何一个由Django提供的页面将会被缓存，
+缓存时长是由你在 :setting:`CACHE_MIDDLEWARE_SECONDS` 配置中定义的。
+看篇文档 :doc:`cache documentation </topics/cache>`.
 
 "Common" middleware
 -------------------
@@ -34,122 +33,114 @@ defines. See the :doc:`cache documentation </topics/cache>`.
 
 .. class:: CommonMiddleware
 
-Adds a few conveniences for perfectionists:
+给完美主义者增加一些便利条件
 
-* Forbids access to user agents in the :setting:`DISALLOWED_USER_AGENTS`
-  setting, which should be a list of strings.
+* 禁止 :setting:`DISALLOWED_USER_AGENTS` 中设置的用户代理来访问，这项配置
+  应该是一个字符串的list
 
-* Performs URL rewriting based on the :setting:`APPEND_SLASH` and
-  :setting:`PREPEND_WWW` settings.
+* 基于 :setting:`APPEND_SLASH` 和 :setting:`PREPEND_WWW` 的设置。来进行URL
+  的重写。
 
-  If :setting:`APPEND_SLASH` is ``True`` and the initial URL doesn't end
-  with a slash, and it is not found in the URLconf, then a new URL is
-  formed by appending a slash at the end. If this new URL is found in the
-  URLconf, then Django redirects the request to this new URL. Otherwise,
-  the initial URL is processed as usual.
+  如果 :setting:`APPEND_SLASH` 设为 ``True`` 并且一开始的的URL没有以斜线
+  结尾，并且在URLconf中也没找到对应定义，这时形成一个一个斜线结尾新的URL。
+  如果这个新的URL存在于URLconf，这时Django会重定向请求到这个新URL上，否
+  则，一开始的URL按正常情况处理。
 
-  For example, ``foo.com/bar`` will be redirected to ``foo.com/bar/`` if
-  you don't have a valid URL pattern for ``foo.com/bar`` but *do* have a
-  valid pattern for ``foo.com/bar/``.
+  比如， ``foo.com/bar`` 将会被重定向到 ``foo.com/bar/`` 如果你没有定义
+  有效的针对 ``foo.com/bar`` 的正则但是定义了针对 ``foo.com/bar`` 的有
+  效正则。
 
-  If :setting:`PREPEND_WWW` is ``True``, URLs that lack a leading "www."
-  will be redirected to the same URL with a leading "www."
+  如果 :setting:`PREPEND_WWW` 设为 ``True`` ，url前面缺少 "www."的将会被
+  重定向到同样的但是一个"www."开头的url。
 
-  Both of these options are meant to normalize URLs. The philosophy is that
-  each URL should exist in one, and only one, place. Technically a URL
-  ``foo.com/bar`` is distinct from ``foo.com/bar/`` -- a search-engine
-  indexer would treat them as separate URLs -- so it's best practice to
-  normalize URLs.
+  两种选项都是为了规范化url。其中的哲学就是，任何一个url应该在一个地方仅存
+  在一个。技术上来讲，url ``foo.com/bar`` 是区别于 ``foo.com/bar/`` -- 一
+  搜索引擎索引会把这里分开处理 -- 因此，最佳实践就是规范化url。
 
-* Sends broken link notification emails to :setting:`MANAGERS` if
-  :setting:`SEND_BROKEN_LINK_EMAILS` is set to ``True``.
+* 如果 :setting:``SEND_BROKEN_LINK_EMAILS`` 被设置为 ``True`` 的话，会发送
+  邮件来通知 :setting:``MANAGERS`` 有错误的链接。
 
-* Handles ETags based on the :setting:`USE_ETAGS` setting. If
-  :setting:`USE_ETAGS` is set to ``True``, Django will calculate an ETag
-  for each request by MD5-hashing the page content, and it'll take care of
-  sending ``Not Modified`` responses, if appropriate.
+* 基于 :setting:`USE_ETAGS` 设置来处理ETag。如果设置 :setting:`USE_ETAGS` 
+  为 ``True`` ，Django会通过MD5-hashing处理页面的内容来为每一个页面请求
+  计算Etag，并且如果合适的话，它将会发送携带 ``Not Modified`` 的响应。
 
-View metadata middleware
-------------------------
+
+View metadata middleware 视图元数据中间件
+------------------------------------------------------------------------
 
 .. module:: django.middleware.doc
    :synopsis: Middleware to help your app self-document.
 
 .. class:: XViewMiddleware
 
-Sends custom ``X-View`` HTTP headers to HEAD requests that come from IP
-addresses defined in the :setting:`INTERNAL_IPS` setting. This is used by
-Django's :doc:`automatic documentation system </ref/contrib/admin/admindocs>`.
-Depends on :class:`~django.contrib.auth.middleware.AuthenticationMiddleware`.
+发送自定义的 ``X-View`` HTTP头部给那些来自配置文件 :setting:`INTERNAL_IPS` 
+定义的IP地址的请求。这被应用在Django的 
+:doc:`automatic documentation system </ref/contrib/admin/admindocs>` 中，依
+于 :class:`~django.contrib.auth.middleware.AuthenticationMiddleware` 。
 
-GZip middleware
----------------
+GZip middleware 压缩处理中间件
+---------------------------------------------
 
 .. module:: django.middleware.gzip
    :synopsis: Middleware to serve GZipped content for performance.
 
 .. class:: GZipMiddleware
 
-Compresses content for browsers that understand GZip compression (all modern
-browsers).
+压缩内容给那些支撑此功能的浏览器（现在所有浏览器都支持）。
 
-It is suggested to place this first in the middleware list, so that the
-compression of the response content is the last thing that happens.
+建议把这个中间件放到中间件配置列表的第一个，这样压缩响应内容的处理会到最后才
+发生。
 
-It will NOT compress content if any of the following are true:
+如果满足下面条件的话，内容不会被压缩：
 
-* The content body is less than 200 bytes long.
+* body内容小于200bytes长度
 
-* The response has already set the ``Content-Encoding`` header.
+* 响应已经设置了 ``Content-Encoding`` 头部。
 
-* The request (the browser) hasn't sent an ``Accept-Encoding`` header
-  containing ``gzip``.
+* 请求（浏览器）没有发送包含 ``gzip`` 的 ``Accept-Encoding`` 头部。
 
-* The request is from Internet Explorer and the ``Content-Type`` header
-  contains ``javascript`` or starts with anything other than ``text/``.
-  We do this to avoid a bug in early versions of IE that caused decompression
-  not to be performed on certain content types.
+* 来自IE浏览器的请求和 ``Content-Type`` 头部中含有 ``javascript`` 或者以非
+  ``text/`` 字符开始。
+  我们这做来避免由于IE浏览器早期版本中引起在某些确切内容类型时压缩不会执行的bug
 
-You can apply GZip compression to individual views using the
-:func:`~django.views.decorators.http.gzip_page()` decorator.
+你可以独立的使用GZip压缩通过这个 :func:`~django.views.decorators.http.gzip_page()` 
+装饰器。
 
-Conditional GET middleware
---------------------------
+Conditional GET middleware 有条件的GET中间件
+----------------------------------------------------
 
 .. module:: django.middleware.http
    :synopsis: Middleware handling advanced HTTP features.
 
 .. class:: ConditionalGetMiddleware
 
-Handles conditional GET operations. If the response has a ``ETag`` or
-``Last-Modified`` header, and the request has ``If-None-Match`` or
-``If-Modified-Since``, the response is replaced by an
-:class:`~django.http.HttpNotModified`.
+处理带有条件判断状态GET操作。如果一个请求包含 ``ETag`` 或者 ``Last-Modified`` 
+头部，以及请求 包含 ``If-None-Match`` 或 ``If-Modified-Since`` ,这时响应会被
+替换为 :class:`~django.http.HttpNotModified`.
 
-Also sets the ``Date`` and ``Content-Length`` response-headers.
+另外，设置 ``Date`` 和 ``Content-Length`` 到响应头部。
 
-Reverse proxy middleware
-------------------------
+Reverse proxy middleware 反向代理中间件
+------------------------------------------------
 
 .. class:: SetRemoteAddrFromForwardedFor
 
-This middleware was removed in Django 1.1. See :ref:`the release notes
-<removed-setremoteaddrfromforwardedfor-middleware>` for details.
+这个中间件在Django1.1中就被移除了，具体参考这里 :ref:`the release notes
+<removed-setremoteaddrfromforwardedfor-middleware>` 。
 
-Locale middleware
------------------
+Locale middleware 本地中间件
+----------------------------------
 
 .. module:: django.middleware.locale
    :synopsis: Middleware to enable language selection based on the request.
 
 .. class:: LocaleMiddleware
 
-Enables language selection based on data from the request. It customizes
-content for each user. See the :doc:`internationalization documentation
-</topics/i18n/index>`.
+基于请求中的数据开启语言选择。它可以为每个用户进行定制。具体参考这里：
+ :doc:`internationalization documentation</topics/i18n/index>`.
 
-Message middleware
-------------------
+Message middleware消息中间件
+------------------------------------
 
 .. module:: django.contrib.messages.middleware
    :synopsis: Message middleware.
@@ -159,34 +150,33 @@ Message middleware
 .. versionadded:: 1.2
    ``MessageMiddleware`` was added.
 
-Enables cookie- and session-based message support. See the
+开启基于cookie和session的消息支持功能。具体参考这里：
 :doc:`messages documentation </ref/contrib/messages>`.
 
-Session middleware
-------------------
+Session middleware会话中间件
+------------------------------------
 
 .. module:: django.contrib.sessions.middleware
    :synopsis: Session middleware.
 
 .. class:: SessionMiddleware
 
-Enables session support. See the :doc:`session documentation
+开启session支持，具体参考这里 :doc:`session documentation
 </topics/http/sessions>`.
 
-Authentication middleware
--------------------------
+Authentication middleware认证中间
+--------------------------------------------------
 
 .. module:: django.contrib.auth.middleware
   :synopsis: Authentication middleware.
 
 .. class:: AuthenticationMiddleware
 
-Adds the ``user`` attribute, representing the currently-logged-in user, to
-every incoming ``HttpRequest`` object. See :doc:`Authentication in Web requests
-</topics/auth>`.
+给每一个进来的 ``HttpRequest`` 对象添加 ``user`` 属性，表示是当前登录用户。
+具体参考这里 :doc:`Authentication in Web requests </topics/auth>`.
 
-CSRF protection middleware
---------------------------
+CSRF protection middleware CSRF保护中间件
+----------------------------------------------------
 
 .. module:: django.middleware.csrf
    :synopsis: Middleware adding protection against Cross Site Request
@@ -194,28 +184,26 @@ CSRF protection middleware
 
 .. class:: CsrfViewMiddleware
 
-Adds protection against Cross Site Request Forgeries by adding hidden form
-fields to POST forms and checking requests for the correct value. See the
+针对跨站请求伪造通过给POST表单添加因此的表单字段以及验证请求中字段的正确
+型来进行防护。具体参考这里
 :doc:`Cross Site Request Forgery protection documentation </ref/contrib/csrf>`.
 
-Transaction middleware
-----------------------
+Transaction middleware 事物中间件
+--------------------------------------------
 
 .. module:: django.middleware.transaction
    :synopsis: Middleware binding a database transaction to each Web request.
 
 .. class:: TransactionMiddleware
 
-Binds commit and rollback to the request/response phase. If a view function
-runs successfully, a commit is done. If it fails with an exception, a rollback
-is done.
+为请求/响应处理绑定提交和回滚事件。如果一个视图方法执行正确，则提交完成。
+如果出现了异常错误，则会进行事件回滚。
 
-The order of this middleware in the stack is important: middleware modules
-running outside of it run with commit-on-save - the default Django behavior.
-Middleware modules running inside it (coming later in the stack) will be under
-the same transaction control as the view functions.
+堆栈中的中间件的顺序很重要：在这个中间件之外运行的中间件会在Django的默认
+提交和保存操作时是处理数据，不受事务控制。在这个中间件之内运行的（也就是在
+堆栈中后面存在的中间件）将会被处于和视图方法同一个事务控制中。
 
-See the :doc:`transaction management documentation </topics/db/transactions>`.
+具体参考这里 :doc:`transaction management documentation </topics/db/transactions>`.
 
 X-Frame-Options middleware
 --------------------------
