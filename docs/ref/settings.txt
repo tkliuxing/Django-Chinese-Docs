@@ -8,13 +8,13 @@ Settings
 
 .. warning::
 
-    覆写设置项时，特别是在默认值为空元组()或是空字典{}的情况下，要格外谨慎。比如 :setting:`MIDDLEWARE_CLASSES`
-    和 :setting:`TEMPLATE_CONTEXT_PROCESSORS` 。要确保其包含你要用到的Django特性。
+    覆写设置项时, 特别是在默认值为空元组()或是空字典{}的情况下, 要格外谨慎.比如 :setting:`MIDDLEWARE_CLASSES`
+    和 :setting:`TEMPLATE_CONTEXT_PROCESSORS` .要确保其包含你要用到的Django特性.
 
 有效的设置项
 ============
 
-接下来我们会按照字母顺序展示所有的可用设置项及其默认值。
+接下来我们会按照字母顺序展示所有的可用设置项及其默认值.
 
 .. setting:: ABSOLUTE_URL_OVERRIDES
 
@@ -23,15 +23,15 @@ ABSOLUTE_URL_OVERRIDES
 
 默认值: ``{}`` (空字典)
 
-该设置项为一个字典，用于将 ``"app_label.model_name"`` 字符串与函式进行映射。函式接受一个model对象做为参数并返回该对象的网址。
-这相当于在其中的每个应用的底层上重载 ``get_absolute_url()`` 方法，例如::
+该设置项为一个字典, 用于将 ``"app_label.model_name"`` 字符串与函式进行映射.函式接受一个model对象做为参数并返回该对象的网址.
+这相当于在其中的每个应用的底层上重载 ``get_absolute_url()`` 方法, 例如::
 
     ABSOLUTE_URL_OVERRIDES = {
         'blogs.weblog': lambda o: "/blogs/%s/" % o.slug,
         'news.story': lambda o: "/stories/%s/%s/" % (o.pub_year, o.slug),
     }
 
-注意用于该设置项的model字符串无论其实际名称是什么，在此处都应该设为小写。
+注意用于该设置项的model字符串无论其实际名称是什么, 在此处都应该设为小写.
 
 .. setting:: ADMIN_FOR
 
@@ -40,9 +40,9 @@ ADMIN_FOR
 
 默认项: ``()`` (空元组)
 
-一个settings元组，用于存放django自带管理后台要用到的 settings 模块（格式如 ``'foo.bar.baz'`` ），
+一个settings元组, 用于存放django自带管理后台要用到的 settings 模块（格式如 ``'foo.bar.baz'`` ）, 
 
-自带的管理后台在对models,视图和模板标签的自动内省的文档中会用到该设置。
+自带的管理后台在对models,视图和模板标签的自动内省的文档中会用到该设置.
 
 .. setting:: ADMINS
 
@@ -51,14 +51,14 @@ ADMINS
 
 默认值: ``()`` (空元组)
 
-该元组内存放的是可以接收代码错误通知的用户。当
-``DEBUG=False`` 时，如果某个视图(view)抛出异常，Django就会将带有详细异常信息的以邮件的形式发送给上述用户。
-元组中的每个成员应该是一个形如(完整名称,邮件地址)的二元组，例如::
+该元组内存放的是可以接收代码错误通知的用户.当
+``DEBUG=False`` 时, 如果某个视图(view)抛出异常, Django就会将带有详细异常信息的以邮件的形式发送给上述用户.
+元组中的每个成员应该是一个形如(完整名称,邮件地址)的二元组, 例如::
 
     (('John', 'john@example.com'), ('Mary', 'mary@example.com'))
 
-要注意：无论何时，只要有错误发生，元组中的 *所有用户* 都会收到Django发送的邮件。
-wrongway特别提醒：有时这些错误会很多很烦，比如某些２B爬虫访问了某个不存的网址。
+要注意：无论何时, 只要有错误发生, 元组中的 *所有用户* 都会收到Django发送的邮件.
+wrongway特别提醒：有时这些错误会很多很烦, 比如某些２B爬虫访问了某个不存的网址.
 详见 :doc:`/howto/error-reporting` 
 
 .. setting:: ALLOWED_INCLUDE_ROOTS
@@ -68,11 +68,11 @@ ALLOWED_INCLUDE_ROOTS
 
 默认值: ``()`` (空元组)
 
-该元组内存放的是表示嵌入文件根路径的字符串——只有在某字符串存在于该元组的情况下，Django的 ``{% ssi %}`` 模板标签才会嵌入以其为前缀的文件。
-这样做是出于安全考虑，从而使模板作者不能访问到他们不该访问的文件。
+该元组内存放的是表示嵌入文件根路径的字符串——只有在某字符串存在于该元组的情况下, Django的 ``{% ssi %}`` 模板标签才会嵌入以其为前缀的文件.
+这样做是出于安全考虑, 从而使模板作者不能访问到他们不该访问的文件.
 
-举个例子，我们将 :setting:`ALLOWED_INCLUDE_ROOTS` 设为 ``('/home/html', '/var/www')`` ，
-那么 ``{% ssi /home/html/foo.txt %}`` 是有效的，而 ``{% ssi /etc/passwd %}``　则是无效的。
+举个例子, 我们将 :setting:`ALLOWED_INCLUDE_ROOTS` 设为 ``('/home/html', '/var/www')`` ,
+那么 ``{% ssi /home/html/foo.txt %}`` 是有效的, 而 ``{% ssi /etc/passwd %}`` 则是无效的.
 
 .. setting:: APPEND_SLASH
 
@@ -81,12 +81,12 @@ APPEND_SLASH
 
 默认值: ``True``
 
-设为 ``True`` 时，如果请求的URL与URLconf中的任何一个URL模式都不匹配，且URL并没有以斜杠结尾，那么Django就会重定向到以斜杠结尾的相同网址。
-要注意的是，重定向可能会导致某些POST请求所提交的数据丢失。
+设为 ``True`` 时, 如果请求的URL与URLconf中的任何一个URL模式都不匹配, 且URL并没有以斜杠结尾, 那么Django就会重定向到以斜杠结尾的相同网址.
+要注意的是, 重定向可能会导致某些POST请求所提交的数据丢失.
 
 :setting:`APPEND_SLASH` 设置项只有在安装了
-:class:`~django.middleware.common.CommonMiddleware` 的情况下才会生效。
-(详见 :doc:`/topics/http/middleware`)。 也可参见 :setting:`PREPEND_WWW` 。
+:class:`~django.middleware.common.CommonMiddleware` 的情况下才会生效.
+(详见 :doc:`/topics/http/middleware`). 也可参见 :setting:`PREPEND_WWW` .
 
 .. setting:: AUTHENTICATION_BACKENDS
 
@@ -95,9 +95,9 @@ AUTHENTICATION_BACKENDS
 
 默认值: ``('django.contrib.auth.backends.ModelBackend',)``
 
-是一个存放用户认址后端类(authentication backend class)的元组，用于于认证用户详见
+是一个存放用户认址后端类(authentication backend class)的元组, 用于于认证用户详见
 :doc:`用户认证后端文档
-</ref/authbackends>` 。
+</ref/authbackends>` .
 
 .. setting:: AUTH_PROFILE_MODULE
 
@@ -106,7 +106,7 @@ AUTH_PROFILE_MODULE
 
 默认值: 未定义
 
-当前站点使用的用户附加属性模型。详面
+当前站点使用的用户附加属性模型.详面
 :ref:`auth-profiles`.
 
 .. setting:: CACHES
@@ -124,11 +124,11 @@ CACHES
         }
     }
 
-该设置项包含了Django会用到的所有缓存设置。这是一个嵌套的字典，其中的每个键名（即缓存项别名）都对应一个存放缓存选项的字典。
+该设置项包含了Django会用到的所有缓存设置.这是一个嵌套的字典, 其中的每个键名（即缓存项别名）都对应一个存放缓存选项的字典.
 
 
-:setting:`CACHES` 字典中必须包含一个 ``default`` 缓存；其他缓存可以随意命名。
-如果你正在使用缓存的并非是本地内存缓存，或者你想定义多个缓存，就要用到其他选项。
+:setting:`CACHES` 字典中必须包含一个 ``default`` 缓存；其他缓存可以随意命名.
+如果你正在使用缓存的并非是本地内存缓存, 或者你想定义多个缓存, 就要用到其他选项.
 以下就是可用的缓存选项：
 
 .. setting:: CACHES-BACKEND
@@ -138,7 +138,7 @@ BACKEND
 
 默认值: ``''`` (空字符串)
 
-要使用的缓存后端。内置的缓存后端有以下几种：
+要使用的缓存后端.内置的缓存后端有以下几种：
 
 * ``'django.core.cache.backends.db.DatabaseCache'``
 * ``'django.core.cache.backends.dummy.DummyCache'``
@@ -147,27 +147,27 @@ BACKEND
 * ``'django.core.cache.backends.memcached.MemcachedCache'``
 * ``'django.core.cache.backends.memcached.PyLibMCCache'``
 
-我们可以将:setting:`BACKEND <CACHE-BACKEND>` 设为某个缓存后端的可访问路径(例如 ``mypackage.backends.whatever.WhateverCache``)，以使用非Django内置的第三方缓存。
-您不妨参考其他后端，从头编写一个完整的新缓存后端，以此做为一个读者练习。
+我们可以将 :setting:`BACKEND <CACHE-BACKEND>` 设为某个缓存后端的可访问路径(例如 ``mypackage.backends.whatever.WhateverCache``), 以使用非Django内置的第三方缓存.
+您不妨参考其他后端, 从头编写一个完整的新缓存后端, 以此做为一个读者练习.
 
 .. note::
-    在Django1.3之前，我们使用以后端类型名为前缀的URI来表示Django内置的缓存后端(比如，使用``'db://tablename'`` 表示使用数据库缓存后端)。
-    我们不建议使用这种格式，它会在Django1.5中彻底去除。
+    在Django1.3之前, 我们使用以后端类型名为前缀的URI来表示Django内置的缓存后端(比如, 使用 ``'db://tablename'`` 表示使用数据库缓存后端).
+    我们不建议使用这种格式, 它会在Django1.5中彻底去除.
 
 .. setting:: CACHES-KEY_FUNCTION
 
 KEY_FUNCTION
 ~~~~~~~~~~~~
 
-一个形如'xxxx.xxxx.xxx.xxx'的路径字符串，表示一个函式的可访问路径。该函式决定了如何将前缀，版本以及键名拼装成最终的缓存键。
+一个形如'xxxx.xxxx.xxx.xxx'的路径字符串, 表示一个函式的可访问路径.该函式决定了如何将前缀, 版本以及键名拼装成最终的缓存键.
 默认的实现方法如下::
 
     def make_key(key, key_prefix, version):
         return ':'.join([key_prefix, str(version), smart_str(key)])
 
-如果你想使用自定义的函式，新函式只需与上述参数相同即可。
+如果你想使用自定义的函式, 新函式只需与上述参数相同即可.
 
-详见 :ref:`缓存文档 <cache_key_transformation>` 。
+详见 :ref:`缓存文档 <cache_key_transformation>` .
 
 .. setting:: CACHES-KEY_PREFIX
 
@@ -176,9 +176,9 @@ KEY_PREFIX
 
 默认值: ``''`` (空字符串)
 
-做为前缀自动被Django包含在所有缓存键名中。
+做为前缀自动被Django包含在所有缓存键名中.
 
-详见 :ref:`缓存文档 <cache_key_prefixing>` 。
+详见 :ref:`缓存文档 <cache_key_prefixing>` .
 
 .. setting:: CACHES-LOCATION
 
@@ -187,7 +187,7 @@ LOCATION
 
 默认值: ``''`` (空字符串)
 
-要使用的缓存位置。它可以是文件系统缓存的一个目录，也可以是memcache服务器的主机和端口，或是仅仅是本地内存缓存的一个简单标识名称::
+要使用的缓存位置.它可以是文件系统缓存的一个目录, 也可以是memcache服务器的主机和端口, 或是仅仅是本地内存缓存的一个简单标识名称::
 
     CACHES = {
         'default': {
@@ -203,10 +203,10 @@ OPTIONS
 
 默认值: None
 
-传递给缓存后端的其他选项。根据所使用的缓存后端不同，使用不同的参数。
+传递给缓存后端的其他选项.根据所使用的缓存后端不同, 使用不同的参数.
 
 具体的参数列表详见
-:doc:`缓存后端 </topics/cache>` ，以了解您所选用的后端使用哪些参数。
+:doc:`缓存后端 </topics/cache>` , 以了解您所选用的后端使用哪些参数.
 
 .. setting:: CACHES-TIMEOUT
 
@@ -215,7 +215,7 @@ TIMEOUT
 
 默认值: 300
 
-设置缓存项的过期时间，以秒为单位。
+设置缓存项的过期时间, 以秒为单位.
 
 .. setting:: CACHES-VERSION
 
@@ -224,9 +224,9 @@ VERSION
 
 默认值: ``1``
 
-由Django生成的用于组合缓存键名的默认版本数字。
+由Django生成的用于组合缓存键名的默认版本数字.
 
-详见 :ref:`cache documentation <cache_versioning>` 。
+详见 :ref:`cache documentation <cache_versioning>` .
 
 .. setting:: CACHE_MIDDLEWARE_ALIAS
 
@@ -235,7 +235,7 @@ CACHE_MIDDLEWARE_ALIAS
 
 默认值: ``default``
 
-用于缓存中间件的缓存链接。
+用于缓存中间件的缓存链接.
 
 .. setting:: CACHE_MIDDLEWARE_ANONYMOUS_ONLY
 
@@ -244,9 +244,9 @@ CACHE_MIDDLEWARE_ANONYMOUS_ONLY
 
 默认值: ``False``
 
-如果为 ``True`` ，只有匿名请求(例如非登录用户的请求)才会被缓存。否则，缓存中间件会缓存每一张没有GET和POST传入参数的网页。
+如果为 ``True`` , 只有匿名请求(例如非登录用户的请求)才会被缓存.否则, 缓存中间件会缓存每一张没有GET和POST传入参数的网页.
 
-将该设置设为 ``True`` 时，要在middleware中添加 ``AuthenticationMiddleware`` 。
+将该设置设为 ``True`` 时, 要在middleware中添加 ``AuthenticationMiddleware`` .
 
 详见 :doc:`/topics/cache`.
 
@@ -257,7 +257,7 @@ CACHE_MIDDLEWARE_KEY_PREFIX
 
 默认值: ``''`` (空字符串)
 
-缓存中间件要用到的缓存前缀。
+缓存中间件要用到的缓存前缀.
 
 详见 :doc:`/topics/cache`.
 
@@ -268,9 +268,9 @@ CACHE_MIDDLEWARE_SECONDS
 
 默认值: ``600``
 
-使用缓存中间件或是 ``cache_page()`` 装饰器时缓存一个页面的过期时间，单位是秒。
+使用缓存中间件或是 ``cache_page()`` 装饰器时缓存一个页面的过期时间, 单位是秒.
 
-详见 :doc:`/topics/cache` 。
+详见 :doc:`/topics/cache` .
 
 .. setting:: CSRF_COOKIE_DOMAIN
 
@@ -281,11 +281,11 @@ CSRF_COOKIE_DOMAIN
 
 默认值: ``None``
 
-设置启用CSRF cookie的站点。它可以轻易地将跨站请求伪造与正常的跨子站请求区分开。
-该设置项的格式应该类似 ``".lawrence.com"`` ，以允许由一个子站表单发出的POST请求可以被另一个子站的视图(view)所接收。
+设置启用CSRF cookie的站点.它可以轻易地将跨站请求伪造与正常的跨子站请求区分开.
+该设置项的格式应该类似 ``".lawrence.com"`` , 以允许由一个子站表单发出的POST请求可以被另一个子站的视图(view)所接收.
 
-请注意该设置项的存在并不意味着：在默认情况下，Django的CSRF防护对于跨子站攻击就是安全的。详见
-:ref:`CSRF 限制 <csrf-limitations>` 一节。
+请注意该设置项的存在并不意味着：在默认情况下, Django的CSRF防护对于跨子站攻击就是安全的.详见
+:ref:`CSRF 限制 <csrf-limitations>` 一节.
 
 .. setting:: CSRF_COOKIE_NAME
 
@@ -296,7 +296,7 @@ CSRF_COOKIE_NAME
 
 默认值: ``'csrftoken'``
 
-用于CSRF认证令牌的cookie名称。可以是任何名称，详见
+用于CSRF认证令牌的cookie名称.可以是任何名称, 详见
 :doc:`/ref/contrib/csrf`.
 
 .. setting:: CSRF_COOKIE_PATH
@@ -308,9 +308,9 @@ CSRF_COOKIE_PATH
 
 默认值: ``'/'``
 
-应用于CSRF cookie的路径。它应该匹配你的Django应用的URL路径，或是该路径的父路径。
+应用于CSRF cookie的路径.它应该匹配你的Django应用的URL路径, 或是该路径的父路径.
 
-如果你在同一台主机上运行多个Django实例时，该设定会非常有用。它们各自使用不同的cookie路径，每个实例只能看到自己的CSRF cookie。
+如果你在同一台主机上运行多个Django实例时, 该设定会非常有用.它们各自使用不同的cookie路径, 每个实例只能看到自己的CSRF cookie.
 
 .. setting:: CSRF_COOKIE_SECURE
 
@@ -321,7 +321,7 @@ CSRF_COOKIE_SECURE
 
 默认值: ``False``
 
-是否对CSRF cookie进行加密。如果设为 ``True`` ，cookie将被标识为 "secure" ，这意味着浏览器确保该cookie只能通过HTTPS链接发送。
+是否对CSRF cookie进行加密.如果设为 ``True`` , cookie将被标识为 "secure" , 这意味着浏览器确保该cookie只能通过HTTPS链接发送.
 
 .. setting:: CSRF_FAILURE_VIEW
 
@@ -332,13 +332,13 @@ CSRF_FAILURE_VIEW
 
 默认值: ``'django.views.csrf.csrf_failure'``
 
-一个形如'xxxx.xxxx.xxx.xxx'的函式路径字符串，该视图函式在请求被CSRF防护拒绝时发挥作用。
+一个形如'xxxx.xxxx.xxx.xxx'的函式路径字符串, 该视图函式在请求被CSRF防护拒绝时发挥作用.
 该函式结构如下::
 
   def csrf_failure(request, reason="")
 
-其中的 ``reason`` 是一个短消息(对于开发者或是日志比较有用，一般用户对此并不关注)
-，表示当前请求被拒绝的原因。详见
+其中的 ``reason`` 是一个短消息(对于开发者或是日志比较有用, 一般用户对此并不关注)
+, 表示当前请求被拒绝的原因.详见
 :doc:`/ref/contrib/csrf`.
 
 
@@ -351,12 +351,12 @@ DATABASES
 
 默认值: ``{}`` (空字典)
 
-该设置项是一个嵌套的字典，包含了Django会用到的所有数据库设置。
-其中的每个字典项都以数据库别名做为键值，对应一个存放该数据库选项的字典。
+该设置项是一个嵌套的字典, 包含了Django会用到的所有数据库设置.
+其中的每个字典项都以数据库别名做为键值, 对应一个存放该数据库选项的字典.
 
-:setting:`DATABASES` 字典中必须定义一个 ``default`` 数据库；其他数据库可以随意命名。
+:setting:`DATABASES` 字典中必须定义一个 ``default`` 数据库；其他数据库可以随意命名.
 
-最简单的设置就是安装的一个单独的SQLite文件数据库。设置如下::
+最简单的设置就是安装的一个单独的SQLite文件数据库.设置如下::
 
     DATABASES = {
         'default': {
@@ -365,7 +365,7 @@ DATABASES
         }
     }
 
-对于其他数据库后端或是更灵活的SQLite配置而言，就要用到其他选项，下面就介绍其中所有的数据库选项。
+对于其他数据库后端或是更灵活的SQLite配置而言, 就要用到其他选项, 下面就介绍其中所有的数据库选项.
 
 .. setting:: DATABASE-ENGINE
 
@@ -374,20 +374,20 @@ ENGINE
 
 默认值: ``''`` (空符串)
 
-要使用的数据库后端。Django内置的数据库后端有：
+要使用的数据库后端.Django内置的数据库后端有：
 
 * ``'django.db.backends.postgresql_psycopg2'``
 * ``'django.db.backends.mysql'``
 * ``'django.db.backends.sqlite3'``
 * ``'django.db.backends.oracle'``
 
-我们可以通过设置　``ENGINE`` 而使用非Django提供的第三方数据库后端——将其设为某个后端的可访问路径，例如
-``mypackage.backends.whatever``)。您不妨参考其他后端，从头编写一个完整的新数据库后端，以此做为一个读者练习。
+我们可以通过设置　``ENGINE`` 而使用非Django提供的第三方数据库后端——将其设为某个后端的可访问路径, 例如
+``mypackage.backends.whatever``).您不妨参考其他后端, 从头编写一个完整的新数据库后端, 以此做为一个读者练习.
 
 
 .. note::
-    在Django1.2之前，我们使用一个短名称来表示Django内置的数据库后端(比如，使用``'sqlite3'`` 表示使用SQLite数据库后端)。
-    我们不建议使用这种格式，它已在Django1.4中彻底去除 。   
+    在Django1.2之前, 我们使用一个短名称来表示Django内置的数据库后端(比如, 使用 ``'sqlite3'`` 表示使用SQLite数据库后端).
+    我们不建议使用这种格式, 它已在Django1.4中彻底去除 .   
 
 .. setting:: HOST
 
@@ -396,16 +396,16 @@ HOST
 
 默认值: ``''`` (空字符串)
 
-表示连接数据库使用哪台主机。空字符串表示本地(localhost)。使用SQLite时该项无效。
+表示连接数据库使用哪台主机.空字符串表示本地(localhost).使用SQLite时该项无效.
 
-如果我们使用的是MySQL，且设置值以反斜杠 (``'/'``) 开头时，MySQL将通过Unix socket链接某个指定的socket。举个例子::
+如果我们使用的是MySQL, 且设置值以反斜杠 (``'/'``) 开头时, MySQL将通过Unix socket链接某个指定的socket.举个例子::
 
     "HOST": '/var/run/mysql'
 
-同样仍是使用Mysql，如果该值并未以反斜杠开头，那么该值就表示某个主机名或是IP。
+同样仍是使用Mysql, 如果该值并未以反斜杠开头, 那么该值就表示某个主机名或是IP.
 
-使用PostgreSQL时，空字符串表示使用Unix domain socket进行连接，而不是进行本地连接。
-如果你想明确指定PostgreSQL连接本地机器，此外就要填写为 ``localhost`` 。
+使用PostgreSQL时, 空字符串表示使用Unix domain socket进行连接, 而不是进行本地连接.
+如果你想明确指定PostgreSQL连接本地机器, 此外就要填写为 ``localhost`` .
 
 .. setting:: NAME
 
@@ -414,9 +414,9 @@ NAME
 
 默认值: ``''`` (空字符串)
 
-使用的数据库名称。对SQLite而言，该设置就是数据库文件的完整路径。要注意的是，指定文件路径时
-一定要使用斜杠，即便是在Windows平台也是如此
-(比如 ``C:/homes/user/mysite/sqlite3.db``)。
+使用的数据库名称.对SQLite而言, 该设置就是数据库文件的完整路径.要注意的是, 指定文件路径时
+一定要使用斜杠, 即便是在Windows平台也是如此
+(比如 ``C:/homes/user/mysite/sqlite3.db``).
 
 .. setting:: OPTIONS
 
@@ -425,10 +425,10 @@ OPTIONS
 
 默认值: ``{}`` (空字典)
 
-连接数据库时要用到的其他选项。Django根据不同的数据库后端使用不同的选项。
+连接数据库时要用到的其他选项.Django根据不同的数据库后端使用不同的选项.
 
 具体的选项信息可参见
-:doc:`数据库后端 </ref/databases>` 文档，以了解您选用的数据库后端有哪些可用的选项。
+:doc:`数据库后端 </ref/databases>` 文档, 以了解您选用的数据库后端有哪些可用的选项.
 
 .. setting:: PASSWORD
 
@@ -437,7 +437,7 @@ PASSWORD
 
 默认值: ``''`` (空字符串)
 
-连接数据库时使用的密码。使用SQLite时此项无效。
+连接数据库时使用的密码.使用SQLite时此项无效.
 
 .. setting:: PORT
 
@@ -446,7 +446,7 @@ PORT
 
 默认值： ``''`` (Empty string)
 
-连接数据库时使用的端口。空字符串表示使用默认端口。使用SQLite时此项无效。
+连接数据库时使用的端口.空字符串表示使用默认端口.使用SQLite时此项无效.
 
 .. setting:: USER
 
@@ -455,7 +455,7 @@ USER
 
 默认值： ``''`` (Empty string)
 
-连接数据库时使用的用户名。使用SQLite时此项无效。
+连接数据库时使用的用户名.使用SQLite时此项无效.
 
 .. setting:: TEST_CHARSET
 
@@ -464,9 +464,9 @@ TEST_CHARSET
 
 默认值： ``None``
 
-创建测试数据库时使用的字符集编码方案。因为该值是直接传给数据库的，所以它的格式是由数据库后端指定的。
+创建测试数据库时使用的字符集编码方案.因为该值是直接传给数据库的, 所以它的格式是由数据库后端指定的.
 
-该设置项对 PostgreSQL_ (``postgresql_psycopg2``) 和 MySQL_ (``mysql``) 后端有效。
+该设置项对 PostgreSQL_ (``postgresql_psycopg2``) 和 MySQL_ (``mysql``) 后端有效.
 
 .. _PostgreSQL: http://www.postgresql.org/docs/8.2/static/multibyte.html
 .. _MySQL: http://dev.mysql.com/doc/refman/5.0/en/charset-database.html
@@ -478,9 +478,9 @@ TEST_COLLATION
 
 默认值： ``None``
 
-创建测试数据库时使用的排序顺利。因为该值是直接传给后端的，所以它的格式由数据库后端所决定。
+创建测试数据库时使用的排序顺利.因为该值是直接传给后端的, 所以它的格式由数据库后端所决定.
 
-仅仅支持 ``mysql`` 后端 (详见 `MySQL manual`_ )。
+仅仅支持 ``mysql`` 后端 (详见 `MySQL manual`_ ).
 
 .. _MySQL manual: MySQL_
 
@@ -491,11 +491,11 @@ TEST_DEPENDENCIES
 
 .. versionadded:: 1.3
 
-默认值： 对其他非 ``default`` 且没有依赖关联的数据库而言，默认值就是 ``['default']`` 。
+默认值： 对其他非 ``default`` 且没有依赖关联的数据库而言, 默认值就是 ``['default']`` .
 
-数据库依赖关联的创建顺序。详见文档
+数据库依赖关联的创建顺序.详见文档
 :ref:`控制测试数据库的创建顺序
-<topics-testing-creation-dependencies>` 。
+<topics-testing-creation-dependencies>` .
 
 .. setting:: TEST_MIRROR
 
@@ -504,12 +504,12 @@ TEST_MIRROR
 
 默认值： ``None``
 
-测试时的镜像数据库别名。
+测试时的镜像数据库别名.
 
-该项适用于测试多个数据库的主/从配置。
+该项适用于测试多个数据库的主/从配置.
 详见
 :ref:`测试主从配置
-<topics-testing-masterslave>` 。
+<topics-testing-masterslave>` .
 
 .. setting:: TEST_NAME
 
@@ -518,10 +518,10 @@ TEST_NAME
 
 默认值： ``None``
 
-运行测试案例时使用的数据库的名称。
+运行测试案例时使用的数据库的名称.
 
-使用SQLite数据库时，如果使用默认值 (``None``) ，测试时就会使用一个驻留内存的数据库。
-对于其他数据库引擎来说，测试时的数据库名称就是 ``'test_' + DATABASE_NAME`` 。
+使用SQLite数据库时, 如果使用默认值 (``None``) , 测试时就会使用一个驻留内存的数据库.
+对于其他数据库引擎来说, 测试时的数据库名称就是 ``'test_' + DATABASE_NAME`` .
 
 详见 :doc:`/topics/testing`.
 
@@ -532,9 +532,9 @@ TEST_CREATE
 
 默认值： ``True``
 
-该项只适用于Oracle数据库。
+该项只适用于Oracle数据库.
 
-如果设为 ``False`` ，就不会在测试起始和结束时自动创建和删除测试表空间。
+如果设为 ``False`` , 就不会在测试起始和结束时自动创建和删除测试表空间.
 
 .. setting:: TEST_USER
 
@@ -543,9 +543,9 @@ TEST_USER
 
 默认值： ``None``
 
-该项只适用于Oracle数据库。
+该项只适用于Oracle数据库.
 
-运行测试时连接Oracle数据库所使用的用户名。如果为空，Django会使用 ``'test_' + USER`` 做为默认用户名。
+运行测试时连接Oracle数据库所使用的用户名.如果为空, Django会使用 ``'test_' + USER`` 做为默认用户名.
 
 .. setting:: TEST_USER_CREATE
 
@@ -554,9 +554,9 @@ TEST_USER_CREATE
 
 默认值： ``True``
 
-该项只适用于Oracle数据库。
+该项只适用于Oracle数据库.
 
-如果设为 ``False`` ，就不在会测试起始和结束时自动创建和删除测试用户。
+如果设为 ``False`` , 就不在会测试起始和结束时自动创建和删除测试用户.
 
 .. setting:: TEST_PASSWD
 
@@ -565,9 +565,9 @@ TEST_PASSWD
 
 默认值： ``None``
 
-该项只适用于Oracle数据库。
+该项只适用于Oracle数据库.
 
-运行测试时连接Oracle数据库所使用的密码。如果为空，Django会使用一个硬编码的默认值。
+运行测试时连接Oracle数据库所使用的密码.如果为空, Django会使用一个硬编码的默认值.
 
 .. setting:: TEST_TBLSPACE
 
@@ -576,9 +576,9 @@ TEST_TBLSPACE
 
 默认值： ``None``
 
-该项只适用于Oracle数据库。
+该项只适用于Oracle数据库.
 
-运行测试时使用的表空间的名称。如果为空，Django会使用 ``'test_' + NAME`` 做为表空间名。
+运行测试时使用的表空间的名称.如果为空, Django会使用 ``'test_' + NAME`` 做为表空间名.
 
 .. setting:: TEST_TBLSPACE_TMP
 
@@ -587,9 +587,9 @@ TEST_TBLSPACE_TMP
 
 默认值： ``None``
 
-该项只适用于Oracle数据库。
+该项只适用于Oracle数据库.
 
-运行测试时使用的临时表空间的名称。如果为空，Django会使用 ``'test_' + NAME + '_temp'`` 做为临时表空间的名称。
+运行测试时使用的临时表空间的名称.如果为空, Django会使用 ``'test_' + NAME + '_temp'`` 做为临时表空间的名称.
 
 .. setting:: DATABASE_ROUTERS
 
@@ -600,11 +600,11 @@ DATABASE_ROUTERS
 
 默认值： ``[]`` (空列表)
 
-该路由列表决定了执行一个数据库查询时使用哪个数据库。
+该路由列表决定了执行一个数据库查询时使用哪个数据库.
 
 详见
 :ref:`使用多数据库配置时自切切换数据库路由
-<topics-db-multi-db-routing>` 。
+<topics-db-multi-db-routing>` .
 
 .. setting:: DATE_FORMAT
 
@@ -613,15 +613,15 @@ DATE_FORMAT
 
 默认值： ``'N j, Y'`` (e.g. ``Feb. 4, 2003``)
 
-显示日期字段时所使用的默认格式，与系统无关。要注意当 :setting:`USE_L10N` 被设为 ``True`` 时，
-本地语言环境所指定的格式拥有更高的优先级并取代该设置项。详见
-:tfilter:`日期格式字符串 <date>` 。
+显示日期字段时所使用的默认格式, 与系统无关.要注意当 :setting:`USE_L10N` 被设为 ``True`` 时, 
+本地语言环境所指定的格式拥有更高的优先级并取代该设置项.详见
+:tfilter:`日期格式字符串 <date>` .
 
 .. versionchanged:: 1.2
-    :setting:`USE_L10N` 置为 ``True`` 时，该设置项的值将被覆盖。
+    :setting:`USE_L10N` 置为 ``True`` 时, 该设置项的值将被覆盖.
 
 
-:setting:`DATETIME_FORMAT` ， :setting:`TIME_FORMAT` 和 :setting:`SHORT_DATE_FORMAT` 亦是如此。
+:setting:`DATETIME_FORMAT` ,  :setting:`TIME_FORMAT` 和 :setting:`SHORT_DATE_FORMAT` 亦是如此.
 
 .. setting:: DATE_INPUT_FORMATS
 
@@ -630,22 +630,22 @@ DATE_INPUT_FORMATS
 
 .. versionadded:: 1.2
 
-默认值：:
+默认值::
 
     ('%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
     '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',
     '%B %d, %Y', '%d %B %Y', '%d %B, %Y')
 
-该项是一个元组，表示日期字段上可用的日期输入格式。
-Django会按顺序尝试元组内的日期格式，直至得到匹配正确的有效结果为止。
-要注意这些格式字符串使用的是Python内置的 datetime_ 模块的语法，而非
-Django的 ``date`` 模板标签所用的格式字符串。
+该项是一个元组, 表示日期字段上可用的日期输入格式.
+Django会按顺序尝试元组内的日期格式, 直至得到匹配正确的有效结果为止.
+要注意这些格式字符串使用的是Python内置的 datetime_ 模块的语法, 而非
+Django的 ``date`` 模板标签所用的格式字符串.
 
 
-当 :setting:`USE_L10N` 设为 ``True`` 时，
-本地语言环境所指定的格式比该设置项拥有更高的优先级。
+当 :setting:`USE_L10N` 设为 ``True`` 时, 
+本地语言环境所指定的格式比该设置项拥有更高的优先级.
 
-:setting:`DATETIME_INPUT_FORMATS` 和 :setting:`TIME_INPUT_FORMATS` 亦是如此。
+:setting:`DATETIME_INPUT_FORMATS` 和 :setting:`TIME_INPUT_FORMATS` 亦是如此.
 
 .. _datetime: http://docs.python.org/library/datetime.html#strftime-strptime-behavior
 
@@ -656,14 +656,14 @@ DATETIME_FORMAT
 
 默认值： ``'N j, Y, P'`` (e.g. ``Feb. 4, 2003, 4 p.m.``)
 
-显示日期时间字段时所使用的默认格式，与系统无关。要注意当 :setting:`USE_L10N` 被设为 ``True`` 时，
-本地语言环境所指定的格式拥有更高的优先级并取代该设置项。详见
+显示日期时间字段时所使用的默认格式, 与系统无关.要注意当 :setting:`USE_L10N` 被设为 ``True`` 时, 
+本地语言环境所指定的格式拥有更高的优先级并取代该设置项.详见
 :tfilter:`日期格式字符串 <date>`.
 
 .. versionchanged:: 1.2
-    :setting:`USE_L10N` 置为 ``True`` 时，该设置项的值将被覆盖。
+    :setting:`USE_L10N` 置为 ``True`` 时, 该设置项的值将被覆盖.
 
-:setting:`DATE_FORMAT`, :setting:`TIME_FORMAT` 和 :setting:`SHORT_DATETIME_FORMAT` 亦是如此。
+:setting:`DATE_FORMAT`, :setting:`TIME_FORMAT` 和 :setting:`SHORT_DATETIME_FORMAT` 亦是如此.
 
 .. setting:: DATETIME_INPUT_FORMATS
 
@@ -672,21 +672,21 @@ DATETIME_INPUT_FORMATS
 
 .. versionadded:: 1.2
 
-默认值：:
+默认值::
 
     ('%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M', '%Y-%m-%d',
     '%m/%d/%Y %H:%M:%S', '%m/%d/%Y %H:%M', '%m/%d/%Y',
     '%m/%d/%y %H:%M:%S', '%m/%d/%y %H:%M', '%m/%d/%y')
 
-该项是一个元组，表示日期时间字段上可用的输入格式。
-Django会按顺序尝试元组内的日期时间格式，直至得到匹配正确的有效结果为止。
-要注意这些格式字符串使用的是Python内置的 datetime_ 模块的语法，而非
-Django的 ``date`` 模板标签所用的格式字符串。
+该项是一个元组, 表示日期时间字段上可用的输入格式.
+Django会按顺序尝试元组内的日期时间格式, 直至得到匹配正确的有效结果为止.
+要注意这些格式字符串使用的是Python内置的 datetime_ 模块的语法, 而非
+Django的 ``date`` 模板标签所用的格式字符串.
 
-当 :setting:`USE_L10N` 设为 ``True`` 时，
-本地语言环境所指定的格式比该设置项拥有更高的优先级。
+当 :setting:`USE_L10N` 设为 ``True`` 时, 
+本地语言环境所指定的格式比该设置项拥有更高的优先级.
 
-:setting:`DATE_INPUT_FORMATS` 和 :setting:`TIME_INPUT_FORMATS` 亦是如此。
+:setting:`DATE_INPUT_FORMATS` 和 :setting:`TIME_INPUT_FORMATS` 亦是如此.
 
 .. _datetime: http://docs.python.org/library/datetime.html#strftime-strptime-behavior
 
@@ -697,34 +697,34 @@ DEBUG
 
 默认值： ``False``
 
-布尔值，决定是否启用调试模式。
+布尔值, 决定是否启用调试模式.
 
-切忌在生产用站点上启 :setting:`DEBUG` 为 True 。切记切记切记！
+切忌在生产用站点上启 :setting:`DEBUG` 为 True .切记切记切记!
 
-调试模式的特性之一就是会显示详细的错误信息页。在调试模式下，如果你的应用抛出了某个异常，
-Django会显示详细的错误消息回溯(traceback)，其中包含很多当前环境的元信息——诸如当前Django settings( ``settings.py`` )定义的所有配置项。
+调试模式的特性之一就是会显示详细的错误信息页.在调试模式下, 如果你的应用抛出了某个异常, 
+Django会显示详细的错误消息回溯(traceback), 其中包含很多当前环境的元信息——诸如当前Django settings( ``settings.py`` )定义的所有配置项.
 
-做为一项安全措施，在调试模式下，Django不会显示敏感或易于被利用的设置项——诸如 ``SECRET_KEY`` 或 ``PROFANITIES_LIST`` 。
-具体来说，下列设置项将被排除在显示之外：
+做为一项安全措施, 在调试模式下, Django不会显示敏感或易于被利用的设置项——诸如 ``SECRET_KEY`` 或 ``PROFANITIES_LIST`` .
+具体来说, 下列设置项将被排除在显示之外:
 
-    * API
-    * KEY
-    * PASS
-    * PROFANITIES_LIST
-    * SECRET
-    * SIGNATURE
-    * TOKEN
+* API
+* KEY
+* PASS
+* PROFANITIES_LIST
+* SECRET
+* SIGNATURE
+* TOKEN
 
 .. versionchanged:: 1.4
    
-    在排除之列添加了 ``'PASSWORD'`` ``'PASS'``. ``'API'``, ``'TOKEN'`` 和 ``'KEY'`` 。
+    在排除之列添加了 ``'PASSWORD'`` ``'PASS'``. ``'API'``, ``'TOKEN'`` 和 ``'KEY'`` .
 
-注意上述设置都是局部匹配的， ``'PASS'`` 也可以匹配 PASSWORD ，
-而 ``'TOKEN'`` 也匹配 TOKENIZED ，等等。
+注意上述设置都是局部匹配的,  ``'PASS'`` 也可以匹配 PASSWORD , 
+而 ``'TOKEN'`` 也匹配 TOKENIZED , 等等.
 
-还要注意的是，有很多内容不适合对公开，诸如文件路径，配置选项以及一些会给服务器带来安全隐患的敏感信息。
+还要注意的是, 有很多内容不适合对公开, 诸如文件路径, 配置选项以及一些会给服务器带来安全隐患的敏感信息.
 
-还有一点要记住就是在调试模式下，Django会记住每个运行的SQL查询。这对于调试是非常有帮助的，但在生产服务器却会迅速耗光内存。
+还有一点要记住就是在调试模式下, Django会记住每个运行的SQL查询.这对于调试是非常有帮助的, 但在生产服务器却会迅速耗光内存.
 
 .. _django/views/debug.py: https://code.djangoproject.com/browser/django/trunk/django/views/debug.py
 
@@ -733,8 +733,8 @@ DEBUG_PROPAGATE_EXCEPTIONS
 
 默认值： ``False``
 
-设为True时，Django针对视图函式的普通异常的处理将被抑制，异常将继续向上传递。
-这对某些测试设置非常有用，千万不要用在在线站点中。
+设为True时, Django针对视图函式的普通异常的处理将被抑制, 异常将继续向上传递.
+这对某些测试设置非常有用, 千万不要用在在线站点中.
 
 .. setting:: DECIMAL_SEPARATOR
 
@@ -848,8 +848,8 @@ EMAIL_BACKEND
 
 默认值： ``'django.core.mail.backends.smtp.EmailBackend'``
 
-用于发送邮件的后端。详见
-:doc:`/topics/email` 了解可用的后端。
+用于发送邮件的后端.详见
+:doc:`/topics/email` 了解可用的后端.
 
 .. setting:: EMAIL_FILE_PATH
 
@@ -860,7 +860,7 @@ EMAIL_FILE_PATH
 
 默认值： 未定义
 
-使用 ``file`` 邮件后端时用以存储输出文件的目录。
+使用 ``file`` 邮件后端时用以存储输出文件的目录.
 
 .. setting:: EMAIL_HOST
 
@@ -869,9 +869,9 @@ EMAIL_HOST
 
 默认值： ``'localhost'``
 
-用于发送邮件的主机。
+用于发送邮件的主机.
 
-详见 :setting:`EMAIL_PORT` 。
+详见 :setting:`EMAIL_PORT` .
 
 .. setting:: EMAIL_HOST_PASSWORD
 
@@ -906,14 +906,14 @@ EMAIL_PORT
 
 默认值： ``25``
 
-SMTP服务器( :setting:`EMAIL_HOST` )使用的发邮端口。
+SMTP服务器( :setting:`EMAIL_HOST` )使用的发邮端口.
 
 .. setting:: EMAIL_SUBJECT_PREFIX
 
 EMAIL_SUBJECT_PREFIX
 --------------------
 
-默认值： ``'[Django] '``
+默认值： ``'[Django]'``
 
 Subject-line prefix for email messages sent with ``django.core.mail.mail_admins``
 or ``django.core.mail.mail_managers``. You'll probably want to include the
@@ -926,7 +926,7 @@ EMAIL_USE_TLS
 
 默认值： ``False``
 
-与SMTP服务器通信时，是否启动TLS链接(安全链接)。
+与SMTP服务器通信时, 是否启动TLS链接(安全链接).
 
 .. setting:: FILE_CHARSET
 
@@ -943,7 +943,7 @@ template files and initial SQL data files.
 FILE_UPLOAD_HANDLERS
 --------------------
 
-默认值：:
+默认值::
 
     ("django.core.files.uploadhandler.MemoryFileUploadHandler",
      "django.core.files.uploadhandler.TemporaryFileUploadHandler",)
@@ -1128,7 +1128,7 @@ A tuple of IP addresses, as strings, that:
 LANGUAGE_CODE
 -------------
 
-默认值： ``'en-us'``
+默认值： ``"en-us"``
 
 A string representing the language code for this installation. This should be in
 standard :term:`language format<language code>`. For example, U.S. English is
@@ -1367,7 +1367,7 @@ MESSAGE_TAGS
 
 .. versionadded:: 1.2
 
-默认值：:
+默认值::
 
     {messages.DEBUG: 'debug',
     messages.INFO: 'info',
@@ -1383,7 +1383,7 @@ Sets the mapping of message levels to message tags. See the
 MIDDLEWARE_CLASSES
 ------------------
 
-默认值：:
+默认值::
 
     ('django.middleware.common.CommonMiddleware',
      'django.contrib.sessions.middleware.SessionMiddleware',
@@ -1844,7 +1844,7 @@ See :setting:`STATIC_ROOT`.
 TEMPLATE_CONTEXT_PROCESSORS
 ---------------------------
 
-默认值：:
+默认值::
 
     ("django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
@@ -1912,7 +1912,7 @@ See :doc:`/topics/templates`.
 TEMPLATE_LOADERS
 ----------------
 
-默认值：:
+默认值::
 
      ('django.template.loaders.filesystem.Loader',
       'django.template.loaders.app_directories.Loader')

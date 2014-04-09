@@ -5,8 +5,8 @@
 .. module:: django.middleware
    :synopsis: Django's built-in middleware classes.
 
-这篇文档Django中的所有中间件组件。要查看关于如何使用它们以及如何编写自己的
-中间件，看这里 :doc:`middleware usage guide </topics/http/middleware>` 。
+这篇文档Django中的所有中间件组件.要查看关于如何使用它们以及如何编写自己的
+中间件, 看这里 :doc:`middleware usage guide </topics/http/middleware>` .
 
 可用的中间件
 ====================
@@ -21,8 +21,8 @@ Cache middleware
 
 .. class:: FetchFromCacheMiddleware
 
-开启全站范围的缓存。如果开始了这些缓存，任何一个由Django提供的页面将会被缓存，
-缓存时长是由你在 :setting:`CACHE_MIDDLEWARE_SECONDS` 配置中定义的。
+开启全站范围的缓存.如果开始了这些缓存, 任何一个由Django提供的页面将会被缓存, 
+缓存时长是由你在 :setting:`CACHE_MIDDLEWARE_SECONDS` 配置中定义的.
 看篇文档 :doc:`cache documentation </topics/cache>`.
 
 "Common" middleware
@@ -35,34 +35,34 @@ Cache middleware
 
 给完美主义者增加一些便利条件
 
-* 禁止 :setting:`DISALLOWED_USER_AGENTS` 中设置的用户代理来访问，这项配置
+* 禁止 :setting:`DISALLOWED_USER_AGENTS` 中设置的用户代理来访问, 这项配置
   应该是一个字符串的list
 
-* 基于 :setting:`APPEND_SLASH` 和 :setting:`PREPEND_WWW` 的设置。来进行URL
-  的重写。
+* 基于 :setting:`APPEND_SLASH` 和 :setting:`PREPEND_WWW` 的设置.
+  来进行URL的重写.
 
-  如果 :setting:`APPEND_SLASH` 设为 ``True`` 并且一开始的的URL没有以斜线
-  结尾，并且在URLconf中也没找到对应定义，这时形成一个一个斜线结尾新的URL。
-  如果这个新的URL存在于URLconf，这时Django会重定向请求到这个新URL上，否
-  则，一开始的URL按正常情况处理。
+  如果 :setting:`APPEND_SLASH` 设为 ``True`` 并且一开始的的URL没有以斜线结尾, 
+  并且在URLconf中也没找到对应定义, 这时形成一个一个斜线结尾新的URL.
+  如果这个新的URL存在于URLconf, 这时Django会重定向请求到这个新URL上, 
+  否则, 一开始的URL按正常情况处理.
 
-  比如， ``foo.com/bar`` 将会被重定向到 ``foo.com/bar/`` 如果你没有定义
-  有效的针对 ``foo.com/bar`` 的正则但是定义了针对 ``foo.com/bar`` 的有
-  效正则。
+  比如,  ``foo.com/bar`` 将会被重定向到 ``foo.com/bar/``
+  如果你没有定义有效的针对 ``foo.com/bar`` 的正则但是定义了针对
+  ``foo.com/bar`` 的有效正则.
 
-  如果 :setting:`PREPEND_WWW` 设为 ``True`` ，url前面缺少 "www."的将会被
-  重定向到同样的但是一个"www."开头的url。
+  如果 :setting:`PREPEND_WWW` 设为 ``True`` ,url前面缺少 "www."
+  的将会被重定向到同样的但是一个"www."开头的url.
 
-  两种选项都是为了规范化url。其中的哲学就是，任何一个url应该在一个地方仅存
-  在一个。技术上来讲，url ``foo.com/bar`` 是区别于 ``foo.com/bar/`` -- 一
-  搜索引擎索引会把这里分开处理 -- 因此，最佳实践就是规范化url。
+  两种选项都是为了规范化url.其中的哲学就是, 任何一个url应该在一个地方仅存在一个.
+  技术上来讲, url ``foo.com/bar`` 是区别于 ``foo.com/bar/`` --
+  搜索引擎索引会把这里分开处理 -- 因此, 最佳实践就是规范化url.
 
-* 如果 :setting:``SEND_BROKEN_LINK_EMAILS`` 被设置为 ``True`` 的话，会发送
-  邮件来通知 :setting:``MANAGERS`` 有错误的链接。
+* 如果 :setting:`SEND_BROKEN_LINK_EMAILS` 被设置为 ``True`` 的话,
+  会发送邮件来通知 :setting:`MANAGERS` 有错误的链接.
 
-* 基于 :setting:`USE_ETAGS` 设置来处理ETag。如果设置 :setting:`USE_ETAGS` 
-  为 ``True`` ，Django会通过MD5-hashing处理页面的内容来为每一个页面请求
-  计算Etag，并且如果合适的话，它将会发送携带 ``Not Modified`` 的响应。
+* 基于 :setting:`USE_ETAGS` 设置来处理ETag.如果设置 :setting:`USE_ETAGS` 
+  为 ``True`` , Django会通过MD5-hashing处理页面的内容来为每一个页面请求计算Etag, 
+  并且如果合适的话, 它将会发送携带 ``Not Modified`` 的响应.
 
 
 View metadata middleware 视图元数据中间件
@@ -73,10 +73,10 @@ View metadata middleware 视图元数据中间件
 
 .. class:: XViewMiddleware
 
-发送自定义的 ``X-View`` HTTP头部给那些来自配置文件 :setting:`INTERNAL_IPS` 
-定义的IP地址的请求。这被应用在Django的 
-:doc:`automatic documentation system </ref/contrib/admin/admindocs>` 中，依
-于 :class:`~django.contrib.auth.middleware.AuthenticationMiddleware` 。
+发送自定义的 ``X-View`` HTTP头部给那些来自配置文件 :setting:`INTERNAL_IPS`
+定义的IP地址的请求.这被应用在Django的
+:doc:`automatic documentation system </ref/contrib/admin/admindocs>` 中, 
+依赖于 :class:`~django.contrib.auth.middleware.AuthenticationMiddleware` .
 
 GZip middleware 压缩处理中间件
 ---------------------------------------------
@@ -86,25 +86,24 @@ GZip middleware 压缩处理中间件
 
 .. class:: GZipMiddleware
 
-压缩内容给那些支撑此功能的浏览器（现在所有浏览器都支持）。
+压缩内容给那些支撑此功能的浏览器（现在所有浏览器都支持）.
 
-建议把这个中间件放到中间件配置列表的第一个，这样压缩响应内容的处理会到最后才
-发生。
+建议把这个中间件放到中间件配置列表的第一个, 这样压缩响应内容的处理会到最后才发生.
 
-如果满足下面条件的话，内容不会被压缩：
+如果满足下面条件的话, 内容不会被压缩：
 
 * body内容小于200bytes长度
 
-* 响应已经设置了 ``Content-Encoding`` 头部。
+* 响应已经设置了 ``Content-Encoding`` 头部.
 
-* 请求（浏览器）没有发送包含 ``gzip`` 的 ``Accept-Encoding`` 头部。
+* 请求（浏览器）没有发送包含 ``gzip`` 的 ``Accept-Encoding`` 头部.
 
 * 来自IE浏览器的请求和 ``Content-Type`` 头部中含有 ``javascript`` 或者以非
-  ``text/`` 字符开始。
+  ``text/`` 字符开始.
   我们这做来避免由于IE浏览器早期版本中引起在某些确切内容类型时压缩不会执行的bug
 
 你可以独立的使用GZip压缩通过这个 :func:`~django.views.decorators.http.gzip_page()` 
-装饰器。
+装饰器.
 
 Conditional GET middleware 有条件的GET中间件
 ----------------------------------------------------
@@ -114,19 +113,19 @@ Conditional GET middleware 有条件的GET中间件
 
 .. class:: ConditionalGetMiddleware
 
-处理带有条件判断状态GET操作。如果一个请求包含 ``ETag`` 或者 ``Last-Modified`` 
-头部，以及请求 包含 ``If-None-Match`` 或 ``If-Modified-Since`` ,这时响应会被
+处理带有条件判断状态GET操作.如果一个请求包含 ``ETag`` 或者 ``Last-Modified`` 
+头部, 以及请求 包含 ``If-None-Match`` 或 ``If-Modified-Since`` ,这时响应会被
 替换为 :class:`~django.http.HttpNotModified`.
 
-另外，设置 ``Date`` 和 ``Content-Length`` 到响应头部。
+另外, 设置 ``Date`` 和 ``Content-Length`` 到响应头部.
 
 Reverse proxy middleware 反向代理中间件
 ------------------------------------------------
 
 .. class:: SetRemoteAddrFromForwardedFor
 
-这个中间件在Django1.1中就被移除了，具体参考这里 :ref:`the release notes
-<removed-setremoteaddrfromforwardedfor-middleware>` 。
+这个中间件在Django1.1中就被移除了, 具体参考这里 :ref:`the release notes
+<removed-setremoteaddrfromforwardedfor-middleware>` .
 
 Locale middleware 本地中间件
 ----------------------------------
@@ -136,7 +135,7 @@ Locale middleware 本地中间件
 
 .. class:: LocaleMiddleware
 
-基于请求中的数据开启语言选择。它可以为每个用户进行定制。具体参考这里：
+基于请求中的数据开启语言选择.它可以为每个用户进行定制.具体参考这里：
  :doc:`internationalization documentation</topics/i18n/index>`.
 
 Message middleware消息中间件
@@ -150,7 +149,7 @@ Message middleware消息中间件
 .. versionadded:: 1.2
    ``MessageMiddleware`` was added.
 
-开启基于cookie和session的消息支持功能。具体参考这里：
+开启基于cookie和session的消息支持功能.具体参考这里：
 :doc:`messages documentation </ref/contrib/messages>`.
 
 Session middleware会话中间件
@@ -161,7 +160,7 @@ Session middleware会话中间件
 
 .. class:: SessionMiddleware
 
-开启session支持，具体参考这里 :doc:`session documentation
+开启session支持, 具体参考这里 :doc:`session documentation
 </topics/http/sessions>`.
 
 Authentication middleware认证中间
@@ -172,7 +171,7 @@ Authentication middleware认证中间
 
 .. class:: AuthenticationMiddleware
 
-给每一个进来的 ``HttpRequest`` 对象添加 ``user`` 属性，表示是当前登录用户。
+给每一个进来的 ``HttpRequest`` 对象添加 ``user`` 属性, 表示是当前登录用户.
 具体参考这里 :doc:`Authentication in Web requests </topics/auth>`.
 
 CSRF protection middleware CSRF保护中间件
@@ -185,7 +184,7 @@ CSRF protection middleware CSRF保护中间件
 .. class:: CsrfViewMiddleware
 
 针对跨站请求伪造通过给POST表单添加因此的表单字段以及验证请求中字段的正确
-型来进行防护。具体参考这里
+型来进行防护.具体参考这里
 :doc:`Cross Site Request Forgery protection documentation </ref/contrib/csrf>`.
 
 Transaction middleware 事物中间件
@@ -196,12 +195,12 @@ Transaction middleware 事物中间件
 
 .. class:: TransactionMiddleware
 
-为请求/响应处理绑定提交和回滚事件。如果一个视图方法执行正确，则提交完成。
-如果出现了异常错误，则会进行事件回滚。
+为请求/响应处理绑定提交和回滚事件.如果一个视图方法执行正确, 则提交完成.
+如果出现了异常错误, 则会进行事件回滚.
 
 堆栈中的中间件的顺序很重要：在这个中间件之外运行的中间件会在Django的默认
-提交和保存操作时是处理数据，不受事务控制。在这个中间件之内运行的（也就是在
-堆栈中后面存在的中间件）将会被处于和视图方法同一个事务控制中。
+提交和保存操作时是处理数据, 不受事务控制.在这个中间件之内运行的（也就是在
+堆栈中后面存在的中间件）将会被处于和视图方法同一个事务控制中.
 
 具体参考这里 :doc:`transaction management documentation </topics/db/transactions>`.
 
