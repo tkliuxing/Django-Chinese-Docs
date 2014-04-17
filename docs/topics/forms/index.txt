@@ -1,52 +1,53 @@
-=========
+================
 表单开发
-=========
+================
 
 .. admonition:: 关于这篇文档
 
-	这篇文档提供Django表单处理的入门。
-	如需要参看更多关于表单的API及细节，请参照
-	:doc:`/ref/forms/api`, :doc:`/ref/forms/fields`, 和
-    	:doc:`/ref/forms/validation`。
+    这篇文档提供Django表单处理的入门.
+    如需要参看更多关于表单的API及细节, 请参照
+    :doc:`/ref/forms/api`, :doc:`/ref/forms/fields`, 和
+    :doc:`/ref/forms/validation`.
 
 .. highlightlang:: html+django
 
 ``django.forms`` 是Django表单控制的库
 
-表单的提交由:class:`~django.http.HttpRequest` 类处理，你可以使用表单库来处理常用的表单任务：
+表单的提交由 :class:`~django.http.HttpRequest` 类处理, 你可以使用表单库来处理常用的表单任务:
 
-1.使用表单小工具自动生成HTML表单。
-2.使用验证规则验证提交的表单内容。
-3.呈现表单验证错误。
-4.把提交的表单数据类型转换为所依赖的Python数据类型。
+1. 使用表单小工具自动生成HTML表单.
+2. 使用验证规则验证提交的表单内容.
+3. 呈现表单验证错误.
+4. 把提交的表单数据类型转换为所依赖的Python数据类型.
 
 概览
-====
+===========
 
 表单库包含这些概念
 
 .. glossary::
 
     小工具(Widget)
-	一个用于呈现表单内容的类，例： ``<input type="text">`` 或 ``<textarea>``。这个类用于控制成仙的HTML内容。
+        一个用于呈现表单内容的类, 例: ``<input type="text">`` 或 ``<textarea>``.这个类用于控制成仙的HTML内容.
 
     字段(Field)
-	一个用于验证表单内容的类，例：``EmailField``用于验证表单的数据是否一个电邮地址。
+        一个用于验证表单内容的类, 例: ``EmailField`` 用于验证表单的数据是否一个电邮地址.
 
     表单(Form)
-	可呈现、可自证的字段集合。
+        可呈现、可自证的字段集合.
 
     表单媒体(Form Media)
-	在表单中需要用到的CSS和JavaScript资源。
+        在表单中需要用到的CSS和JavaScript资源.
 
-这个库与其它Django组件，类似数据库层、视图及模板层解耦。该库只依赖Django的设置，以及一些``django.utils``的帮助程序以及Django的国际化内容（你也可以不使用国际化内容）。
+这个库与其它Django组件, 类似数据库层、视图及模板层解耦.该库只依赖Django的设置,
+以及一些 ``django.utils`` 的帮助程序以及Django的国际化内容(你也可以不使用国际化内容).
 
 表单对象
-========
+===============
 
-一个表单对象封装了一系列的表单字段及验证规则。使用``django.forms.Form``创建表单对象，创建的过程很像你使用Django的数据库对象那样。
+一个表单对象封装了一系列的表单字段及验证规则. 使用 ``django.forms.Form`` 创建表单对象, 创建的过程很像你使用Django的数据库对象那样.
 
-例如，以下表单实现了“与我联系”功能：
+例如, 以下表单实现了"与我联系"功能:
 
 .. code-block:: python
 
@@ -58,14 +59,16 @@
         sender = forms.EmailField()
         cc_myself = forms.BooleanField(required=False)
 
-表单是由``Field`` 组合而成的。在这个例子里，我们有四个字段：``subject``，``message``，``sender``和``cc_myself``。``CharField``，``EmailField``以及``BooleanField``是用于验证的字段类型。你可从这里查看全部列表： :doc:`/ref/forms/fields`。
+表单是由 ``Field`` 组合而成的.在这个例子里, 我们有四个字段:``subject``, ``message``, ``sender`` 和 ``cc_myself``.
+``CharField``, ``EmailField`` 以及 ``BooleanField`` 是用于验证的字段类型.
+你可从这里查看全部列表: :doc:`/ref/forms/fields`.
 
-如果你希望直接在表单中编辑Django中声明的对象，你可以使用:doc:`ModelForm </topics/forms/modelforms>` 去避免重复定义你的对象。
+如果你希望直接在表单中编辑Django中声明的对象, 你可以使用 :doc:`ModelForm </topics/forms/modelforms>` 去避免重复定义你的对象.
 
 在视图中使用表单
---------------
+-----------------------
 
-在视图中使用表单的标准流程是这样的：
+在视图中使用表单的标准流程是这样的:
 
 .. code-block:: python
 
@@ -83,27 +86,36 @@
            'form': form,
        })
 
-这段代码有三个分支：
+这段代码有三个分支:
 
-1.如果表单尚未提交，应该创建一个未绑定的ContactForm对象并发到模板。
-2.如果表单已被提交，就使用 ``request.POST``创建表单对象。如果提交的数据都通过验证，就把跳转到“thanks”页面。
-3.如果表单已被提交，但不通过验证，就把绑定的表单对象发送到模板。
+1. 如果表单尚未提交, 应该创建一个未绑定的ContactForm对象并发到模板.
+2. 如果表单已被提交, 就使用 ``request.POST`` 创建表单对象.如果提交的数据都通过验证, 就把跳转到"thanks"页面.
+3. 如果表单已被提交, 但不通过验证, 就把绑定的表单对象发送到模板.
 
-表单中**绑定**和**未绑定**非常重要。未绑定的表单没有任何与它关联的数据；当呈现到用户面前时，表单会是空的，或是只有些默认数据。一个绑定的表单具有提交的数据，可视为数据室有效的。如果一个未能通过验证的表单会呈现一条错误消息，告知用户表单报错。
+表单中 **绑定** 和 **未绑定** 非常重要. 未绑定的表单没有任何与它关联的数据;
+当呈现到用户面前时, 表单会是空的, 或是只有些默认数据.
+一个绑定的表单具有提交的数据, 可视为数据室有效的.
+如果一个未能通过验证的表单会呈现一条错误消息, 告知用户表单报错.
 
-参考:ref:`ref-forms-api-bound-unbound`获取更多关于绑定和未绑定表单的信息。
+参考 :ref:`ref-forms-api-bound-unbound` 获取更多关于绑定和未绑定表单的信息.
 
 在表单中控制上传文件
------------------
+--------------------------
 
-可从:ref:`binding-uploaded-files`获取更多关于表单中控制上传文件的信息。
+可从 :ref:`binding-uploaded-files` 获取更多关于表单中控制上传文件的信息.
 
 处理表单中的数据
---------------
+-----------------------
 
-当 ``is_valid()``方法返回 ``True``，你就可以安全地处理符合表单验证规则的数据。虽然这时你可以使用 ``request.POST``取得数据，但使用``form.cleaned_data``更好。这里的数据不单止已经验证过了，而且还会转换为对应的Python对象。在上面的例子中，``cc_myself``就是布尔类型的。同样地，像``IntegerField``和``FloatField``转换为了Python中的整形和浮点型。要注意的是，只读字段并不会在``form.cleaned_data``中（就算是使用自定义``clean()``方法也不会有任何作用），因为这些字段被呈现为text而不是input元素，所以不会提交回服务器。
+当 ``is_valid()`` 方法返回 ``True``, 你就可以安全地处理符合表单验证规则的数据.
+虽然这时你可以使用 ``request.POST`` 取得数据, 但使用 ``form.cleaned_data`` 更好.
+这里的数据不单止已经验证过了, 而且还会转换为对应的Python对象.
+在上面的例子中, ``cc_myself`` 就是布尔类型的.
+同样地, 像 ``IntegerField`` 和 ``FloatField`` 转换为了Python中的整形和浮点型.
+要注意的是, 只读字段并不会在 ``form.cleaned_data`` 中(就算是使用自定义 ``clean()`` 方法也不会有任何作用),
+因为这些字段被呈现为text而不是input元素, 所以不会提交回服务器.
 
-以下代码扩展了上面的例子，用于说明如何处理表单数据：
+以下代码扩展了上面的例子, 用于说明如何处理表单数据:
 
 .. code-block:: python
 
@@ -121,25 +133,29 @@
         send_mail(subject, message, sender, recipients)
         return HttpResponseRedirect('/thanks/') # 提交后跳转
 
-参阅:doc:`/topics/email`获得更多关于使用Django发送邮件的信息。
+参阅 :doc:`/topics/email` 获得更多关于使用Django发送邮件的信息.
 
 使用模板呈现表单
---------------
+-----------------------
 
-表单天生就设计为可用于Django模板语言。在上面的例子中，我们把``ContactForm``对象发送到模板中的``form``变量中。这里是一个模板例子::
+表单天生就设计为可用于Django模板语言.在上面的例子中, 我们把 ``ContactForm`` 对象发送到模板中的 ``form`` 变量中.
+这里是一个模板例子::
 
     <form action="/contact/" method="post">{% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Submit" />
     </form>
 
-表单会输出它的字段；``<form>`` 标签及提交按钮就由你自己决定要如何呈现。
+表单会输出它的字段; ``<form>`` 标签及提交按钮就由你自己决定要如何呈现.
 
 .. admonition:: 表单及跨站请求保护
 
-   Django提供了一套易用的:doc:`protection against Cross Site Request Forgeries </ref/contrib/csrf>`。当使用POST提交表单，你必须使用 :ttag:`csrf_token`模板标签以启用CSRF保护你的表单。本文档接下来的例子中，将暂时省略在表单中使用CSRF。
+   Django提供了一套易用的 :doc:`protection against Cross Site Request Forgeries </ref/contrib/csrf>`.
+   当使用POST提交表单, 你必须使用 :ttag:`csrf_token` 模板标签以启用CSRF保护你的表单.
+   本文档接下来的例子中, 将暂时省略在表单中使用CSRF.
 
-``form.as_p``会输出表单中的所有字段以及它的说明文本。以下是一个模板的例子::
+``form.as_p`` 会输出表单中的所有字段以及它的说明文本.
+以下是一个模板的例子::
 
    <form action="/contact/" method="post">
    <p><label for="id_subject">Subject:</label>
@@ -153,15 +169,16 @@
    <input type="submit" value="Submit" />
    </form>
 
-需要注意的是，每个表单字段的ID属性都设置为``id_<field-name>``，这些将会被文本标签引用。这对一些帮助阅读系统非常重要，就像是一些读屏软件。你也可以:ref:`customize the way in which labels and ids are generated
-<ref-forms-api-configuring-label>`。
+需要注意的是, 每个表单字段的ID属性都设置为 ``id_<field-name>`` , 这些将会被文本标签引用.
+这对一些帮助阅读系统非常重要, 就像是一些读屏软件.
+你也可以 :ref:`自定义生成标签和id的方式 <ref-forms-api-configuring-label>`.
 
-你也可以使用``form.as_table``把表单输出为表格（你需要自己提供``<table>``标签）或使用``form.as_ul``输出为列表。
+你也可以使用 ``form.as_table`` 把表单输出为表格(你需要自己提供 ``<table>`` 标签)或使用 ``form.as_ul`` 输出为列表.
 
 自定义表单模板
-------------
+---------------------
 
-如果你不喜欢生成的默认表单HTML，你完全可以使用Django模板语言自定义你的表单要如何呈现。以下室扩展示例::
+如果你不喜欢生成的默认表单HTML, 你完全可以使用Django模板语言自定义你的表单要如何呈现.以下室扩展示例::
 
     <form action="/contact/" method="post">
         {{ form.non_field_errors }}
@@ -188,14 +205,15 @@
         <p><input type="submit" value="Send message" /></p>
     </form>
 
-每个表单字段可以用``{{ form.name_of_field }}``输出到模板里，这样就可以呈现出表单元素了。使用``{{ form.name_of_field.errors }}``可以呈现出未排序的表单的错误列表，将会这样::
+每个表单字段可以用 ``{{ form.name_of_field }}`` 输出到模板里, 这样就可以呈现出表单元素了.
+使用 ``{{ form.name_of_field.errors }}`` 可以呈现出未排序的表单的错误列表, 将会这样::
 
    <ul class="errorlist">
        <li>Sender is required.</li>
    </ul>
 
-列表中的``errorlist``CSS类让你可更改列表的样式。
-如果你希望再进一步自定义呈现错误列表，你也可以像这样使用循环::
+列表中的 ``errorlist`` CSS类让你可更改列表的样式.
+如果你希望再进一步自定义呈现错误列表, 你也可以像这样使用循环::
 
     {% if form.subject.errors %}
         <ol>
@@ -206,9 +224,9 @@
     {% endif %}
 
 遍历表单中的字段
----------------
+------------------------
 
-你可以使用``{% for %}``循环来减少使用相同的代码来呈现表单元素::
+你可以使用 ``{% for %}`` 循环来减少使用相同的代码来呈现表单元素::
 
     <form action="/contact/" method="post">
         {% for field in form %}
@@ -220,42 +238,49 @@
         <p><input type="submit" value="Send message" /></p>
     </form>
 
-在循环里，``{{ field }}``是:class:`BoundField`的实例。
-``BoundField``有如下属性，在模板里非常有用::
+在循环里,  ``{{ field }}`` 是 :class:`BoundField` 的实例.
+``BoundField`` 有如下属性, 在模板里非常有用:
 
-``{{ field.label }}``
-    字段的文本说明，譬如``电子邮件地址``。
+.. glossary::
 
-``{{ field.label_tag }}``
-    字段的文本说明将会包装在``<label>``标签里，
-    譬如``<label for="id_email">电子邮件地址</label>``
+    ``{{ field.label }}``
+        字段的文本说明, 譬如 ``电子邮件地址``.
 
-``{{ field.value }}`` 
-    字段的值。譬如``someone@example.com``
+    ``{{ field.label_tag }}``
+        字段的文本说明将会包装在 ``<label>`` 标签里, 
+        譬如 ``<label for="id_email">电子邮件地址</label>`` 
 
-``{{ field.html_name }}``
-    The name of the field that will be used in the input element's name
-    field. This takes the form prefix into account, if it has been set.
+    ``{{ field.value }}`` 
+        字段的值.譬如 ``someone@example.com`` 
 
-``{{ field.help_text }}``
-    与字段关联的帮助信息内容。
+    ``{{ field.html_name }}``
+        The name of the field that will be used in the input element's name
+        field. This takes the form prefix into account, if it has been set.
 
-``{{ field.errors }}``
-    使用``<ul class="errorlist">``输出包含这个字段的所有错误信息。你可以使用``{% for error in field.errors %}``来自定义现实这些错误。在这里，循环里的每个元素都只是错误信息的字符串。
+    ``{{ field.help_text }}``
+        与字段关联的帮助信息内容.
 
-``field.is_hidden``
-    如把该属性设置为``True``，字段将为隐藏字段，反之亦然。这在模板中并不太实用，但在测试时你可以这样::
+    ``{{ field.errors }}``
+        使用 ``<ul class="errorlist">`` 输出包含这个字段的所有错误信息.
+        你可以使用 ``{% for error in field.errors %}``来自定义现实这些错误.
+        在这里, 循环里的每个元素都只是错误信息的字符串.
 
-        {% if field.is_hidden %}
-           {# Do something special #}
-        {% endif %}
+    ``{{field.is_hidden}}``
+        如把该属性设置为 ``True`` , 字段将为隐藏字段, 反之亦然.
+        这在模板中并不太实用, 但在测试时你可以这样::
+
+            {% if field.is_hidden %}
+               {# Do something special #}
+            {% endif %}
 
 遍历隐藏及可见字段
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-如果你不依赖Django默认布局，而手动重新布局，而希望处理``<input type="hidden">``于其它可见标签与众不同。譬如，因为隐藏字段不会显示任何东西，把错误消息放在字段的“旁边”可能会引起用户的疑惑，所以字段的错误消息应该已不同的方式处理。
+如果你不依赖Django默认布局, 而手动重新布局, 而希望处理 ``<input type="hidden">`` 于其它可见标签与众不同.
+譬如, 因为隐藏字段不会显示任何东西, 把错误消息放在字段的"旁边"可能会引起用户的疑惑,
+所以字段的错误消息应该已不同的方式处理.
 
-Django提供了两种方法来遍历隐藏字段和可见字段：``hidden_fields()``和``visible_fields()``。这里是我们对上面的例子使用这两个方法的一些修改::
+Django提供了两种方法来遍历隐藏字段和可见字段: ``hidden_fields()`` 和 ``visible_fields()`` .这里是我们对上面的例子使用这两个方法的一些修改::
 
     <form action="/contact/" method="post">
         {# Include the hidden fields #}
@@ -272,12 +297,14 @@ Django提供了两种方法来遍历隐藏字段和可见字段：``hidden_field
         <p><input type="submit" value="Send message" /></p>
     </form>
 
-在这个例子里我们没有使用隐藏字段来控制错误信息。通常错误信息是表单篡改的标志，用户交互不会有任何改变。当啊，你可以把错误信息更友好地显示出来。
+在这个例子里我们没有使用隐藏字段来控制错误信息.
+通常错误信息是表单篡改的标志, 用户交互不会有任何改变.
+当然, 你可以把错误信息更友好地显示出来.
 
 重用表单模板
-------------
+---------------------
 
-如果你的网站在多个地方都用相同的表单呈现逻辑，你可以使用:ttag:`include`标签来减少每个模板的循环代码::
+如果你的网站在多个地方都用相同的表单呈现逻辑, 你可以使用 :ttag:`include` 标签来减少每个模板的循环代码::
 
     <form action="/contact/" method="post">
         {% include "form_snippet.html" %}
@@ -293,14 +320,14 @@ Django提供了两种方法来遍历隐藏字段和可见字段：``hidden_field
         </div>
     {% endfor %}
 
-如果表单元素使用模板上下文中不同的名称，你可以使用:ttag:`include`的 ``with``参数设置别名::
+如果表单元素使用模板上下文中不同的名称, 你可以使用 :ttag:`include` 的 ``with`` 参数设置别名::
 
     <form action="/comments/add/" method="post">
         {% include "form_snippet.html" with form=comment_form %}
         <p><input type="submit" value="Submit comment" /></p>
     </form>
 
-如果你发现你会重复做这样的事，你应该考虑使用自定义标签:ref:`inclusion tag<howto-custom-template-tags-inclusion-tags>`。
+如果你发现你会重复做这样的事, 你应该考虑使用自定义标签 :ref:`inclusion tag<howto-custom-template-tags-inclusion-tags>`.
 
 Further topics
 ==============
@@ -317,4 +344,4 @@ This covers the basics, but forms can do a whole lot more:
 .. seealso::
 
     :doc:`The Forms Reference </ref/forms/index>`
-	所有API的说明，包括表单字段，表单元素以及表单及字段的验证。
+    所有API的说明, 包括表单字段, 表单元素以及表单及字段的验证.

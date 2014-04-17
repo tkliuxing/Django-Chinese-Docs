@@ -121,7 +121,7 @@ Getting Help
 ============
 
 * **The basics:**
-  :doc:`Overview <topics/forms/index>` |
+  :doc:`概览 <topics/forms/index>` |
   :doc:`Form API <ref/forms/api>` |
   :doc:`Built-in fields <ref/forms/fields>` |
   :doc:`Built-in widgets <ref/forms/widgets>`
